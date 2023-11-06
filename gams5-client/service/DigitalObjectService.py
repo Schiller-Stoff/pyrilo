@@ -1,5 +1,5 @@
 
-from enums.GAMS5APIStatics import GAMS5APIStatics
+from statics.GAMS5APIStatics import GAMS5APIStatics
 
 
 class DigitalObjectService:
