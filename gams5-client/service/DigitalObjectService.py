@@ -1,6 +1,6 @@
 
 from statics.GAMS5APIStatics import GAMS5APIStatics
-
+from domain.DigitalObject import DigitalObject
 
 class DigitalObjectService:
     """
@@ -30,6 +30,12 @@ class DigitalObjectService:
         """
 
         # TODO implement - return a list of digital objects (domain class) to work on. 
+        objects = []
+        objects.append(DigitalObject("demo1", project_abbr, ["TEI_SOURCE", "PFLANZE"]))
+        objects.append(DigitalObject("demo2", project_abbr, ["TEI_SOURCE"]))
+        objects.append(DigitalObject("demo3", project_abbr, ["TEI_SOURCE"]))
+
+        return objects
 
 
 
