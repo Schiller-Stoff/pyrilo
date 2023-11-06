@@ -26,7 +26,7 @@ class DigitalObjectService:
 
     def list_objects(project_abbr: str):
         """
-        Retrieves an overview overl all digital objects for given project.
+        Retrieves an overview over all digital objects for given project.
         """
 
         # TODO implement - return a list of digital objects (domain class) to work on. 
