@@ -12,8 +12,13 @@ class GAMS5APIClient:
     user_name: str
     user_pw: str
 
-    def __init__(self, host: str, user_name: str, user_pw: str) -> None:
+    def __init__(self, host: str) -> None:
         self.host = host
+
+    def configure_auth(self, user_name: str, user_pw: str):
+        """
+        Configures authentication for state changing operations via the REST-API.
+        """
         self.user_name = user_name
         self.user_pw = user_pw
 
@@ -32,6 +37,9 @@ if __name__ == "__main__":
     MY_PROJECT = "demo"
     # TODO configuring - maybe for handling auth thats not a good idea? e.g. GET requesting should possible all the time VS state changing operations
     # need to throw an error. --> maybe own configure_auth() method?
-    client = GAMS5APIClient("http://locahlhost:18085", "admin", "admin")
+    client = GAMS5APIClient("http://locahlhost:18085")
+    # configure authentication ins separate method.
+    client.configure_auth("admin", "admin")
+
     found_objects = client.list_objects(MY_PROJECT)
     print(found_objects)
