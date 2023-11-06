@@ -1,6 +1,9 @@
 
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from domain.DigitalObject import DigitalObject
+from typing import Dict
+import requests
+import json
 
 class DigitalObjectService:
     """
@@ -8,34 +11,47 @@ class DigitalObjectService:
     """
 
     ## TODO class needs configuration - what is the hostname / port to request against?
+    auth: Dict[str, str] | None
 
+    # TODO also need the hostname (with protocol and port!)
+    host: str
 
-    def __init__(self) -> None:
+    # do some error control? (should not contain trailing slashes etc.) 
+    API_BASE_PATH: str
+
+    def __init__(self, host: str) -> None:
+        self.host = host
+        self.API_BASE_PATH = f"{host}{GAMS5APIStatics.API_ROOT}"
         pass
 
 
-    def create_object(id: str, project_abbr: str):
+    def create_object(self, id: str, project_abbr: str):
         """
         Creates given digital object for project.
 
         """
         # TODO implement
 
-        create_object_path = f"{GAMS5APIStatics.API_ROOT}/projects/{project_abbr}/objects/{id}"
+        create_object_path = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
 
 
-    def list_objects(project_abbr: str):
+    def list_objects(self, project_abbr: str):
         """
         Retrieves an overview over all digital objects for given project.
         """
 
-        # TODO implement - return a list of digital objects (domain class) to work on. 
-        objects = []
-        objects.append(DigitalObject("demo1", project_abbr, ["TEI_SOURCE", "PFLANZE"]))
-        objects.append(DigitalObject("demo2", project_abbr, ["TEI_SOURCE"]))
-        objects.append(DigitalObject("demo3", project_abbr, ["TEI_SOURCE"]))
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
+        response = requests.get(url)
 
-        return objects
+        response_object_list = response.json()
+
+        digital_objects = []
+        for response_object in response_object_list:
+            digital_objects.append(
+                DigitalObject(response_object["id"], project_abbr, response_object["datastreams"])
+            )
+
+        return digital_objects
 
 
 
