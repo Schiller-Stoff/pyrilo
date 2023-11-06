@@ -8,12 +8,12 @@ class GAMS5APIClient:
     - requesting lists of datastreams for a digital object etc.
     """
 
-    host: str
     user_name: str
     user_pw: str
+    digital_object_service: DigitalObjectService
 
     def __init__(self, host: str) -> None:
-        self.host = host
+        self.digital_object_service = DigitalObjectService(host)
 
     def configure_auth(self, user_name: str, user_pw: str):
         """
@@ -28,7 +28,7 @@ class GAMS5APIClient:
         Lists all objects of defined project
         """
 
-        return DigitalObjectService.list_objects(project_abbr)
+        return self.digital_object_service.list_objects(project_abbr)
         
 
 if __name__ == "__main__":
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     MY_PROJECT = "demo"
     # TODO configuring - maybe for handling auth thats not a good idea? e.g. GET requesting should possible all the time VS state changing operations
     # need to throw an error. --> maybe own configure_auth() method?
-    client = GAMS5APIClient("http://locahlhost:18085")
+    client = GAMS5APIClient("http://localhost:18085")
     # configure authentication ins separate method.
     client.configure_auth("admin", "admin")
 
