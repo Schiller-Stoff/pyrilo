@@ -8,8 +8,6 @@ class GAMS5APIClient:
     - requesting lists of datastreams for a digital object etc.
     """
 
-    user_name: str
-    user_pw: str
     digital_object_service: DigitalObjectService
 
     def __init__(self, host: str) -> None:
@@ -19,10 +17,8 @@ class GAMS5APIClient:
         """
         Configures authentication for state changing operations via the REST-API.
         """
-        self.user_name = user_name
-        self.user_pw = user_pw
+        self.digital_object_service.configure_auth(user_name, user_pw)
 
-    
     def list_objects(self, project_abbr: str) -> List[str]:
         """
         Lists all objects of defined project
@@ -30,7 +26,6 @@ class GAMS5APIClient:
 
         return self.digital_object_service.list_objects(project_abbr)
         
-
 if __name__ == "__main__":
 
     # example usage of the client
