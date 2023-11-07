@@ -47,6 +47,7 @@ class DigitalObjectService:
 
         digital_objects = []
         for response_object in response_object_list:
+            # TODO mapping from api-response to digital object is error prone here
             digital_objects.append(
                 DigitalObject(response_object["id"], project_abbr, response_object["datastreams"])
             )
