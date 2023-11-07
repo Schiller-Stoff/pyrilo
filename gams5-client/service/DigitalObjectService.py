@@ -2,9 +2,7 @@
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from domain.DigitalObject import DigitalObject
 from typing import Dict
-import requests
-from requests.auth import HTTPBasicAuth
-import json
+from urllib3 import make_headers, request
 
 class DigitalObjectService:
     """
@@ -12,7 +10,7 @@ class DigitalObjectService:
     """
 
     ## TODO class needs configuration - what is the hostname / port to request against?
-    auth: HTTPBasicAuth | None = None
+    auth: tuple | None = None
 
     # TODO also need the hostname (with protocol and port!)
     host: str
@@ -30,7 +28,7 @@ class DigitalObjectService:
         """
         Configures auth procedure for class.
         """
-        self.auth = HTTPBasicAuth(user_name, user_password)
+        self.auth = (user_name, user_password)
 
     def create_object(self, id: str, project_abbr: str):
         """
@@ -48,13 +46,13 @@ class DigitalObjectService:
         """
 
         url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
-        response = requests.get(url, auth=self.auth if self.auth else None)
+        r = request("GET", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None)
 
-        if response.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {response.content}"
+        if r.status >= 400:
+            msg = f"Failed to request against {url}. API response: {r.json()}"
             raise ConnectionError(msg)
         
-        response_object_list = response.json()
+        response_object_list = r.json()
 
         digital_objects = []
         for response_object in response_object_list:
