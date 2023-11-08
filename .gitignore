@@ -19,3 +19,4 @@ bock.egg*
 dist
 .pypirc
 __pycache__
+logs
