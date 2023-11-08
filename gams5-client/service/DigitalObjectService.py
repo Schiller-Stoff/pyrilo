@@ -8,25 +8,16 @@ class DigitalObjectService:
     """
     Service class for operations on digital objects.
     """
-
+    # tuple for basic auth - 1. user_name 2. user_password
     auth: tuple | None = None
-
     host: str
-
     # do some error control? (should not contain trailing slashes etc.) 
     API_BASE_PATH: str
 
-    def __init__(self, host: str) -> None:
+    def __init__(self, host: str, auth: tuple | None = None) -> None:
         self.host = host
+        self.auth = auth
         self.API_BASE_PATH = f"{host}{GAMS5APIStatics.API_ROOT}"
-        pass
-
-
-    def configure_auth(self, user_name:str, user_password: str):
-        """
-        Configures auth procedure for class.
-        """
-        self.auth = (user_name, user_password)
 
     def save_object(self, id: str, project_abbr: str):
         """
