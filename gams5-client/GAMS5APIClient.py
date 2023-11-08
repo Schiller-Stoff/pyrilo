@@ -25,6 +25,14 @@ class GAMS5APIClient:
         """
 
         return self.digital_object_service.list_objects(project_abbr)
+    
+
+    def save_object(self, id: str, project_abbr: str):
+        """
+        Creates a digital object 
+        """
+        return self.digital_object_service.save_object(id, project_abbr)
+
         
 if __name__ == "__main__":
 
@@ -36,5 +44,9 @@ if __name__ == "__main__":
     # configure authentication ins separate method.
     client.configure_auth("admin", "admin")
 
-    found_objects = client.list_objects(MY_PROJECT)
-    print(found_objects)
+    # found_objects = client.list_objects(MY_PROJECT)
+    # print(found_objects) 
+
+    client.save_object("demo3", MY_PROJECT)
+
+    

@@ -30,14 +30,19 @@ class DigitalObjectService:
         """
         self.auth = (user_name, user_password)
 
-    def create_object(self, id: str, project_abbr: str):
+    def save_object(self, id: str, project_abbr: str):
         """
-        Creates given digital object for project.
+        Creates digital object for project with given id.
 
         """
-        # TODO implement
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
+        r = request("PUT", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False)
 
-        create_object_path = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
+        if r.status >= 400:
+            msg = f"Failed to request against {url}. API response: {r.json()}"
+            raise ConnectionError(msg)
+
+
 
     def list_objects(self, project_abbr: str):
         """
