@@ -17,7 +17,7 @@ class GAMS5APIClient:
         """
         Configures authentication for state changing operations via the REST-API.
         """
-        self.digital_object_service.configure_auth(user_name, user_pw)
+        self.digital_object_service.auth = (user_name, user_pw)
 
     def list_objects(self, project_abbr: str) -> List[str]:
         """
@@ -26,12 +26,17 @@ class GAMS5APIClient:
 
         return self.digital_object_service.list_objects(project_abbr)
     
-
     def save_object(self, id: str, project_abbr: str):
         """
         Creates a digital object 
         """
         return self.digital_object_service.save_object(id, project_abbr)
+    
+    def ingest():
+        """
+        Ingests defined folder / package structure.
+        """
+        # TODO implement ...
 
         
 if __name__ == "__main__":
@@ -44,9 +49,9 @@ if __name__ == "__main__":
     # configure authentication ins separate method.
     client.configure_auth("admin", "admin")
 
-    # found_objects = client.list_objects(MY_PROJECT)
-    # print(found_objects) 
+    found_objects = client.list_objects(MY_PROJECT)
+    print(found_objects) 
 
-    client.save_object("demo3", MY_PROJECT)
+    client.save_object("demo4", MY_PROJECT)
 
     
