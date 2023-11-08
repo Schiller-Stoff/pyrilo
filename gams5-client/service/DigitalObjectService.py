@@ -9,10 +9,8 @@ class DigitalObjectService:
     Service class for operations on digital objects.
     """
 
-    ## TODO class needs configuration - what is the hostname / port to request against?
     auth: tuple | None = None
 
-    # TODO also need the hostname (with protocol and port!)
     host: str
 
     # do some error control? (should not contain trailing slashes etc.) 
