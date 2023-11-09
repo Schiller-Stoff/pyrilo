@@ -1,4 +1,4 @@
 
 # Folder description
 
-Contains ingest files 
+Contains ingest files for a project
