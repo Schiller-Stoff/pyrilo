@@ -1,3 +1,4 @@
+from service.SubInfoPackService import SubInfoPackService
 from service.DigitalObjectService import DigitalObjectService
 from typing import List
 import logging
@@ -11,15 +12,18 @@ class GAMS5APIClient:
     """
 
     digital_object_service: DigitalObjectService
+    sub_info_pack_service: SubInfoPackService
 
     def __init__(self, host: str) -> None:
         self.digital_object_service = DigitalObjectService(host)
+        self.sub_info_pack_service = SubInfoPackService(host)
 
     def configure_auth(self, user_name: str, user_pw: str):
         """
         Configures authentication for state changing operations via the REST-API.
         """
         self.digital_object_service.auth = (user_name, user_pw)
+        self.sub_info_pack_service.auth = (user_name, user_pw)
 
     def list_objects(self, project_abbr: str) -> List[str]:
         """
@@ -34,11 +38,19 @@ class GAMS5APIClient:
         """
         return self.digital_object_service.save_object(id, project_abbr)
     
-    def ingest():
+    def ingest_sip(self):
         """
         Ingests defined folder / package structure.
         """
         # TODO implement ...
+
+
+    def ingest(self):
+        """
+        Walks through project directory and ingests indvidual objects.
+        """
+        # TODO implement ...
+        self.sub_info_pack_service.ingest_folder_object("demo", "demo1")
 
     
     

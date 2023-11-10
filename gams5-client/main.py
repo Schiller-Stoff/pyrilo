@@ -19,7 +19,9 @@ if __name__ == "__main__":
     # configure authentication ins separate method.
     client.configure_auth("admin", "admin")
 
-    found_objects = client.list_objects(MY_PROJECT)
-    print(found_objects) 
+    # found_objects = client.list_objects(MY_PROJECT)
+    # print(found_objects) 
 
-    client.save_object("demo4", MY_PROJECT)
+    # client.save_object("demo4", MY_PROJECT)
+
+    client.ingest()
