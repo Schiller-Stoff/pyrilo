@@ -45,12 +45,11 @@ class GAMS5APIClient:
         # TODO implement ...
 
 
-    def ingest(self):
+    def ingest(self, project_abbr: str):
         """
-        Walks through project directory and ingests indvidual objects.
+        Walks through project directory and ingests individual objects.
         """
-        # TODO implement ...
-        self.sub_info_pack_service.ingest_folder_object("demo", "demo1")
+        self.sub_info_pack_service.ingest_folder_object(project_abbr, "demo1")
 
     
     
