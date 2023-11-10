@@ -24,4 +24,4 @@ if __name__ == "__main__":
 
     # client.save_object("demo4", MY_PROJECT)
 
-    client.ingest(MY_PROJECT)
+    client.ingest_sip(MY_PROJECT, "demo1")
