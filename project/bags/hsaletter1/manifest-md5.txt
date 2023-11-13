@@ -1,0 +1,2 @@
+4add953dee0628988f82444dfc0f9bbf  data/image1/IMG.jpeg
+5b27c964f3a9edb831de1d5bd31a1673  data/tei/TEI_SOURCE.xml

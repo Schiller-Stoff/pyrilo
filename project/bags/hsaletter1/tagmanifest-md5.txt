@@ -1,0 +1,9 @@
+edb24b76e7148576657ec174544a3136 bag-info.txt
+41b89090f32a9ef33226b48f1b98dddf bagit.txt
+746fc7794d22dae974f8ba06c36bd6fd manifest-md5.txt
+dc17eb49781a66016ef7052c26ca985f manifest-sha256.txt
+106728fb6f7961e5d6ba3fcb3b6c743b metadata/CMDI.xml
+31e85abb9c5feb78c028c49f9810e72b metadata/datacite.xml
+4a8979ed7746400383a599657a02cc9c metadata/dc.xml
+cc986ce9313c14d2c44bb15e659deb97 metadata/EDM.xml
+880e38fdcc4e51a8cc61cd5c72ecb411 metadata/RDF.xml
