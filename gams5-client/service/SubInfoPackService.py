@@ -34,7 +34,7 @@ class SubInfoPackService:
     # validate folder? 
 
     # zip folder?
-    folder_path =  os.getcwd() + "/ingest/" + folder_name
+    folder_path =  os.getcwd() + "/project/" + folder_name
     logging.debug(f"Zipping folder {folder_path} ...")
 
     # zip files / folder
