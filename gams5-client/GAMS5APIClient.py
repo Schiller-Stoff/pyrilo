@@ -38,19 +38,20 @@ class GAMS5APIClient:
         """
         return self.digital_object_service.save_object(id, project_abbr)
     
-    def ingest_sip(self):
+    def ingest_sip(self, project_abbr: str, sip_folder_name: str):
         """
-        Ingests defined folder / package structure.
+        Ingests defined folder from the local SIP structure.
         """
-        # TODO implement ...
+        self.sub_info_pack_service.ingest_folder_object(project_abbr, sip_folder_name)
 
 
-    def ingest(self):
+    def ingest(self, project_abbr: str):
         """
-        Walks through project directory and ingests indvidual objects.
+        Walks through project directory and ingests individual objects.
         """
-        # TODO implement ...
-        self.sub_info_pack_service.ingest_folder_object("demo", "demo1")
+        # TODO loop through directory and call method 
+        # self.sub_info_pack_service.ingest_folder_object(project_abbr, "demo1")
+        raise NotImplementedError("Not implemented!")
 
     
     

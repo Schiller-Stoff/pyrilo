@@ -81,18 +81,5 @@ class SubInfoPackService:
      body, content_type = encode_multipart_formdata(form_multipart, boundary=None)
      return body, content_type
 
-  def zip_dir(self, dir_path: str):
-    """
-    Zips the given directory and returns the temp file.
-    """
-    with tempfile.NamedTemporaryFile(suffix='.zip', delete=False) as tempf:
-        with zipfile.ZipFile(tempf.name, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            for root, dirs, files in os.walk(dir_path):
-                for file in files:
-                    zipf.write(os.path.join(root, file), 
-                               os.path.relpath(os.path.join(root, file), dir_path))
-  
-   
-    return tempf
   
 
