@@ -38,7 +38,7 @@ class GAMS5APIClient:
         """
         return self.digital_object_service.save_object(id, project_abbr)
     
-    def ingest_sip(self, project_abbr: str, sip_folder_name: str):
+    def ingest_bag(self, project_abbr: str, sip_folder_name: str):
         """
         Ingests defined folder from the local SIP structure.
         """
