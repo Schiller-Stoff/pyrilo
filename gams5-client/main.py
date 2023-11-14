@@ -25,3 +25,4 @@ if __name__ == "__main__":
     # client.save_object("demo4", MY_PROJECT)
 
     client.ingest_bag(MY_PROJECT, "hsaletter1")
+    # client.delete_object("hsa.letter.1", MY_PROJECT)

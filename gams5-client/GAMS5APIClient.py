@@ -38,6 +38,12 @@ class GAMS5APIClient:
         """
         return self.digital_object_service.save_object(id, project_abbr)
     
+    def delete_object(self, id: str, project_abbr: str):
+        """
+        Deletes a digital object
+        """
+        return self.digital_object_service.delete_object(id, project_abbr)
+
     def ingest_bag(self, project_abbr: str, sip_folder_name: str):
         """
         Ingests defined folder from the local SIP structure.

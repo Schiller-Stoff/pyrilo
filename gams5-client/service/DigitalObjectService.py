@@ -1,4 +1,5 @@
 
+import logging
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from domain.DigitalObject import DigitalObject
 from typing import Dict
@@ -29,7 +30,10 @@ class DigitalObjectService:
 
         if r.status >= 400:
             msg = f"Failed to request against {url}. API response: {r.json()}"
+            logging.error(msg)
             raise ConnectionError(msg)
+        else:
+            logging.info(f"Successfully created digital object with id {id} for project {project_abbr}.")
 
 
 
@@ -44,7 +48,10 @@ class DigitalObjectService:
 
         if r.status >= 400:
             msg = f"Failed to request against {url}. API response: {r.json()}"
+            logging.error(msg)
             raise ConnectionError(msg)
+        else:
+            logging.info(f"Successfully retrieved digital objects for project {project_abbr}.")
         
         response_object_list = r.json()
 
@@ -56,3 +63,19 @@ class DigitalObjectService:
             )
 
         return digital_objects
+
+
+    def delete_object(self, id: str, project_abbr: str):
+        """
+        Deletes a digital object with given id.
+
+        """
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
+        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False)
+
+        if r.status >= 400:
+            msg = f"Failed to request against {url}. API response: {r.json()}"
+            logging.error(msg)
+            raise ConnectionError(msg)
+        else:
+            logging.info(f"Successfully deleted digital object with id {id}.")
