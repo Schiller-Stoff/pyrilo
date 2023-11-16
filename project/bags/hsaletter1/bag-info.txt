@@ -10,6 +10,16 @@ Payload-Oxum: 87937.2
 Title: HSA Letter 1
 Type: TEI
 
-Creator: Michael Parler (Creator of the represented object)
+##### from here added by sebi ##### 
+
+# Creator of the represented object
+Creator: Michael Parler
+#
+# Rights of the digital object
 Rights: All resources of this digital objects are under the Licence CC BY 4.0
+#
+# Publisher of the digital object
 Publisher: CJS - Centrum für Jüdische Studien
+#
+# optional child object definitions (BUT: must already exist when digital object is being created)
+# Child-Object-Ids: car5,car6,car7
