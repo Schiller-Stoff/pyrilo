@@ -9,3 +9,7 @@ Id: hsa.letter.1
 Payload-Oxum: 87937.2
 Title: HSA Letter 1
 Type: TEI
+
+Creator: Michael Parler (Creator of the represented object)
+Rights: All resources of this digital objects are under the Licence CC BY 4.0
+Publisher: CJS - Centrum für Jüdische Studien
