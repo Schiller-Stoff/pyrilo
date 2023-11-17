@@ -9,13 +9,20 @@
     "creator": "Pyrillo",
     "rights": "CC-BY-NC-ND",
     "publisher": "ZIM Zentrum für Informationsmodellierung",
-    "children": ["car5","car6","car7"],
     "objectType": "TEI",
     
     "contentFiles": [
         {
             "size": 1947642,
-            "bagpath": "data/content/TEI_SOURCE.xml"
+            "bagpath": "data/content/TEI_SOURCE.xml",
+            
+            "dsid": "TEI_SOURCE",
+            "mimetype": "application/xml",
+            "title": "Main datastream",
+            "description": "This is a demo datastream for testing purposes.",
+            "creator": "Demo project",
+            "rights": "CC-BY-NC-ND",
+            "publisher": "ZIM Zentrum für Informationsmodellierung"
         }
     ]
 }
