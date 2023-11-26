@@ -7,7 +7,7 @@ def setup_client() -> GAMS5APIClient:
     log_file_path = f"{os.getcwd()}/logs/app.log"
 
     # setup logging
-    logging.basicConfig(filename=log_file_path, encoding='utf-8', level=logging.DEBUG)
+    logging.basicConfig(filename=log_file_path, encoding='utf-8', level=logging.DEBUG, filemode='w')
 
     # example usage of the client
     # TODO configuring - maybe for handling auth thats not a good idea? e.g. GET requesting should possible all the time VS state changing operations
