@@ -38,6 +38,17 @@ class SIPBagitTransformerService:
             # bagit_info_file.write("External-Description: Demo Bag\n")
             # bagit_info_file.write("External-Identifier: demo-bag\n")
 
+    def create_bagit_checksum_files(self, bag_folder_path: str):
+        """
+        Creates checksum files for the bagit format.
+        """
+        # TODO add real logic for creating cheksum files
+        
+        # Generate manifest-md5.txt file
+        manifest_md5_file_path = os.path.join(bag_folder_path, "manifest-md5.txt")
+        with open(manifest_md5_file_path, "w") as manifest_md5_file:
+            manifest_md5_file.write("data/content/TEI_SOURCE.xml HASH\n")
+
 
     def transform(self):
         """
@@ -68,3 +79,4 @@ class SIPBagitTransformerService:
 
             # Create basic bag files
             self.create_bag_files(bags_folder_path)
+            self.create_bagit_checksum_files(bags_folder_path)
