@@ -19,7 +19,7 @@ class SIPBagitTransformerService:
     
     def create_bag_files(self, bag_folder_path: str):
         """
-        Creates basic bag files like bagit.txt and bagit-info.txt
+        Creates basic bag files like bagit.txt and bag-info.txt
         """
         # Generate bagit.txt file
         bagit_file_path = os.path.join(bag_folder_path, "bagit.txt")
@@ -28,7 +28,7 @@ class SIPBagitTransformerService:
             bagit_file.write("Tag-File-Character-Encoding: UTF-8\n")
 
         # Generate bagit-info.txt file
-        bagit_info_file_path = os.path.join(bag_folder_path, "bagit-info.txt")
+        bagit_info_file_path = os.path.join(bag_folder_path, "bag-info.txt")
         with open(bagit_info_file_path, "w") as bagit_info_file:
             bagit_info_file.write("Bag-Software-Agent: Pyrilo\n")
             bagit_info_file.write("Contact-Email: example@example.com\n")
