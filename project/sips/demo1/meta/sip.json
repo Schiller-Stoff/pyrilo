@@ -1,6 +1,6 @@
 {
     "$schema": "https://gitlab.cern.ch/digitalmemory/sip-spec/-/blob/master/sip-schema-d1.json",
-    "created_by": "Pyrillo",
+    "created_by": "Pyrilo",
     "source": "local",
     "recid": "demo1",
 
