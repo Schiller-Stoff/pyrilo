@@ -1,3 +1,4 @@
+import datetime
 import os
 import shutil
 from statics.GAMS5APIStatics import GAMS5APIStatics
@@ -24,16 +25,18 @@ class SIPBagitTransformerService:
         # Generate bagit.txt file
         bagit_file_path = os.path.join(bag_folder_path, "bagit.txt")
         with open(bagit_file_path, "w") as bagit_file:
-            bagit_file.write("BagIt-Version: 1.0\n")
+            bagit_file.write("BagIt-Version: 0.97\n")
             bagit_file.write("Tag-File-Character-Encoding: UTF-8\n")
 
         # Generate bagit-info.txt file
         bagit_info_file_path = os.path.join(bag_folder_path, "bag-info.txt")
         with open(bagit_info_file_path, "w") as bagit_info_file:
             bagit_info_file.write("Bag-Software-Agent: Pyrilo\n")
-            bagit_info_file.write("Contact-Email: example@example.com\n")
-            bagit_info_file.write("External-Description: Demo Bag\n")
-            bagit_info_file.write("External-Identifier: demo-bag\n")
+            bagit_info_file.write("Bagging-Date: {}\n".format(datetime.datetime.now().strftime("%Y-%m-%d")))
+            bagit_info_file.write("Payload Oxum: [SOME HASH]\n")
+            # bagit_info_file.write("Contact-Email: example@example.com\n")
+            # bagit_info_file.write("External-Description: Demo Bag\n")
+            # bagit_info_file.write("External-Identifier: demo-bag\n")
 
 
     def transform(self):
