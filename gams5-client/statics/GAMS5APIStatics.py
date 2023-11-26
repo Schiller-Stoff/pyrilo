@@ -13,7 +13,7 @@ class GAMS5APIStatics:
     # local paths for client to work
     LOCAL_PROJECT_FILES_PATH = os.getcwd() + "/project"
     LOCAL_SIP_FOLDERS_PATH = LOCAL_PROJECT_FILES_PATH + "/sips"
-    LOCAL_BAGIT_FILES_PATH = LOCAL_PROJECT_FILES_PATH + "/bagit"
+    LOCAL_BAGIT_FILES_PATH = LOCAL_PROJECT_FILES_PATH + "/bags"
 
     def __init__(self) -> None:
         pass

@@ -1,5 +1,6 @@
 from service.SubInfoPackService import SubInfoPackService
 from service.DigitalObjectService import DigitalObjectService
+from service.SIPBagitTransformerService import SIPBagitTransformerService
 from typing import List
 import logging
 import os
@@ -13,10 +14,12 @@ class GAMS5APIClient:
 
     digital_object_service: DigitalObjectService
     sub_info_pack_service: SubInfoPackService
+    sip_bagit_transformer_service: SIPBagitTransformerService
 
     def __init__(self, host: str) -> None:
         self.digital_object_service = DigitalObjectService(host)
         self.sub_info_pack_service = SubInfoPackService(host)
+        self.sip_bagit_transformer_service = SIPBagitTransformerService()
 
     def configure_auth(self, user_name: str, user_pw: str):
         """
@@ -59,5 +62,9 @@ class GAMS5APIClient:
         # self.sub_info_pack_service.ingest_folder_object(project_abbr, "demo1")
         raise NotImplementedError("Not implemented!")
 
-    
-    
+    def transform_sips_to_bags(self):
+        """
+        Transforms all SIPs to the bagit format.
+        """
+        # TODO implement
+        return self.sip_bagit_transformer_service.transform()
