@@ -2,13 +2,13 @@
     "$schema": "https://gitlab.cern.ch/digitalmemory/sip-spec/-/blob/master/sip-schema-d1.json",
     "created_by": "Pyrilo",
     "source": "local",
-    "recid": "demo1",
+    "recid": "car3",
 
-    "title": "Demo SIP",
-    "description": "This is a demo SIP for testing purposes.",
-    "creator": "Pyrillo",
+    "title": "Gedenktafel Hauptquartier der Gestapo",
+    "description": "Born digital TEI Dokument zur Beschreibung eines Erinnerungsortes bzw. Erinnerungszeichens. Erinnerungszeichen markieren Erinnerungsorte und machen sie in der Öffentlichkeit sichtbar. Sie sind ein sichtbarer Verweis auf Ereignisse, Erfahrungen und Verbrechen, die der Nationalsozialismus und Faschismus zu verantworten haben und sind intentionaler Ausdruck der Erinnerungskultur einer bestimmten Gruppe. Sie können physische oder virtuelle Manifestationen sein. Zur genaueren Bestimmung und Analyse werden die einzelnen Erinnerungsorte/Erinnerungszeichen durch spezifische Kriterien genauer klassifiziert und mit Information angereichert. Hierbei kann es zu Überlappungen und in manchen Fällen zu Unschärfen kommen, weshalb teils Mehrfachzuordnungen in den einzelnen Kategorien vorgenommen werden.Die digitale Erinnerungslandkarte Österreichs (DERLA) ist ein Dokumentations- und Vermittlungsprojekt. Es dokumentiert die Erinnerungsorte und -zeichen an die Opfer sowie die Orte des Terrors des Nationalsozialismus in Österreich und setzt sich die kritische Auseinandersetzung mit Nationalsozialismus und Faschismus und der Erinnerung daran zum Ziel. Die ständig neu zu stellenden Fragen, was, wann, wo und von wem wie erinnert wurde und wird, geben Einblicke in die Transformationen der Auseinandersetzungen mit dem Nationalsozialismus und sind Ausdruck unseres politischen und gesellschaftlichen Selbstverständnisses in der Gegenwart. „Gedächtnisorte“, Denk- und Mahnmäler, Gedenktafeln, Gedenkstätten sowie Straßenbezeichnungen nach WiderstandskämpferInnen und Opfern des NS-Regimes sind die Materialisationen des Geschichtsbewusstseins im Alltag. Der Blick auf die Erinnerungslandschaft in der Gegenwart gibt daher zum einen Einblick in das kollektive Gedächtnis der österreichischen Gesellschaft und zum anderen legt die Beschäftigung mit ihrer Entstehungsgeschichte die Konjunkturen dieser Beschäftigung offen",
+    "creator": "Born digital. DERLA Projekt und Erweiterungen",
     "rights": "CC-BY-NC-ND",
-    "publisher": "ZIM Zentrum für Informationsmodellierung",
+    "publisher": "Centrum für Jüdische Studien Graz",
     "objectType": "TEI",
     
     "contentFiles": [
@@ -18,10 +18,10 @@
             "dsid": "TEI_SOURCE",
             "mimetype": "application/xml",
             "title": "Main datastream",
-            "description": "This is a demo datastream for testing purposes.",
-            "creator": "Demo project",
+            "description": "Main TEI document describing one place of remembrance.",
+            "creator": "Born digital. DERLA Projekt und Erweiterungen",
             "rights": "CC-BY-NC-ND",
-            "publisher": "ZIM Zentrum für Informationsmodellierung"
+            "publisher": "Centrum für Jüdische Studien Graz"
         }
     ]
 }

@@ -2,249 +2,203 @@
   <teiHeader xml:lang="de">
     <fileDesc>
       <titleStmt>
-        <title type="main">Charles Baissac an Hugo Schuchardt (15-00432)</title>
-        <author ana="marcrelator:aut">
-          <persName ref="https://gams.uni-graz.at/o:hsa.persons#P.1069">
-            <forename>Charles</forename>
-            <surname>Baissac</surname>
-          </persName>
-        </author>
-        <editor ana="marcrelator:edt">
+        <title>Gedenktafel Hauptquartier der Gestapo</title>
+        <respStmt ana="marcrelator:mrk">
+          <resp>Erfassung der geografischen und historischen Daten</resp>
           <persName>
-            <forename>Elisabeth</forename>
-            <surname>Steiner</surname>
+            <forename>Lukas</forename>
+            <surname>Niehvoll</surname>
           </persName>
-        </editor>
+          <persName>
+            <forename>Victoria</forename>
+            <surname>Kuhmar</surname>
+          </persName>
+          <persName>
+            <forename>Heimo</forename>
+            <surname>Halbrainer</surname>
+          </persName>
+        </respStmt>
+        <respStmt ana="marcrelator:mrk">
+          <resp>Daten- und Informationsmodellierung</resp>
+          <persName>
+            <forename>Sebastian</forename>
+            <surname>Stoff</surname>
+            <idno type="orcid">0000-0001-6941-113X</idno>
+          </persName>
+        </respStmt>
+        <respStmt>
+          <resp>Didaktische Aufarbeitung</resp>
+          <persName>
+            <forename>Georg</forename>
+            <surname>Marschnig</surname>
+          </persName>
+          <persName>
+            <forename>Grid</forename>
+            <surname>Oelschlegel</surname>
+          </persName>
+        </respStmt>
+        <funder ana="marcrelator:fnd">
+          <orgName ref="https://www.zukunftsfonds.steiermark.at/">Land Steiermark: Zukunftsfonds Steiermark</orgName>
+          <address>
+            <addName>Friedrichgasse 9 8010 Graz</addName>
+          </address>
+        </funder>
+        <funder ana="marcrelator:fnd">
+          <orgName ref="https://www.nationalfonds.org/startseite">Nationalfonds der Repuplik Österreich für Opfer des Nationalsozialismus</orgName>
+          <idno type="wikidata">Q27949109</idno>
+        </funder>
+        <funder ana="marcrelator:fnd">
+          <orgName ref="http://www.zukunftsfonds-austria.at/">Zukunftsfonds der Republik Österreich</orgName>
+          <idno type="wikidata">Q228721</idno>
+        </funder>
+        <funder ana="marcrelator:fnd">
+          <orgName ref="https://www.graz.at/">Stadt Graz</orgName>
+          <idno type="wikidata">Q13298</idno>
+        </funder>
+        <funder ana="marcrelator:fnd">
+          <orgName ref="https://vorarlberg.at/">Land Vorarlberg</orgName>
+          <idno type="wikidata">Q38981</idno>
+        </funder>
       </titleStmt>
       <publicationStmt>
-        <publisher ana="marcrelator:pbl">
-          <orgName corresp="https://sprachwissenschaft.uni-graz.at" ref="http://d-nb.info/gnd/807328-4">Institut für Sprachwissenschaft,
-                  Karl-Franzens-Universität Graz</orgName>
+        <publisher>
+          <link target="https://juedischestudien.uni-graz.at/"/>
+          <orgName ref="https://d-nb.info/gnd/10034042-8">Centrum für Jüdische Studien,    Karl-Franzens-Universität Graz</orgName>
         </publisher>
         <authority ana="marcrelator:his">
-          <orgName corresp="https://informationsmodellierung.uni-graz.at" ref="http://d-nb.info/gnd/1137284463">Zentrum für
-                  Informationsmodellierung - Austrian Centre for Digital Humanities,
-                  Karl-Franzens-Universität Graz</orgName>
+          <link target="https://informationsmodellierung.uni-graz.at"/>
+          <orgName ref="http://d-nb.info/gnd/1137284463">Zentrum für Informationsmodellierung    - Austrian Centre for Digital Humanities, Karl-Franzens-Universität Graz   </orgName>
         </authority>
         <distributor ana="marcrelator:rps">
-          <orgName ref="https://gams.uni-graz.at">GAMS - Geisteswissenschaftliches
-                  Asset Management System</orgName>
+          <link target="https://gams.uni-graz.at"/>
+          <orgName>GAMS - Geisteswissenschaftliches Asset Management System</orgName>
         </distributor>
-        <availability>
-          <licence target="https://creativecommons.org/licenses/by-nc/4.0">Creative Commons
-                  BY-NC 4.0</licence>
-        </availability>
-        <date ana="dcterms:issued" when="2022">2022</date>
+        <date ana="dcterms:issued" when="2019">2019</date>
         <pubPlace ana="marcrelator:pup">Graz</pubPlace>
-        <idno corresp="http://schuchardt.uni-graz.at/id/letter/1" type="PID">o:hsa.letter.1</idno>
-        <idno source="http://schuchardt.uni-graz.at" type="altIdentifier">15-00432</idno>
+        <idno type="PID">o:derla.car3</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc/4.0">Creative Commons    BY-NC 4.0</licence>
+        </availability>
       </publicationStmt>
       <seriesStmt>
-        <title ref="https://schuchardt.uni-graz.at">Hugo Schuchardt Archiv</title>
-        <respStmt ana="marcrelator:pbl">
-          <resp>Herausgeber</resp>
-          <persName ref="http://d-nb.info/gnd/111679893">
-            <forename>Bernhard</forename>
-            <surname>Hurch</surname>
-            <orgName ref="http://d-nb.info/gnd/36157-4">Karl-Franzens-Universität Graz</orgName>
+        <title ref="https://gams.uni-graz.at/derla">DERLA: Digitale Erinnerungslandschaften</title>
+        <respStmt ana="marcrelator:pdr">
+          <resp>Projektleitung</resp>
+          <persName>
+            <forename>Gerald</forename>
+            <surname>Lamprecht</surname>
+          </persName>
+        </respStmt>
+        <respStmt ana="marcrelator:rth">
+          <resp>ZIM Forschungsleiter</resp>
+          <persName>
+            <forename>Georg</forename>
+            <surname>Vogeler</surname>
+            <idno type="orcid">0000-0002-1726-1712</idno>
+          </persName>
+        </respStmt>
+        <respStmt ana="marcrelator:res">
+          <resp>ZIM Mitarbeiter</resp>
+          <persName>
+            <forename>Sebastian</forename>
+            <surname>Stoff</surname>
+            <idno type="orcid">0000-0001-6941-113X</idno>
           </persName>
         </respStmt>
       </seriesStmt>
       <sourceDesc>
-        <msDesc>
-          <msIdentifier>
-            <country>Österreich</country>
-            <region>Steiermark</region>
-            <settlement>Graz</settlement>
-            <institution>Karl-Franzens-Universität Graz</institution>
-            <repository ref="https://ub.uni-graz.at/de/bibliotheken/sondersammlungen">Universitätsbibliothek Graz Abteilung für Sondersammlungen</repository>
-            <idno type="shelfmark">00432</idno>
-          </msIdentifier>
-          <msContents>
-            <textLang mainLang="fr"/>
-            <msItem>
-              <author ref="https://gams.uni-graz.at/o:hsa.persons#P.1069">
-                <forename>Charles</forename>
-                <surname>Baissac</surname>
-              </author>
-            </msItem>
-          </msContents>
-          <physDesc>
-            <objectDesc>
-              <supportDesc>
-                <support>
-                  <material ref="http://vocab.getty.edu/aat/300014109">Papier</material>
-                  <objectType>Brief</objectType>
-                </support>
-                <extent>
-                  <measure quantity="1" unit="pages">1 Seite</measure>
-                </extent>
-              </supportDesc>
-            </objectDesc>
-          </physDesc>
-          <history>
-            <origin>
-              <origPlace ana="marcrelator:prp" corresp="https://gams.uni-graz.at/o:hsa.places#PL.41" ref="http://sws.geonames.org/934154">Port Louis</origPlace>
-              <origDate ana="dcterms:created" when="1885-01-20">1885-01-20</origDate>
-            </origin>
-            <provenance>
-                     Hugo Schuchardts wissenschaftlicher Nachlass (Bibliothek,
-                     Werkmanuskripte und wissenschaftliche Korrespondenz) kam nach seinem Tod 1927
-                     laut Verfügung in seinem Testament als Geschenk an die UB Graz.
-                  </provenance>
-          </history>
-        </msDesc>
-        <bibl type="print">
-          <author>
-            <persName>
-              <forename>Elisabeth</forename>
-              <surname>Steiner</surname>
-            </persName>
-          </author>
-          <date when="2010">2010</date>
-          <title>'L'approbation d'un juge come vous est de celles dont on a le droit d'être fier':
-               Der Briefwechsel zwischen Schuchardt und Baissac</title>
-          <series>
-            <title>Grazer Linguistische Studien</title>
-          </series>
-          <biblScope unit="volume">74</biblScope>
-          <biblScope from="7" to="62" unit="pages">7-62</biblScope>
-        </bibl>
-        <bibl type="online">
-          <author ana="marcrelator:aut">
-            <persName>
-              <forename>Elisabeth</forename>
-              <surname>Steiner</surname>
-            </persName>
-          </author>
-          <date when="2009">2009</date>
-          <title>Die Korrespondenz zwischen Charles Baissac und Hugo Schuchardt</title>
-          <series>
-            <title>Hugo Schuchardt Archiv</title>
-            <editor>
-              <forename>Bernhard</forename>
-              <surname>Hurch</surname>
-            </editor>
-          </series>
-          <ref target="http://schuchardt.uni-graz.at/id/letters/1069"/>
-        </bibl>
+        <listBibl>
+          <bibl>Halbrainer / Lamprecht / Rigerl, Orte und Zeichen der Erinnerung, Graz 2018.</bibl>
+        </listBibl>
       </sourceDesc>
     </fileDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="German"/>
+      </langUsage>
+      <settingDesc>
+        <place>
+          <location>
+            <geogFeat ref="https://gams.uni-graz.at/archive/objects/o:derla.car#car3" type="point">
+              <objectType>
+                <term ref="https://gams.uni-graz.at/o:derla.keywords#keyword14">Gedenktafel</term>
+              </objectType>
+              <geo>46.623983</geo>
+              <geo>14.310149</geo>
+              <date type="creation">2015</date>
+            </geogFeat>
+            <address>
+              <country>Österreich</country>
+              <addName>Burggasse 8, 9020, Klagenfurt/Celovec</addName>
+              <region>Kärnten</region>
+            </address>
+            <desc>
+              <term ref="https://gams.uni-graz.at/o:derla.keywords#keyword42">Öffentlich zugänglich</term>
+            </desc>
+          </location>
+          <idno type="osm-number">way 128842895</idno>
+        </place>
+      </settingDesc>
+      <textClass>
+        <keywords>
+          <term ref="https://gams.uni-graz.at/o:derla.keywords#keyword58">Orte des Terrors - Gestapo/SS/NSDAP</term>
+        </keywords>
+      </textClass>
+      <particDesc>
+        <listPerson type="creators">
+          <person role="initiator">
+            <name>Land Kärnten</name>
+          </person>
+        </listPerson>
+      </particDesc>
+      <particDesc>
+        <listPerson type="creators">
+          <person role="artist">
+            <name>Melitta Moschik</name>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
     <encodingDesc>
+      <geoDecl datum="WGS84" xml:id="WGS">World Geodetic System</geoDecl>
       <editorialDecl>
-        <p>Die Datenmodellierung orientiert sich am <ref
-            target="https://www.deutschestextarchiv.de/doku/basisformat/">DTA-Basisformat</ref>,
-               <ref
-            target="https://www.ediarum.org/">ediarum</ref> und der
-               <ref target="https://github.com/TEI-Correspondence-SIG/correspDesc">CorrespDesc-SIG</ref>.</p>
-        <p>Das auf DTABf-Modellierungsschema wurde für die Zwecke des Projektes angepasst und befindet sich unter <ref target="https://gams.uni-graz.at/o:hsa.odd"/>
-        </p>
+        <p>Born digital TEI Dokument zur Beschreibung eines Erinnerungsortes bzw. Erinnerungszeichens.</p>
+        <p>Erinnerungszeichen markieren Erinnerungsorte und machen sie in der Öffentlichkeit sichtbar.   Sie sind ein sichtbarer Verweis auf Ereignisse, Erfahrungen und Verbrechen, die der Nationalsozialismus   und Faschismus zu verantworten haben und sind intentionaler Ausdruck der   Erinnerungskultur einer bestimmten Gruppe.   Sie können physische oder virtuelle Manifestationen sein. Zur genaueren Bestimmung und Analyse   werden die einzelnen Erinnerungsorte/Erinnerungszeichen durch spezifische Kriterien genauer   klassifiziert und mit Information angereichert. Hierbei kann es zu   Überlappungen und in manchen Fällen zu Unschärfen kommen,   weshalb teils Mehrfachzuordnungen in den einzelnen Kategorien vorgenommen werden.</p>
       </editorialDecl>
       <projectDesc>
-        <ab>
-          <ref target="info:fedora/context:hsa" type="context">Hugo Schuchardt Archiv</ref>
-        </ab>
-        <p>Das Hugo Schuchardt Archiv widmet sich der Aufarbeitung des Gesamtwerks und des Nachlasses von Hugo Schuchardt (1842-1927).
-               Die Onlinepräsentation stellt alle Schriften sowie eine umfangreiche Sekundärbibliografie zur Verfügung.
-               Die Bearbeitung des Nachlasses legt besonderes Augenmerk auf die Erschließung der Korrespondenz,
-               die zu großen Teilen bereits ediert vorliegt, und der Werkmanuskripte.</p>
+        <p>Die digitale Erinnerungslandkarte Österreichs (DERLA) ist ein Dokumentations- und     Vermittlungsprojekt. Es dokumentiert die Erinnerungsorte und -zeichen an die     Opfer sowie die Orte des Terrors des Nationalsozialismus in Österreich und setzt     sich die kritische Auseinandersetzung mit Nationalsozialismus und Faschismus und     der Erinnerung daran zum Ziel. Die ständig neu zu stellenden Fragen, was, wann,     wo und von wem wie erinnert wurde und wird, geben Einblicke in die     Transformationen der Auseinandersetzungen mit dem Nationalsozialismus und sind     Ausdruck unseres politischen und gesellschaftlichen Selbstverständnisses in der     Gegenwart. „Gedächtnisorte“, Denk- und Mahnmäler, Gedenktafeln, Gedenkstätten     sowie Straßenbezeichnungen nach WiderstandskämpferInnen und Opfern des     NS-Regimes sind die Materialisationen des Geschichtsbewusstseins im Alltag. Der     Blick auf die Erinnerungslandschaft in der Gegenwart gibt daher zum einen     Einblick in das kollektive Gedächtnis der österreichischen Gesellschaft und zum     anderen legt die Beschäftigung mit ihrer Entstehungsgeschichte die Konjunkturen     dieser Beschäftigung offen.</p>
       </projectDesc>
       <listPrefixDef>
         <prefixDef ident="marcrelator" matchPattern="([a-z]+)" replacementPattern="http://id.loc.gov/vocabulary/relators/$1">
-          <p>Rollen-Taxonomie</p>
+          <p>Institutionelle und Personale Rollen taxonomie</p>
         </prefixDef>
         <prefixDef ident="dcterms" matchPattern="([a-z]+)" replacementPattern="http://purl.org/dc/terms/$1">
-          <p>Datumstaxonomie</p>
-        </prefixDef>
-        <prefixDef ident="skos" matchPattern="([a-z]+)" replacementPattern="http://www.w3.org/2004/02/skos/core#$1">
-          <p>Thesaurustaxonomie</p>
+          <p>Datums Taxonomie</p>
         </prefixDef>
       </listPrefixDef>
     </encodingDesc>
-    <profileDesc>
-      <correspDesc ref="https://gams.uni-graz.at/o:hsa.letter.1">
-        <correspAction type="sent">
-          <persName corresp="https://gams.uni-graz.at/o:hsa.persons#P.1069" ref="https://viaf.org/viaf/228232402">
-            <forename>Charles</forename>
-            <surname>Baissac</surname>
-          </persName>
-          <placeName corresp="https://gams.uni-graz.at/o:hsa.places#PL.41" key="#GID.1" ref="http://sws.geonames.org/934154">Port Louis</placeName>
-          <date when="1885-01-20">1885-01-20</date>
-        </correspAction>
-        <correspAction type="received">
-          <persName corresp="https://gams.uni-graz.at/o:hsa.persons#P.109" ref="https://viaf.org/viaf/261931943">
-            <forename>Hugo</forename>
-            <surname>Schuchardt</surname>
-          </persName>
-        </correspAction>
-      </correspDesc>
-      <textClass>
-        <keywords scheme="cirilo:normalizedPlaceNames">
-          <list>
-            <item>
-              <placeName xml:id="GID.1">
-                <country>Mauritius</country>
-                <settlement>Port Louis</settlement>
-                <name ref="http://geonames.org/934154" type="fcode:PPLC">Port Louis</name>
-                <location>
-                  <geo>57.49889,-20.16194</geo>
-                </location>
-              </placeName>
-            </item>
-          </list>
-        </keywords>
-        <keywords ana="correspondence">
-          <list>
-            <item>
-              <ref target="info:fedora/context:hsa.letters.1069" type="context">
-                        Korrespondenz Charles Baissac - Hugo Schuchardt
-                     </ref>
-            </item>
-            <item>
-              <ref target="info:fedora/context:hsa.letters" type="context">Korrespondenz</ref>
-            </item>
-          </list>
-        </keywords>
-        <classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation">Wissenschaft</classCode>
-        <classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation">Sprachwissenschaft</classCode>
-        <classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation">Brief</classCode>
-      </textClass>
-      <langUsage>
-        <language ident="fr">Französisch</language>
-      </langUsage>
-    </profileDesc>
   </teiHeader>
   <facsimile>
-    <surface>
-      <graphic mimeType="image/jpeg" url="info:fedora/o:hsa.letter.1" xml:id="IMG.1">
-        <desc>
-          <ref
-            target="https://ub.uni-graz.at/de/bibliotheken/sondersammlungen">Universitätsbibliothek Graz Abteilung für Sondersammlungen</ref>, <ref target="https://creativecommons.org/licenses/by-nc/4.0/">Creative commons CC BY-NC https://creativecommons.org/licenses/by-nc/4.0/</ref>
-        </desc>
-      </graphic>
-    </surface>
+    <graphic mimeType="image/jpeg" style="Querformat" url="info:fedora/o:derla.car3" xml:id="IMAGE.1">
+      <desc/>
+    </graphic>
+    <graphic mimeType="image/jpeg" style="Querformat" url="info:fedora/o:derla.car3" xml:id="IMAGE.2">
+      <desc/>
+    </graphic>
   </facsimile>
   <text>
     <body>
-      <div subtype="original" type="letter" xml:id="L.1" xml:lang="fr">
-        <pb facs="#IMG.1" n="1"/>
-        <dateline>Port-Louis, 20 Janvier 1885.</dateline>
-        <lb/>
-        <opener>Mon cher Monsieur Schuchardt,</opener>
-        <p>Ma Doudou vous envoie une petite brochure jaune<note n="1" place="foot" type="editorial"> Welche Broschüre hier gemeint ist, kann nicht mehr ausfindig gemacht werden.</note> à laquelle vous ferez bon accueil, j’en suis sûr.</p>
-        <p>Nous sommes anxieux l’un et l’autre d’avoir de vos nouvelles, et voudrions bien savoir que ce sont vos travaux, et non la maladie, qui nous privent de toute lettre de vous.</p>
-        <closer>
-          <salute>Portez-vous bien, c’est le plus sincère de nos vœux, et croyez-moi, mon cher Monsieur Schuchardt, </salute>
-          <lb/>
-          <salute>Votre bien cordialement dévoué</salute>
-          <lb/>
-          <signed>
-            <persName ref="https://gams.uni-graz.at/o:hsa.persons#P.1069">C Baissac</persName>
-          </signed>
-        </closer>
+      <ab>
+        <ref target="context:derla" type="context">DERLA</ref>
+      </ab>
+      <div type="maintext">
+        <p>Zwischen 1938 und 1945 diente die Klagenfurter Burg als Hauptquartier der Geheimen Staatspolizei (Gestapo) für den Gau Kärnten. Sie war Verhör-, Folter- und Haftort für tausende Menschen, die aufgrund ihrer Weltanschauung, ihrer ethnischen Zugehörigkeit oder Widerstandstätigkeit in Gestapohaft gelangten und war für viele Opfer Durchgangsstation in Konzentrationslager oder an die Gerichtshöfe der NS-Justiz.
+Im Mai 2015 wurde nach langjährigen Forderungen nach einem Erinnerungszeichen eine Gedenktafel an der Innenmauer neben dem westseitigen Zugang zum Burghof angebracht. Die schwarze, runde Tafel ging als Siegerprojekt aus einem vom Land Kärnten ausgeschriebenen KünstlerInnenwettbewerb hervor und wurde von Melitta Moschik gestaltet. Die zweisprachig Deutsch und Slowenisch beschriftete Scheibe mit einem Durchmesser von 150 Zentimeter symbolisiert sowohl eine Zielscheibe als auch ein Verbotsschild.</p>
+      </div>
+      <div type="inscription">
+        <p>„In diesem Gebäude war in den Jahren 1938-1945 der Sitz der Geheimen Staatspolizei. Hier wurden Menschen aufgrund ihrer Weltanschauung, ihrer ethnischen Zugehörigkeit oder ihres Widerstands gegen die NS-Gewaltherrschaft gefoltert. Das Unrecht, das sie erlitten haben, sei uns Mahnung und Auftrag im gemeinsamen Ringen um Freiheit, Demokratie und Menschenrechte."
+„V tej stavbi je bil v letih 1938-1945 sedež gestapa, kjer so mučili ljudi zaradi njihovega svetovnega nazora, narodne pripadnosti ali ker so se uprli nacističnemu nasilju. Krivica, ki so jo doživeli, naj nam bo opomin in poslanstvo pri skupnem prizadevanju za svobodo, demokracijo in človekove pravice.“</p>
       </div>
     </body>
   </text>
 </TEI>
-<?xml-model href="https://gams.uni-graz.at/o:hsa.odd/RNG" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://gams.uni-graz.at/o:hsa.odd/RNG" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
