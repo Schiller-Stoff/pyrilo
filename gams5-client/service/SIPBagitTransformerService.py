@@ -63,8 +63,8 @@ class SIPBagitTransformerService:
 
         # Loop through the SIPs folder
         for folder_name in os.listdir(sips_folder):
-            # skip certain files
-            if folder_name == "README.md":
+            # all files on folder root level are ignored
+            if os.path.isfile(os.path.join(sips_folder, folder_name)):
                 continue
 
             # Create the corresponding bags folder
