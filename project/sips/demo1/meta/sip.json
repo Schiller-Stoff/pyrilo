@@ -1,0 +1,27 @@
+{
+    "$schema": "https://gitlab.cern.ch/digitalmemory/sip-spec/-/blob/master/sip-schema-d1.json",
+    "created_by": "Pyrillo",
+    "source": "local",
+    "recid": "demo1",
+
+    "title": "Demo SIP",
+    "description": "This is a demo SIP for testing purposes.",
+    "creator": "Pyrillo",
+    "rights": "CC-BY-NC-ND",
+    "publisher": "ZIM Zentrum für Informationsmodellierung",
+    "objectType": "TEI",
+    
+    "contentFiles": [
+        {
+            "size": 1947642,
+            "bagpath": "data/content/TEI_SOURCE.xml",
+            "dsid": "TEI_SOURCE",
+            "mimetype": "application/xml",
+            "title": "Main datastream",
+            "description": "This is a demo datastream for testing purposes.",
+            "creator": "Demo project",
+            "rights": "CC-BY-NC-ND",
+            "publisher": "ZIM Zentrum für Informationsmodellierung"
+        }
+    ]
+}
