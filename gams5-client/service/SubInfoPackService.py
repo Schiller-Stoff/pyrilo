@@ -26,7 +26,7 @@ class SubInfoPackService:
 
   def ingest_folder_object(self, project_abbr: str, folder_name: str):
     """
-    Ingests a complete project structure.
+    Ingests given given folder from the local bag structure.
     """
     
     # find folder? 
@@ -34,6 +34,7 @@ class SubInfoPackService:
     # validate folder? 
 
     # zip folder?
+    # TODO should use values from GAMSAPIStatics
     folder_path =  os.getcwd() + "/project/bags/" + folder_name
     logging.debug(f"Zipping folder {folder_path} ...")
 
