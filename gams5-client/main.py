@@ -51,3 +51,5 @@ if __name__ == "__main__":
 
     # create bags from sips strcucture and directly ingest them
     demo_create_bags_and_ingest_them(pyrilo)
+
+    # pyrilo.delete_objects(MY_PROJECT)

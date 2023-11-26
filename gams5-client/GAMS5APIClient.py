@@ -46,6 +46,12 @@ class GAMS5APIClient:
         Deletes a digital object
         """
         return self.digital_object_service.delete_object(id, project_abbr)
+    
+    def delete_objects(self, project_abbr: str):
+        """
+        Deletes all digital objects of a project
+        """
+        return self.digital_object_service.delete_objects(project_abbr)
 
     def ingest_bag(self, project_abbr: str, sip_folder_name: str):
         """
