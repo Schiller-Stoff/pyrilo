@@ -53,6 +53,12 @@ class GAMS5APIClient:
         """
         self.sub_info_pack_service.ingest_folder_object(project_abbr, sip_folder_name)
 
+    def ingest_bags(self, project_abbr: str):
+        """
+        Ingests all bags from the local bag structure.
+        """
+        # TODO loop through directory and call method 
+        self.sub_info_pack_service.ingest_bags(project_abbr)
 
     def ingest(self, project_abbr: str):
         """

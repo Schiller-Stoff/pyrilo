@@ -67,6 +67,19 @@ class SubInfoPackService:
         else:
             logging.info(f"Successfully ingested folder {folder_name} for project {project_abbr}.")
             
+  def ingest_bags(self, project_abbr: str):
+    """
+    Walks through project directory and ingest the bags as individual objects.
+    """
+    # TODO access via GAMS5APIStatics
+    bags_dir = GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH
+    for folder_name in os.listdir(bags_dir):
+      # skip files
+      if not os.path.isdir(os.path.join(bags_dir, folder_name)):
+        continue
+
+      self.ingest_folder_object(project_abbr, folder_name)
+      
 
   def create_multipart_formdata(self, data):
      """
