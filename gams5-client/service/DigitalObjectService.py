@@ -74,7 +74,7 @@ class DigitalObjectService:
         r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False)
 
         if r.status >= 400:
-            msg = f"Failed to request against {url}. API response: {r.json()}"
+            msg = f"Failed to delete object {id} for project {project_abbr}. DELETE request against {url}. API response: {r.json()}"
             logging.error(msg)
             raise ConnectionError(msg)
         else:
@@ -89,7 +89,7 @@ class DigitalObjectService:
         r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False)
 
         if r.status >= 400:
-            msg = f"Failed to request against {url}. API response: {r.json()}"
+            msg = f"Failed to DELETE all objects for project {project_abbr}. DELETE request against {url}. API response: {r.json()}"
             logging.error(msg)
             raise ConnectionError(msg)
         else:
