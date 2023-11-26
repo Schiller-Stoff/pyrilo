@@ -26,6 +26,9 @@ def demo_create_bags_and_ingest_them(pyrilo: GAMS5APIClient):
     # demo for transforming local SIPs to bagit format
     pyrilo.transform_sips_to_bags()
     
+    # optionally delete all objects first
+    pyrilo.delete_objects(MY_PROJECT)
+
     # demo for ingesting all bags from the local bag structure 
     pyrilo.ingest_bags(MY_PROJECT)
 
