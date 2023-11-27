@@ -71,3 +71,9 @@ class GAMS5APIClient:
         Transforms all SIPs to the bagit format.
         """
         return self.sip_bagit_transformer_service.transform()
+    
+    def request_sip_files(self, project_abbr: str):
+        """
+        Requests all SIP files from the GAMS5-API and stores it in local folder structure
+        """
+        return self.sub_info_pack_service.request_sip_files(project_abbr)
