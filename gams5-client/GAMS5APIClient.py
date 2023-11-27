@@ -63,16 +63,7 @@ class GAMS5APIClient:
         """
         Ingests all bags from the local bag structure.
         """
-        # TODO loop through directory and call method 
         self.sub_info_pack_service.ingest_bags(project_abbr)
-
-    def ingest(self, project_abbr: str):
-        """
-        Walks through project directory and ingests individual objects.
-        """
-        # TODO loop through directory and call method 
-        # self.sub_info_pack_service.ingest_folder_object(project_abbr, "demo1")
-        raise NotImplementedError("Not implemented!")
 
     def transform_sips_to_bags(self):
         """
