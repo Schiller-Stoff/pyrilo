@@ -2,6 +2,7 @@ from service.SubInfoPackService import SubInfoPackService
 from service.DigitalObjectService import DigitalObjectService
 from service.SIPBagitTransformerService import SIPBagitTransformerService
 from service.BagService import BagService
+from service.IntegrationService import IntegrationService
 from typing import List
 
 class GAMS5APIClient:
@@ -15,12 +16,14 @@ class GAMS5APIClient:
     sub_info_pack_service: SubInfoPackService
     sip_bagit_transformer_service: SIPBagitTransformerService
     bag_service: BagService
+    integration_service: IntegrationService
 
     def __init__(self, host: str) -> None:
         self.digital_object_service = DigitalObjectService(host)
         self.bag_service = BagService(host)
         self.sub_info_pack_service = SubInfoPackService(host)
         self.sip_bagit_transformer_service = SIPBagitTransformerService()
+        self.integration_service = IntegrationService(host)
 
     def configure_auth(self, user_name: str, user_pw: str):
         """
@@ -77,3 +80,9 @@ class GAMS5APIClient:
         Requests all SIP files from the GAMS5-API and stores it in local folder structure
         """
         return self.sub_info_pack_service.request_sip_files(project_abbr)
+    
+    def integrate_project_objects(self, project_abbr: str):
+        """
+        Integrates all objects of a project
+        """
+        return self.integration_service.integrate_all(project_abbr)

@@ -1,0 +1,34 @@
+from statics.GAMS5APIStatics import GAMS5APIStatics
+from urllib3 import make_headers, request
+import logging
+
+class IntegrationService:
+    """
+    Handles operations on GAMS integration endpoints, like triggering indexation to 
+    certain databases etc.
+    """
+
+    auth: tuple | None = None
+    host: str
+    # do some error control? (should not contain trailing slashes etc.) 
+    API_BASE_PATH: str
+
+    def __init__(self, host: str, auth: tuple | None = None) -> None:
+        self.host = host
+        self.auth = auth
+        self.API_BASE_PATH = f"{host}{GAMS5APIStatics.API_ROOT}"
+
+    
+    def integrate_all(self, project_abbr: str):
+        """
+        
+        """
+        url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects"
+        r = request("POST", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False)
+
+        if r.status >= 400:
+            msg = f"Failed to integrate all objects for project {project_abbr}. POST request against {url}. API response: "
+            logging.error(msg)
+            raise ConnectionError(msg)
+        else:
+            logging.info(f"Successfully integrated all digital objects for project {project_abbr}.")

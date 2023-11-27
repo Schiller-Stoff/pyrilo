@@ -32,6 +32,8 @@ def demo_create_bags_and_ingest_them(pyrilo: GAMS5APIClient):
     # demo for ingesting all bags from the local bag structure 
     pyrilo.ingest_bags(MY_PROJECT)
 
+    # demo index all
+    pyrilo.integrate_project_objects(MY_PROJECT)
 
 
 def demo_ingest_bag():
