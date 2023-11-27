@@ -82,4 +82,4 @@ class SIPBagitTransformerService:
             self.create_bag_files(bags_folder_path)
             self.create_bagit_checksum_files(bags_folder_path)
 
-            logging.debug(f"Successfully transformed SIP {folder_name} to bag {bags_folder}.")
+            logging.info(f"Successfully transformed SIP {folder_name} to bag {bags_folder}.")
