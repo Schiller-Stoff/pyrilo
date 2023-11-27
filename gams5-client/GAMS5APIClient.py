@@ -1,6 +1,7 @@
 from service.SubInfoPackService import SubInfoPackService
 from service.DigitalObjectService import DigitalObjectService
 from service.SIPBagitTransformerService import SIPBagitTransformerService
+from service.BagService import BagService
 from typing import List
 
 class GAMS5APIClient:
@@ -13,10 +14,12 @@ class GAMS5APIClient:
     digital_object_service: DigitalObjectService
     sub_info_pack_service: SubInfoPackService
     sip_bagit_transformer_service: SIPBagitTransformerService
+    bag_service: BagService
 
     def __init__(self, host: str) -> None:
         self.digital_object_service = DigitalObjectService(host)
-        self.sub_info_pack_service = SubInfoPackService(host)
+        self.bag_service = BagService(host)
+        self.sub_info_pack_service = SubInfoPackService()
         self.sip_bagit_transformer_service = SIPBagitTransformerService()
 
     def configure_auth(self, user_name: str, user_pw: str):
@@ -24,7 +27,7 @@ class GAMS5APIClient:
         Configures authentication for state changing operations via the REST-API.
         """
         self.digital_object_service.auth = (user_name, user_pw)
-        self.sub_info_pack_service.auth = (user_name, user_pw)
+        self.bag_service.auth = (user_name, user_pw)
 
     def list_objects(self, project_abbr: str) -> List[str]:
         """
@@ -55,13 +58,13 @@ class GAMS5APIClient:
         """
         Ingests defined folder from the local SIP structure.
         """
-        self.sub_info_pack_service.ingest_folder_object(project_abbr, sip_folder_name)
+        self.bag_service.ingest_bag(project_abbr, sip_folder_name)
 
     def ingest_bags(self, project_abbr: str):
         """
         Ingests all bags from the local bag structure.
         """
-        self.sub_info_pack_service.ingest_bags(project_abbr)
+        self.bag_service.ingest_bags(project_abbr)
 
     def transform_sips_to_bags(self):
         """
