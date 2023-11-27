@@ -61,7 +61,9 @@ class SIPBagitTransformerService:
 
         # Get the path of the bags folder
         bags_folder = GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH
-
+        # delete all child folder inside bags folder
+        self.delete_child_folders(bags_folder)
+        
         # Loop through the SIPs folder
         for folder_name in os.listdir(sips_folder):
             # all files on folder root level are ignored
@@ -82,4 +84,14 @@ class SIPBagitTransformerService:
             self.create_bag_files(bags_folder_path)
             self.create_bagit_checksum_files(bags_folder_path)
 
-            logging.info(f"Successfully transformed SIP {folder_name} to bag {bags_folder}.")
+            logging.info(f"Successfully transformed SIP {folder_name} to bag {bags_folder_path}.")
+
+
+    def delete_child_folders(self, bags_folder_path: str):
+        """
+        Deletes all folders inside given path
+        """
+        for folder_name in os.listdir(bags_folder_path):
+            folder_path = os.path.join(bags_folder_path, folder_name)
+            if os.path.isdir(folder_path):
+                shutil.rmtree(folder_path)
