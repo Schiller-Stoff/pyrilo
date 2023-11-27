@@ -15,3 +15,4 @@ prototypical python based gams5 client application - as proxy against the REST-A
 # Dependencies
 
 - available GAMS5 instance.
+- python 3.12
