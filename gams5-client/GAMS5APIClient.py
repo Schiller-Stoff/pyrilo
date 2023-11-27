@@ -19,7 +19,7 @@ class GAMS5APIClient:
     def __init__(self, host: str) -> None:
         self.digital_object_service = DigitalObjectService(host)
         self.bag_service = BagService(host)
-        self.sub_info_pack_service = SubInfoPackService()
+        self.sub_info_pack_service = SubInfoPackService(host)
         self.sip_bagit_transformer_service = SIPBagitTransformerService()
 
     def configure_auth(self, user_name: str, user_pw: str):
