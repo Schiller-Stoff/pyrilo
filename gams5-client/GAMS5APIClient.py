@@ -69,5 +69,4 @@ class GAMS5APIClient:
         """
         Transforms all SIPs to the bagit format.
         """
-        # TODO implement
         return self.sip_bagit_transformer_service.transform()
