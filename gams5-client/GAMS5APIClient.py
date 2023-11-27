@@ -87,3 +87,9 @@ class GAMS5APIClient:
         Integrates all objects of a project
         """
         return self.integration_service.integrate_all(project_abbr)
+    
+    def disintegrate_project_objects(self, project_abbr: str):
+        """
+        Disintegrates all objects of a project
+        """
+        return self.integration_service.disintegrate_all(project_abbr)
