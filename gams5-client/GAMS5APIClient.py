@@ -31,6 +31,7 @@ class GAMS5APIClient:
         """
         self.digital_object_service.auth = (user_name, user_pw)
         self.bag_service.auth = (user_name, user_pw)
+        self.integration_service.auth = (user_name, user_pw)
 
     def list_objects(self, project_abbr: str) -> List[str]:
         """

@@ -21,14 +21,15 @@ class IntegrationService:
     
     def integrate_all(self, project_abbr: str):
         """
-        
+        Integrate all digital objects of a project to gams-integration services.
         """
         url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects"
         r = request("POST", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False)
 
         if r.status >= 400:
-            msg = f"Failed to integrate all objects for project {project_abbr}. POST request against {url}. API response: "
+            msg = f"Failed to integrate all objects for project {project_abbr}. POST request against {url}. Status: {r.status}."
             logging.error(msg)
+            logging.error(f"Response: {r.json()}")
             raise ConnectionError(msg)
         else:
             logging.info(f"Successfully integrated all digital objects for project {project_abbr}.")
