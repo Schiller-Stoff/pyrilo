@@ -20,3 +20,4 @@ dist
 .pypirc
 __pycache__
 logs
+project/bags
