@@ -2,8 +2,6 @@ from service.SubInfoPackService import SubInfoPackService
 from service.DigitalObjectService import DigitalObjectService
 from service.SIPBagitTransformerService import SIPBagitTransformerService
 from typing import List
-import logging
-import os
 
 class GAMS5APIClient:
     """
