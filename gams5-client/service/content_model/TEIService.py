@@ -93,7 +93,7 @@ class TEIService:
     @staticmethod
     def _handle_tei_images(xml_root: ET.Element):
         """
-        TODO add
+        Extracts image metadata from a TEI document.
         """
         
         graphic_elems = xml_root.findall(".//facsimile/graphic", GAMSXMLNamespaces.TEI_NAMESPACES)
