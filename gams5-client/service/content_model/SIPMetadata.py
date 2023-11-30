@@ -19,7 +19,7 @@ class SIPMetadata:
     creator: str
     rights: str
     publisher: str
-    object_type: str = "TEI"
+    object_type: str
     files: List[SIPFileMetadata] = field(default_factory=list)
 
 
