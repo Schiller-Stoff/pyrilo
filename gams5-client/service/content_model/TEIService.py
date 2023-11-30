@@ -21,7 +21,7 @@ class TEIService:
         """
 
         # open file a string and clean it -> otherwiese ETree wil very often fail at parsing
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding="utf8") as file:
             content = file.read()
             content = xml_operations.clean_xml_string(content)
             return xml_operations.parse_xml(content)
