@@ -1,4 +1,7 @@
-
+import logging
+import xml.etree.ElementTree as ET
+from content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
+import utils.xml_operations as xml_operations
 
 class TEIService:
     """
@@ -6,7 +9,14 @@ class TEIService:
 
     """
 
-    def extract_metadata():
+    def read_xml(self, path: str) -> ET.Element:
+        """
+        Parses given xml file and returns root element.
+        """
+        return xml_operations.parse_xml(path)
+
+
+    def extract_metadata(xml_root: ET.Element):
         """
         Extracts metadata from a TEI document.
 
@@ -17,5 +27,14 @@ class TEIService:
         # read out creator
         # ...
 
-        raise NotImplementedError("Not implemented yet.")
+        pid_idno_elem = xml_root.find(".//idno[@type='pid']", GAMSXMLNamespaces.TEI_NAMESPACES)
+        id = pid_idno_elem.text
+
+        title_title_elem = xml_root.find(".//titleStmt/title", GAMSXMLNamespaces.TEI_NAMESPACES)
+        title = title_title_elem.text
+
+        logging.info("Extracted pid: " + id)
+        logging.info("Extracted title: " + title)
+
+        # raise NotImplementedError("Not implemented yet.")
 
