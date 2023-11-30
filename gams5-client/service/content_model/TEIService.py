@@ -3,8 +3,8 @@ import json
 import logging
 import xml.etree.ElementTree as ET
 from typing import List
-from service.content_model.SIPObjectMetadata import SIPObjectMetadata
-from service.content_model.SIPDatastreamMetadata import SIPDatastreamMetadata
+from service.content_model.SIPMetadata import SIPMetadata
+from service.content_model.SIPFileMetadata import SIPFileMetadata
 from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
 import utils.xml_operations as xml_operations
 
@@ -27,7 +27,7 @@ class TEIService:
             return xml_operations.parse_xml(content)
         
     @staticmethod    
-    def write_sip_object_to_json(sip_object_metadata: SIPObjectMetadata, target_path: str):
+    def write_sip_object_to_json(sip_object_metadata: SIPMetadata, target_path: str):
         """
         Transforms given sip object to json and writes it to the given path. 
         """
@@ -41,7 +41,7 @@ class TEIService:
 
 
     @staticmethod
-    def extract_metadata(xml_root: ET.Element) -> SIPObjectMetadata:
+    def extract_metadata(xml_root: ET.Element) -> SIPMetadata:
         """
         Extracts metadata from a TEI document.
 
@@ -68,7 +68,7 @@ class TEIService:
         logging.info("Extracted title: " + title)
 
 
-        object_metadata = SIPObjectMetadata(
+        object_metadata = SIPMetadata(
             id=id, 
             title=title, 
             creator="TODO", 
@@ -103,7 +103,7 @@ class TEIService:
             raise ReferenceError("No images found in TEI document.")
         
 
-        image_datastreams: List[SIPDatastreamMetadata] = []
+        image_datastreams: List[SIPFileMetadata] = []
 
         for graphic_elem in graphic_elems:
             url = graphic_elem.get("url")
@@ -117,7 +117,7 @@ class TEIService:
 
             # TODO ectract description, title, creator, rights, publisher, size, mimetype
 
-            cur_image_datastream = SIPDatastreamMetadata(dsid=dsid, bagpath=url, title="TODO", mimetype="TODO", creator="TODO", description="TODO", rights="TODO", publisher="TODO", size="TODO")
+            cur_image_datastream = SIPFileMetadata(dsid=dsid, bagpath=url, title="TODO", mimetype="TODO", creator="TODO", description="TODO", rights="TODO", publisher="TODO", size="TODO")
             logging.info(f"Found image {cur_image_datastream} in TEI document.")
             image_datastreams.append(cur_image_datastream)
         

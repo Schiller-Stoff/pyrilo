@@ -3,12 +3,12 @@
 from dataclasses import dataclass, field
 import dataclasses
 import json
-from service.content_model.SIPDatastreamMetadata import SIPDatastreamMetadata
+from service.content_model.SIPFileMetadata import SIPFileMetadata
 from typing import List
 
 
 @dataclass
-class SIPObjectMetadata:
+class SIPMetadata:
     """
     Contains data needed to construct a sip.json describin a digital object.
     """
@@ -20,7 +20,7 @@ class SIPObjectMetadata:
     rights: str
     publisher: str
     object_type: str = "TEI"
-    files: List[SIPDatastreamMetadata] = field(default_factory=list)
+    files: List[SIPFileMetadata] = field(default_factory=list)
 
 
     def serialize_to_json(self):
