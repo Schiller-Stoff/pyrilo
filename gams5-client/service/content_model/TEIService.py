@@ -34,12 +34,8 @@ class TEIService:
 
         # TODO add some error checks? e.g. if target_path is valid
 
-        sip_object_dict = dataclasses.asdict(sip_object_metadata)
-        json_result = json.dumps(sip_object_dict)
-        logging.debug(f"Converted sip object to json file: {json_result}")
-
         with open(target_path, 'w') as file:
-            json.dump(sip_object_dict, file)
+            file.write(sip_object_metadata.serialize_to_json())
         
         logging.info(f"Succesffully wrote sip.json to path: {target_path}")
 

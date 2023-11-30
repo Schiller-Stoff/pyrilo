@@ -1,6 +1,8 @@
 
 
 from dataclasses import dataclass, field
+import dataclasses
+import json
 from service.content_model.SIPDatastreamMetadata import SIPDatastreamMetadata
 from typing import List
 
@@ -19,3 +21,13 @@ class SIPObjectMetadata:
     publisher: str
     object_type: str = "TEI"
     files: List[SIPDatastreamMetadata] = field(default_factory=list)
+
+
+    def serialize_to_json(self):
+        """
+        Serializes this object to json. Corresponds to CERNS sip.json format.
+        """
+        sip_object_dict = dataclasses.asdict(self)
+        return json.dumps(sip_object_dict)
+        
+        
