@@ -54,6 +54,7 @@ class SIPBagitTransformerService:
     def transform(self):
         """
         Transforms all project files to the bagit format.
+        TODO: rename! --> creates the base folder structure in the first place!
         """
 
         # Get the path of the SIPs folder
@@ -75,10 +76,17 @@ class SIPBagitTransformerService:
             bags_folder_path = os.path.join(bags_folder, folder_name)
             os.makedirs(bags_folder_path, exist_ok=True)
 
-            # Copy contents from SIP folder to the data directory inside the generated bag
+            # Copy contents from SIP folder to the data/content directory inside the generated bag
             sip_folder_path = os.path.join(sips_folder, folder_name)
-            data_folder_path = os.path.join(bags_folder_path, "data")
+            data_folder_path = os.path.join(bags_folder_path, "data/content")
             shutil.copytree(sip_folder_path, data_folder_path, dirs_exist_ok=True)
+
+            # create meta folder for bagit
+            meta_folder_path = os.path.join(bags_folder_path, "data/meta")
+            os.makedirs(meta_folder_path, exist_ok=True)
+
+            # extract the sip.json from source.xml
+            # TODO add real logic for extracting sip.json
 
             # Create basic bag files
             self.create_bag_files(bags_folder_path)
