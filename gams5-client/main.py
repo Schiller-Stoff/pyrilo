@@ -40,6 +40,13 @@ def demo_ingest_bag():
     pass
 
 
+def test_contentmodels(pyrilo: GAMS5APIClient):
+    """
+    Test content models
+    """
+    pyrilo.create_sip_json("demo")
+    
+
 if __name__ == "__main__":
 
     pyrilo = setup_client()
@@ -55,8 +62,10 @@ if __name__ == "__main__":
     # pyrilo.delete_object("hsa.letter.1", MY_PROJECT)
 
     # create bags from sips strcucture and directly ingest them
-    demo_create_bags_and_ingest_them(pyrilo)
+    # demo_create_bags_and_ingest_them(pyrilo)
 
     # pyrilo.delete_objects(MY_PROJECT)
 
     # pyrilo.disintegrate_project_objects(MY_PROJECT)
+
+    test_contentmodels(pyrilo)

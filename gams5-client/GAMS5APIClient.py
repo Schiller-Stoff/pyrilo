@@ -4,6 +4,7 @@ from service.SIPBagitTransformerService import SIPBagitTransformerService
 from service.BagService import BagService
 from service.IntegrationService import IntegrationService
 from typing import List
+from service.content_model.TEIService import TEIService
 
 class GAMS5APIClient:
     """
@@ -93,3 +94,15 @@ class GAMS5APIClient:
         Disintegrates all objects of a project
         """
         return self.integration_service.disintegrate_all(project_abbr)
+    
+    def create_sip_json(self, project_abbr: str):
+        """
+        TODO add
+        """
+
+        xml_root = TEIService.read_xml("C:\\Users\\sebas\\Desktop\\derla_vorarlberg\\vor4\\vor4.xml")
+
+        sip_object = TEIService.extract_metadata(xml_root)
+        TEIService.write_sip_object_to_json(sip_object, "C:\\Users\\sebas\\Desktop\\derla_vorarlberg\\vor4\\sip.json")
+
+        raise NotImplementedError("Not implemented yet.")
