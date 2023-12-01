@@ -28,6 +28,12 @@ class SIPMetadata:
         Serializes this object to json. Corresponds to CERNS sip.json format.
         """
         sip_object_dict = dataclasses.asdict(self)
+
+        # add static fields
+        sip_object_dict["$schema"] = "https://gitlab.cern.ch/digitalmemory/sip-spec/-/blob/master/sip-schema-d1.json"
+        sip_object_dict["created_by"] = "Pyrilo"
+        sip_object_dict["source"] = "local"
+
         return json.dumps(sip_object_dict)
         
         
