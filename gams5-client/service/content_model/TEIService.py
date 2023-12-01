@@ -53,12 +53,14 @@ class TEIService:
         # read out creator
         # ...
 
+        # TODO move to own method
         pid_idno_elem = xml_root.find(".//idno[@type='PID']", GAMSXMLNamespaces.TEI_NAMESPACES) 
         if pid_idno_elem is None:
             raise ReferenceError("No pid found in TEI document.")
         
         id = pid_idno_elem.text
 
+        # TODO transfer to own method
         title_title_elem = xml_root.find(".//titleStmt/title", GAMSXMLNamespaces.TEI_NAMESPACES)
         if title_title_elem is None:
             raise ReferenceError("No title found in TEI document.")
