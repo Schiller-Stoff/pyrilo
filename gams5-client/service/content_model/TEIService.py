@@ -74,7 +74,7 @@ class TEIService:
             title=title, 
             # TODO add processing of missing statements!
             creator="TODO", 
-            description="TODO",
+            description="TODO TODO TODO",
             object_type=ContentModels.TEI, 
             publisher="TODO", 
             rights="TODO",
