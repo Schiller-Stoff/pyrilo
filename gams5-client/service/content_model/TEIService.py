@@ -3,6 +3,7 @@ import json
 import logging
 import xml.etree.ElementTree as ET
 from typing import List
+from service.content_model.ContentModels import ContentModels
 from service.content_model.SIPMetadata import SIPMetadata
 from service.content_model.SIPFileMetadata import SIPFileMetadata
 from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
@@ -72,8 +73,9 @@ class TEIService:
             id=id, 
             title=title, 
             creator="TODO", 
-            description="TODO", 
-            object_type="TODO", 
+            description="TODO",
+            # TODO TEI-service will always assign object_type = TEI 
+            object_type=ContentModels.TEI, 
             publisher="TODO", 
             rights="TODO",
             files=[]
