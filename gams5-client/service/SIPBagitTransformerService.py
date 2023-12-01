@@ -2,6 +2,8 @@ import datetime
 import logging
 import os
 import shutil
+
+from service.content_model.TEIService import TEIService
 from statics.GAMS5APIStatics import GAMS5APIStatics
 
 
@@ -78,15 +80,18 @@ class SIPBagitTransformerService:
 
             # Copy contents from SIP folder to the data/content directory inside the generated bag
             sip_folder_path = os.path.join(sips_folder, folder_name)
-            data_folder_path = os.path.join(bags_folder_path, "data/content")
+            data_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "content")
             shutil.copytree(sip_folder_path, data_folder_path, dirs_exist_ok=True)
 
             # create meta folder for bagit
-            meta_folder_path = os.path.join(bags_folder_path, "data/meta")
+            meta_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "meta")
             os.makedirs(meta_folder_path, exist_ok=True)
 
             # extract the sip.json from source.xml
-            # TODO add real logic for extracting sip.json
+            source_xml_path = os.path.join(sip_folder_path, "TEI_SOURCE.xml")
+            xml_root = TEIService.read_xml(source_xml_path)
+            sip_object = TEIService.extract_metadata(xml_root)
+            TEIService.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 
             # Create basic bag files
             self.create_bag_files(bags_folder_path)

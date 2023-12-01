@@ -68,4 +68,8 @@ if __name__ == "__main__":
 
     # pyrilo.disintegrate_project_objects(MY_PROJECT)
 
-    test_contentmodels(pyrilo)
+    
+    # test_contentmodels(pyrilo)
+
+
+    pyrilo.transform_sips_to_bags()
