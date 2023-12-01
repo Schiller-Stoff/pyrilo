@@ -5,6 +5,7 @@ import dataclasses
 import json
 from service.content_model.SIPFileMetadata import SIPFileMetadata
 from typing import List
+import copy
 
 
 @dataclass
@@ -20,7 +21,8 @@ class SIPMetadata:
     rights: str
     publisher: str
     object_type: str
-    files: List[SIPFileMetadata] = field(default_factory=list)
+    # needs to be named in camelCase otherwise there will be a serialization error 
+    contentFiles: List[SIPFileMetadata] = field(default_factory=list)
 
 
     def serialize_to_json(self):
