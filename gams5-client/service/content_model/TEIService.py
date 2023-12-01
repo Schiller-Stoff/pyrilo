@@ -68,13 +68,14 @@ class TEIService:
         logging.info("Extracted pid: " + id)
         logging.info("Extracted title: " + title)
 
+        description = TEIService.resolve_sip_description(xml_root)
 
         object_metadata = SIPMetadata(
             id=id, 
             title=title, 
             # TODO add processing of missing statements!
             creator="TODO", 
-            description="TODO TODO TODO",
+            description=description,
             object_type=ContentModels.TEI, 
             publisher="TODO", 
             rights="TODO",
@@ -91,6 +92,20 @@ class TEIService:
         logging.info(f"Extracted metadata from TEI document. {object_metadata}")
         return object_metadata
 
+
+    @staticmethod
+    def resolve_sip_description(xml_root: ET.Element):
+        """
+        Reads out the defined description of the TEI.
+        Assigns a default description if no description is defined.
+        """
+        # TODO what about logging?
+        p_description = xml_root.find(".//encodingDesc/editorialDecl/p", GAMSXMLNamespaces.TEI_NAMESPACES)
+        if p_description is None:
+            # TODO default should be something like (Digital object of the xyz projcet) or something like that
+            return "TODO TODO TODO"
+        else:
+            return p_description.text
 
     @staticmethod
     def _handle_tei_images(xml_root: ET.Element):
