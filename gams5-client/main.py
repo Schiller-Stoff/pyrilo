@@ -65,4 +65,5 @@ if __name__ == "__main__":
     # test_contentmodels(pyrilo)
 
 
+    # demo call for tansforming project sips to bags
     pyrilo.transform_sips_to_bags()
