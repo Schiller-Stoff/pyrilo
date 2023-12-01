@@ -81,13 +81,13 @@ class TEIService:
             object_type=ContentModels.TEI, 
             publisher="TODO", 
             rights="TODO",
-            files=[]
+            contentFiles=[]
         )
 
         # process images defined in the TEI document
         image_files = TEIService._handle_tei_images(xml_root)
         for image_file in image_files:
-            object_metadata.files.append(image_file)
+            object_metadata.contentFiles.append(image_file)
         
         # TODO process other files defined in the TEI document
 
