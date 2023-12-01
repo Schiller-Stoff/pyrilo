@@ -119,7 +119,7 @@ class TEIService:
             # TODO ectract description, title, creator, rights, publisher, size, mimetype
 
             title = TEIService.resolve_file_title(graphic_elem, dsid)
-
+            size = TEIService.resolve_file_size(graphic_elem)
 
             cur_image_datastream = SIPFileMetadata(
                 dsid=dsid, 
@@ -131,7 +131,7 @@ class TEIService:
                 description="TODO", 
                 rights="TODO", 
                 publisher="TODO", 
-                size="TODO"
+                size=size
             )
 
             logging.info(f"Found image {cur_image_datastream} in TEI document.")
@@ -186,3 +186,14 @@ class TEIService:
         # TODO could add some checks if the title is valid / if the title actually corresponds to the file etc.
 
         return dsid
+    
+    @staticmethod
+    def resolve_file_size(graphic_elem: ET.Element) -> str:
+        """
+        Reads out the defined graphic element's size.
+        """
+        # TODO would need to be generated? -> maybe not needed?
+        
+        # TODO could add some checks if the size is valid / if the size actually corresponds to the file etc.
+
+        return 9999999
