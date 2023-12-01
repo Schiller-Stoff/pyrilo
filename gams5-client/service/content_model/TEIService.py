@@ -118,10 +118,13 @@ class TEIService:
 
             # TODO ectract description, title, creator, rights, publisher, size, mimetype
 
+            title = TEIService.resolve_file_title(graphic_elem, dsid)
+
+
             cur_image_datastream = SIPFileMetadata(
                 dsid=dsid, 
                 bagpath=url, 
-                title="TODO", 
+                title=title, 
                 mimetype=mimetype, 
                 creator="TODO", 
                 description="TODO", 
@@ -129,7 +132,7 @@ class TEIService:
                 publisher="TODO", 
                 size="TODO"
             )
-            
+
             logging.info(f"Found image {cur_image_datastream} in TEI document.")
             image_datastreams.append(cur_image_datastream)
         
@@ -171,4 +174,14 @@ class TEIService:
         # TODO could add some checks if the mimetyoe is valid / if the mimetype actually corresponds to the file etc.
 
         return mimetype
-    
+
+    @staticmethod
+    def resolve_file_title(graphic_elem: ET.Element, dsid: str) -> str:
+        """
+        Reads out the defined graphic element's title. If no title is defined, the dsid is used as title.
+        """
+        # TODO currently there is no title defined in the TEI document?
+        
+        # TODO could add some checks if the title is valid / if the title actually corresponds to the file etc.
+
+        return dsid
