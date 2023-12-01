@@ -125,7 +125,8 @@ class TEIService:
                 dsid=dsid, 
                 bagpath=url, 
                 title=title, 
-                mimetype=mimetype, 
+                mimetype=mimetype,
+                # TODO add processing of missing statements! 
                 creator="TODO", 
                 description="TODO", 
                 rights="TODO", 
