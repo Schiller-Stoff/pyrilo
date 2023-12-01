@@ -106,9 +106,7 @@ class TEIService:
         image_datastreams: List[SIPFileMetadata] = []
 
         for graphic_elem in graphic_elems:
-            url = graphic_elem.get("url")
-            if url is None:
-                raise ReferenceError("No url attribute found on image <graphic> element.")
+            url = TEIService._resolve_image_url_to_bagpath(graphic_elem)
             
             # TODO - somehow etree does not recognize the xml:id attribute's namespace
             dsid = graphic_elem.get("{http://www.w3.org/XML/1998/namespace}id")
@@ -125,4 +123,27 @@ class TEIService:
         logging.info(f"Found {len(graphic_elems)} images in TEI document.")
 
         return image_datastreams
+    
+
+    @staticmethod
+    def _resolve_image_url_to_bagpath(graphic_elem: ET.Element) -> str:
+        """
+        Reads out the defined graphic element's url and resolves it to the expected bag-path.
+        Like from "file:///1.JPG" to "data/content/1.JPG"
+        """
+        url = graphic_elem.get("url")
+        if url is None:
+            raise ReferenceError("No url attribute found on image <graphic> element.")
+        
+        if "file:///" in url:
+            url = url.replace("file:///", "data/content/")
+            logging.info(f"Resolved TEI's graphic image url to: {url}")
+        # TODO add some checks what should not be included inside the urL?
+            
+        # TODO rewrite url to the expected bag-path directly here?
+        # TODO maybe check if the url contains "file:///" and points outside of the SIP? -> throw an exception?
+        # TODO what if the url does no contain "file:///"? -> throw an exception?
+
+        return url
+
     
