@@ -110,6 +110,7 @@ class TEIService:
             if url is None:
                 raise ReferenceError("No url attribute found on image <graphic> element.")
             
+            # TODO - somehow etree does not recognize the xml:id attribute's namespace
             dsid = graphic_elem.get("{http://www.w3.org/XML/1998/namespace}id")
             logging.info(f"{graphic_elem.attrib}")
             if dsid is None:

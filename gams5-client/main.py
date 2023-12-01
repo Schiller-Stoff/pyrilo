@@ -38,13 +38,6 @@ def demo_create_bags_and_ingest_them(pyrilo: GAMS5APIClient):
 
 def demo_ingest_bag():
     pass
-
-
-def test_contentmodels(pyrilo: GAMS5APIClient):
-    """
-    Test content models
-    """
-    pyrilo.create_sip_json("demo")
     
 
 if __name__ == "__main__":
