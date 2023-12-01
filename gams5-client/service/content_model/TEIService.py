@@ -118,7 +118,18 @@ class TEIService:
 
             # TODO ectract description, title, creator, rights, publisher, size, mimetype
 
-            cur_image_datastream = SIPFileMetadata(dsid=dsid, bagpath=url, title="TODO", mimetype=mimetype, creator="TODO", description="TODO", rights="TODO", publisher="TODO", size="TODO")
+            cur_image_datastream = SIPFileMetadata(
+                dsid=dsid, 
+                bagpath=url, 
+                title="TODO", 
+                mimetype=mimetype, 
+                creator="TODO", 
+                description="TODO", 
+                rights="TODO", 
+                publisher="TODO", 
+                size="TODO"
+            )
+            
             logging.info(f"Found image {cur_image_datastream} in TEI document.")
             image_datastreams.append(cur_image_datastream)
         
