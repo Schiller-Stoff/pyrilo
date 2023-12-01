@@ -179,10 +179,10 @@
     </encodingDesc>
   </teiHeader>
   <facsimile>
-    <graphic mimeType="image/jpeg" style="Querformat" url="info:fedora/o:derla.car3" xml:id="IMAGE.1">
+    <graphic mimeType="image/jpeg" style="Querformat" url="file:///1.JPG" xml:id="IMAGE.1">
       <desc/>
     </graphic>
-    <graphic mimeType="image/jpeg" style="Querformat" url="info:fedora/o:derla.car3" xml:id="IMAGE.2">
+    <graphic mimeType="image/jpeg" style="Querformat" url="file:///2.JPG" xml:id="IMAGE.2">
       <desc/>
     </graphic>
   </facsimile>
