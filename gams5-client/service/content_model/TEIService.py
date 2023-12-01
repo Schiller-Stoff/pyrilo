@@ -107,6 +107,7 @@ class TEIService:
 
         for graphic_elem in graphic_elems:
             url = TEIService._resolve_image_url_to_bagpath(graphic_elem)
+            mimetype = TEIService._resolve_mimetype(graphic_elem)
             
             # TODO - somehow etree does not recognize the xml:id attribute's namespace
             dsid = graphic_elem.get("{http://www.w3.org/XML/1998/namespace}id")
@@ -116,7 +117,7 @@ class TEIService:
 
             # TODO ectract description, title, creator, rights, publisher, size, mimetype
 
-            cur_image_datastream = SIPFileMetadata(dsid=dsid, bagpath=url, title="TODO", mimetype="TODO", creator="TODO", description="TODO", rights="TODO", publisher="TODO", size="TODO")
+            cur_image_datastream = SIPFileMetadata(dsid=dsid, bagpath=url, title="TODO", mimetype=mimetype, creator="TODO", description="TODO", rights="TODO", publisher="TODO", size="TODO")
             logging.info(f"Found image {cur_image_datastream} in TEI document.")
             image_datastreams.append(cur_image_datastream)
         
@@ -146,4 +147,14 @@ class TEIService:
 
         return url
 
+    @staticmethod
+    def _resolve_mimetype(graphic_elem: ET.Element) -> str:
+        """
+        Reads out the defined graphic element's mimetype.
+        """
+        mimetype = graphic_elem.get("mimeType")
+        if mimetype is None:
+            raise ReferenceError("No mimetype attribute found on image <graphic> element in given TEI document")
+        
+        return mimetype
     
