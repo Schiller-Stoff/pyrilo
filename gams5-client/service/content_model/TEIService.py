@@ -74,7 +74,6 @@ class TEIService:
             title=title, 
             creator="TODO", 
             description="TODO",
-            # TODO TEI-service will always assign object_type = TEI 
             object_type=ContentModels.TEI, 
             publisher="TODO", 
             rights="TODO",
