@@ -156,5 +156,7 @@ class TEIService:
         if mimetype is None:
             raise ReferenceError("No mimetype attribute found on image <graphic> element in given TEI document")
         
+        # TODO could add some checks if the mimetyoe is valid / if the mimetype actually corresponds to the file etc.
+
         return mimetype
     
