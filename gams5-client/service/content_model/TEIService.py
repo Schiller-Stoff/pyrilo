@@ -72,6 +72,7 @@ class TEIService:
         object_metadata = SIPMetadata(
             id=id, 
             title=title, 
+            # TODO add processing of missing statements!
             creator="TODO", 
             description="TODO",
             object_type=ContentModels.TEI, 
