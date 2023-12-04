@@ -87,7 +87,8 @@ class SIPBagitTransformerService:
             meta_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "meta")
             os.makedirs(meta_folder_path, exist_ok=True)
 
-            source_xml_path = os.path.join(sip_folder_path, "TEI_SOURCE.xml")
+            source_xml_path = os.path.join(sip_folder_path, "SOURCE.xml")
+            # TODO decide here which kind of service should be triggered!
             # extract the sip.json from source.xml
             tei_service = TEIService(project_abbr, source_xml_path)
             sip_object = tei_service.extract_metadata()

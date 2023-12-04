@@ -92,13 +92,13 @@ class TEIService:
             contentFiles=[]
         )
 
-        # add TEI_SOURCE.xml as content file
+        # add SOURCE.xml as content file
         object_metadata.contentFiles.append(
             SIPFileMetadata(
                 # TODO tink about actual data assignment
-                title="TEI_SOURCE", 
-                dsid="TEI_SOURCE", 
-                bagpath="data/content/TEI_SOURCE.xml", 
+                title="SOURCE", 
+                dsid="SOURCE", 
+                bagpath="data/content/SOURCE.xml", 
                 mimetype="text/xml",
                 # TODO add actual size 
                 size=9999999,
