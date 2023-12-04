@@ -29,6 +29,9 @@ def demo_create_bags_and_ingest_them(pyrilo: GAMS5APIClient):
     # optionally delete all objects first
     pyrilo.delete_objects(MY_PROJECT)
 
+    # delete all indices from dependend services
+    pyrilo.disintegrate_project_objects(MY_PROJECT)
+
     # demo for ingesting all bags from the local bag structure 
     pyrilo.ingest_bags(MY_PROJECT)
 
@@ -55,10 +58,11 @@ if __name__ == "__main__":
     # pyrilo.delete_object("hsa.letter.1", MY_PROJECT)
 
     # create bags from sips strcucture and directly ingest them
-    # demo_create_bags_and_ingest_them(pyrilo)
+    demo_create_bags_and_ingest_them(pyrilo)
 
     # pyrilo.delete_objects(MY_PROJECT)
 
+    # pyrilo.integrate_project_objects(MY_PROJECT)
     # pyrilo.disintegrate_project_objects(MY_PROJECT)
 
     
@@ -66,4 +70,4 @@ if __name__ == "__main__":
 
 
     # demo call for tansforming project sips to bags
-    pyrilo.transform_sips_to_bags()
+    # pyrilo.transform_sips_to_bags()
