@@ -71,11 +71,11 @@ class GAMS5APIClient:
         """
         self.bag_service.ingest_bags(project_abbr)
 
-    def transform_sips_to_bags(self):
+    def transform_sips_to_bags(self, project_abbr: str):
         """
         Transforms all SIPs to the bagit format.
         """
-        return self.sip_bagit_transformer_service.transform()
+        return self.sip_bagit_transformer_service.transform(project_abbr)
     
     def request_sip_files(self, project_abbr: str):
         """

@@ -18,13 +18,13 @@ def setup_client() -> GAMS5APIClient:
     return client
 
 
-def demo_create_bags_and_ingest_them(pyrilo: GAMS5APIClient):
+def demo_create_bags_and_ingest_them(pyrilo: GAMS5APIClient, MY_PROJECT: str):
     """
     Demo for creating bags and ingesting them directly afterwards.
     
     """
     # demo for transforming local SIPs to bagit format
-    pyrilo.transform_sips_to_bags()
+    pyrilo.transform_sips_to_bags(MY_PROJECT)
     
     # optionally delete all objects first
     pyrilo.delete_objects(MY_PROJECT)
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     # pyrilo.delete_object("hsa.letter.1", MY_PROJECT)
 
     # create bags from sips strcucture and directly ingest them
-    demo_create_bags_and_ingest_them(pyrilo)
+    # demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
 
     # pyrilo.delete_objects(MY_PROJECT)
 
@@ -70,4 +70,4 @@ if __name__ == "__main__":
 
 
     # demo call for tansforming project sips to bags
-    # pyrilo.transform_sips_to_bags()
+    pyrilo.transform_sips_to_bags(MY_PROJECT)

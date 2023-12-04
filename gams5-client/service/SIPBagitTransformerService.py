@@ -53,7 +53,7 @@ class SIPBagitTransformerService:
             manifest_md5_file.write("data/content/TEI_SOURCE.xml HASH\n")
 
 
-    def transform(self):
+    def transform(self, project_abbr: str):
         """
         Transforms all project files to the bagit format.
         TODO: rename! --> creates the base folder structure in the first place!
@@ -89,8 +89,7 @@ class SIPBagitTransformerService:
 
             source_xml_path = os.path.join(sip_folder_path, "TEI_SOURCE.xml")
             # extract the sip.json from source.xml
-            # TODO add in dynamic project abbr! (NO HARDCODING)
-            tei_service = TEIService("demo", source_xml_path)
+            tei_service = TEIService(project_abbr, source_xml_path)
             sip_object = tei_service.extract_metadata()
             tei_service.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 
