@@ -24,7 +24,7 @@ class IntegrationService:
         Integrate all digital objects of a project to gams-integration services.
         """
         url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects"
-        r = request("POST", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=10)
+        r = request("POST", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=30)
 
         if r.status >= 400:
             msg = f"Failed to integrate all objects for project {project_abbr}. POST request against {url}. Status: {r.status}. Response: {r.json()}"
@@ -39,7 +39,7 @@ class IntegrationService:
         Disintegrate all digital objects of a project from gams-integration services.
         """
         url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects"
-        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=10)
+        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=30)
 
         if r.status >= 400:
             msg = f"Failed to disintegrate all objects for project {project_abbr}. POST request against {url}. Status: {r.status}."

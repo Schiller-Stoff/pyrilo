@@ -86,7 +86,7 @@ class DigitalObjectService:
 
         """
         url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
-        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False)
+        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=10)
 
         if r.status >= 400:
             msg = f"Failed to DELETE all objects for project {project_abbr}. DELETE request against {url}. API response: {r.json()}"
