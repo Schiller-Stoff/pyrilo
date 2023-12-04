@@ -77,12 +77,14 @@ class TEIService:
         logging.info("Extracted title: " + title)
 
         description = self.resolve_sip_description()
+        
+        creator = self._resolve_tei_creator()
 
         object_metadata = SIPMetadata(
             id=id, 
             title=title, 
             # TODO add processing of missing statements!
-            creator="TODO", 
+            creator=creator, 
             description=description,
             object_type=ContentModels.TEI, 
             publisher="TODO", 
@@ -101,7 +103,7 @@ class TEIService:
                 # TODO add actual size 
                 size=9999999,
                 # TODO add processing of missing statements! 
-                creator="TODO", 
+                creator=creator, 
                 description="TODO", 
                 rights="TODO", 
                 publisher="TODO", 
@@ -131,6 +133,24 @@ class TEIService:
             return "TODO TODO TODO"
         else:
             return p_description.text
+
+    def _resolve_tei_creator(self):
+        """
+        Reads out the defined creator of the TEI.
+        Assigns a default creator if no creator is defined.
+        """
+        DEFAULT_CREATOR = f"{self.PROJECT_ABBR} (GAMS-project)"
+        marcrelator_author = self.XML_ROOT.find(".//author[@ana='marcrelator:aut']", GAMSXMLNamespaces.TEI_NAMESPACES)
+        if marcrelator_author is None:
+            return f"{self.PROJECT_ABBR} (GAMS-project)"
+        
+        forename_elem = marcrelator_author.find("./persName/forename")
+        surname_elem = marcrelator_author.find("./persName/surname")
+        if (forename_elem is None) or (surname_elem is None):
+            return DEFAULT_CREATOR
+        
+        return DEFAULT_CREATOR
+
 
     def _handle_tei_images(self):
         """
