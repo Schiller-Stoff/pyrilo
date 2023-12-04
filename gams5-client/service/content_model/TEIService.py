@@ -15,8 +15,15 @@ class TEIService:
 
     """
 
-    @staticmethod
-    def read_xml(path: str) -> ET.Element:
+    PROJECT_ABBR: str
+    XML_ROOT: ET.Element
+
+    def __init__(self, project_abbr: str, xml_path: str) -> None:
+        self.PROJECT_ABBR = project_abbr
+        self.XML_ROOT = self.read_xml(xml_path)
+
+
+    def read_xml(self, path: str) -> ET.Element:
         """
         Parses given xml file and returns root element.
         """
@@ -27,8 +34,8 @@ class TEIService:
             content = xml_operations.clean_xml_string(content)
             return xml_operations.parse_xml(content)
         
-    @staticmethod    
-    def write_sip_object_to_json(sip_object_metadata: SIPMetadata, target_path: str):
+        
+    def write_sip_object_to_json(self, sip_object_metadata: SIPMetadata, target_path: str):
         """
         Transforms given sip object to json and writes it to the given path. 
         """
@@ -41,8 +48,7 @@ class TEIService:
         logging.info(f"Succesffully wrote sip.json to path: {target_path}")
 
 
-    @staticmethod
-    def extract_metadata(xml_root: ET.Element) -> SIPMetadata:
+    def extract_metadata(self) -> SIPMetadata:
         """
         Extracts metadata from a TEI document.
 
@@ -54,14 +60,14 @@ class TEIService:
         # ...
 
         # TODO move to own method
-        pid_idno_elem = xml_root.find(".//idno[@type='PID']", GAMSXMLNamespaces.TEI_NAMESPACES) 
+        pid_idno_elem = self.XML_ROOT.find(".//idno[@type='PID']", GAMSXMLNamespaces.TEI_NAMESPACES) 
         if pid_idno_elem is None:
             raise ReferenceError("No pid found in TEI document.")
         
         id = pid_idno_elem.text
 
         # TODO transfer to own method
-        title_title_elem = xml_root.find(".//titleStmt/title", GAMSXMLNamespaces.TEI_NAMESPACES)
+        title_title_elem = self.XML_ROOT.find(".//titleStmt/title", GAMSXMLNamespaces.TEI_NAMESPACES)
         if title_title_elem is None:
             raise ReferenceError("No title found in TEI document.")
         
@@ -70,7 +76,7 @@ class TEIService:
         logging.info("Extracted pid: " + id)
         logging.info("Extracted title: " + title)
 
-        description = TEIService.resolve_sip_description(xml_root)
+        description = self.resolve_sip_description()
 
         object_metadata = SIPMetadata(
             id=id, 
@@ -103,7 +109,7 @@ class TEIService:
         )
 
         # process images defined in the TEI document
-        image_files = TEIService._handle_tei_images(xml_root)
+        image_files = self._handle_tei_images()
         for image_file in image_files:
             object_metadata.contentFiles.append(image_file)
         
@@ -113,27 +119,25 @@ class TEIService:
         return object_metadata
 
 
-    @staticmethod
-    def resolve_sip_description(xml_root: ET.Element):
+    def resolve_sip_description(self):
         """
         Reads out the defined description of the TEI.
         Assigns a default description if no description is defined.
         """
         # TODO what about logging?
-        p_description = xml_root.find(".//encodingDesc/editorialDecl/p", GAMSXMLNamespaces.TEI_NAMESPACES)
+        p_description = self.XML_ROOT.find(".//encodingDesc/editorialDecl/p", GAMSXMLNamespaces.TEI_NAMESPACES)
         if p_description is None:
             # TODO default should be something like (Digital object of the xyz projcet) or something like that
             return "TODO TODO TODO"
         else:
             return p_description.text
 
-    @staticmethod
-    def _handle_tei_images(xml_root: ET.Element):
+    def _handle_tei_images(self):
         """
         Extracts image metadata from a TEI document.
         """
         
-        graphic_elems = xml_root.findall(".//facsimile/graphic", GAMSXMLNamespaces.TEI_NAMESPACES)
+        graphic_elems = self.XML_ROOT.findall(".//facsimile/graphic", GAMSXMLNamespaces.TEI_NAMESPACES)
 
         # check if there are images defined in the TEI document
         if (graphic_elems is None) or (len(graphic_elems) == 0):
@@ -143,8 +147,8 @@ class TEIService:
         image_datastreams: List[SIPFileMetadata] = []
 
         for graphic_elem in graphic_elems:
-            url = TEIService._resolve_image_url_to_bagpath(graphic_elem)
-            mimetype = TEIService._resolve_mimetype(graphic_elem)
+            url = self._resolve_image_url_to_bagpath(graphic_elem)
+            mimetype = self._resolve_mimetype(graphic_elem)
             
             # TODO - somehow etree does not recognize the xml:id attribute's namespace
             dsid = graphic_elem.get("{http://www.w3.org/XML/1998/namespace}id")
@@ -154,8 +158,8 @@ class TEIService:
 
             # TODO ectract description, title, creator, rights, publisher, size, mimetype
 
-            title = TEIService.resolve_file_title(graphic_elem, dsid)
-            size = TEIService.resolve_file_size(graphic_elem)
+            title = self.resolve_file_title(graphic_elem, dsid)
+            size = self.resolve_file_size(graphic_elem)
 
             cur_image_datastream = SIPFileMetadata(
                 dsid=dsid, 
@@ -178,8 +182,7 @@ class TEIService:
         return image_datastreams
     
 
-    @staticmethod
-    def _resolve_image_url_to_bagpath(graphic_elem: ET.Element) -> str:
+    def _resolve_image_url_to_bagpath(self, graphic_elem: ET.Element) -> str:
         """
         Reads out the defined graphic element's url and resolves it to the expected bag-path.
         Like from "file:///1.JPG" to "data/content/1.JPG"
@@ -199,8 +202,8 @@ class TEIService:
 
         return url
 
-    @staticmethod
-    def _resolve_mimetype(graphic_elem: ET.Element) -> str:
+    
+    def _resolve_mimetype(self, graphic_elem: ET.Element) -> str:
         """
         Reads out the defined graphic element's mimetype.
         """
@@ -212,8 +215,8 @@ class TEIService:
 
         return mimetype
 
-    @staticmethod
-    def resolve_file_title(graphic_elem: ET.Element, dsid: str) -> str:
+    
+    def resolve_file_title(self, graphic_elem: ET.Element, dsid: str) -> str:
         """
         Reads out the defined graphic element's title. If no title is defined, the dsid is used as title.
         """
@@ -223,8 +226,8 @@ class TEIService:
 
         return dsid
     
-    @staticmethod
-    def resolve_file_size(graphic_elem: ET.Element) -> str:
+    
+    def resolve_file_size(self, graphic_elem: ET.Element) -> str:
         """
         Reads out the defined graphic element's size.
         """

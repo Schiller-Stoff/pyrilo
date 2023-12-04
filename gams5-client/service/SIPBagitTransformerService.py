@@ -87,11 +87,12 @@ class SIPBagitTransformerService:
             meta_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "meta")
             os.makedirs(meta_folder_path, exist_ok=True)
 
-            # extract the sip.json from source.xml
             source_xml_path = os.path.join(sip_folder_path, "TEI_SOURCE.xml")
-            xml_root = TEIService.read_xml(source_xml_path)
-            sip_object = TEIService.extract_metadata(xml_root)
-            TEIService.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
+            # extract the sip.json from source.xml
+            # TODO add in dynamic project abbr! (NO HARDCODING)
+            tei_service = TEIService("demo", source_xml_path)
+            sip_object = tei_service.extract_metadata()
+            tei_service.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 
             # Create basic bag files
             self.create_bag_files(bags_folder_path)
