@@ -58,16 +58,24 @@ if __name__ == "__main__":
     # pyrilo.delete_object("hsa.letter.1", MY_PROJECT)
 
     # create bags from sips strcucture and directly ingest them
-    # demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
+    demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
 
     # pyrilo.delete_objects(MY_PROJECT)
 
-    # pyrilo.integrate_project_objects(MY_PROJECT)
-    # pyrilo.disintegrate_project_objects(MY_PROJECT)
+    
 
     
     # test_contentmodels(pyrilo)
 
 
     # demo call for tansforming project sips to bags
-    pyrilo.transform_sips_to_bags(MY_PROJECT)
+    # pyrilo.transform_sips_to_bags(MY_PROJECT)
+
+
+    # Integration operations.
+    #
+    # pyrilo.integrate_project_objects(MY_PROJECT)
+    # pyrilo.disintegrate_project_objects(MY_PROJECT)
+
+    # pyrilo.integrate_project_object(MY_PROJECT, "o:derla.vor146")
+    # pyrilo.disintegrate_project_object(MY_PROJECT, "o:derla.vor146")

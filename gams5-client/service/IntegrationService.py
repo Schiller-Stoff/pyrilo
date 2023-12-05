@@ -48,3 +48,33 @@ class IntegrationService:
             raise ConnectionError(msg)
         else:
             logging.info(f"Successfully disintegrated all digital objects for project {project_abbr}.")
+
+
+    def integrate(self, project_abbr: str, object_id: str):
+        """
+        Creates database entries for a singular digital object of a project in gams-integration services.
+        """
+        url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects/{object_id}"
+        r = request("POST", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=30)
+
+        if r.status >= 400:
+            msg = f"Failed to integrate object {object_id} for project {project_abbr}. POST request against {url}. Status: {r.status}. Response: {r.json()}"
+            logging.error(msg)
+            raise ConnectionError(msg)
+        else:
+            logging.info(f"Successfully integrated object {object_id} for project {project_abbr}.")
+
+
+    def disintegrate(self, project_abbr: str, object_id: str):
+        """
+        Disintegrate (=removes database entries) a single digital object of a project from gams-integration services.
+        """
+        url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects/{object_id}"
+        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=30)
+
+        if r.status >= 400:
+            msg = f"Failed to disintegrate object {object_id} for project {project_abbr}. DELETE request against {url}. Status: {r.status}. Response: {r.json()}"
+            logging.error(msg)
+            raise ConnectionError(msg)
+        else:
+            logging.info(f"Successfully disintegrated object {object_id} for project {project_abbr}.")
