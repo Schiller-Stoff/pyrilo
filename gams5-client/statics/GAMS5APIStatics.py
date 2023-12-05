@@ -14,6 +14,8 @@ class GAMS5APIStatics:
     LOCAL_PROJECT_FILES_PATH = os.getcwd() + "/project"
     LOCAL_SIP_FOLDERS_PATH = LOCAL_PROJECT_FILES_PATH + "/sips"
     LOCAL_BAGIT_FILES_PATH = LOCAL_PROJECT_FILES_PATH + "/bags"
+    # source file name of sips
+    SIP_SOURCE_FILE_NAME = "SOURCE.xml"
 
     def __init__(self) -> None:
         pass
