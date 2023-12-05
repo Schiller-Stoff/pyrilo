@@ -14,7 +14,6 @@ class GAMS5APIClient:
     """
 
     digital_object_service: DigitalObjectService
-    sub_info_pack_service: SubInfoPackService
     sip_bagit_transformer_service: SIPBagitTransformerService
     bag_service: BagService
     integration_service: IntegrationService
@@ -22,7 +21,6 @@ class GAMS5APIClient:
     def __init__(self, host: str) -> None:
         self.digital_object_service = DigitalObjectService(host)
         self.bag_service = BagService(host)
-        self.sub_info_pack_service = SubInfoPackService(host)
         self.sip_bagit_transformer_service = SIPBagitTransformerService()
         self.integration_service = IntegrationService(host)
 
@@ -76,12 +74,6 @@ class GAMS5APIClient:
         Transforms all SIPs to the bagit format.
         """
         return self.sip_bagit_transformer_service.transform(project_abbr)
-    
-    def request_sip_files(self, project_abbr: str):
-        """
-        Requests all SIP files from the GAMS5-API and stores it in local folder structure
-        """
-        return self.sub_info_pack_service.request_sip_files(project_abbr)
     
     def integrate_project_objects(self, project_abbr: str):
         """
