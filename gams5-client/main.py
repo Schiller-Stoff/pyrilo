@@ -1,6 +1,10 @@
 
 import logging
 import os
+from processing.DerlaDataProcessor import DerlaDataProcessor
+from service.content_model.TEIService import TEIService
+from statics import GAMS5APIStatics
+from service.SubInfoPackService import SubInfoPackService
 from GAMS5APIClient import GAMS5APIClient
 
 def setup_client() -> GAMS5APIClient:
@@ -39,10 +43,6 @@ def demo_create_bags_and_ingest_them(pyrilo: GAMS5APIClient, MY_PROJECT: str):
     pyrilo.integrate_project_objects(MY_PROJECT)
 
 
-def demo_ingest_bag():
-    pass
-    
-
 if __name__ == "__main__":
 
     pyrilo = setup_client()
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     # pyrilo.delete_object("hsa.letter.1", MY_PROJECT)
 
     # create bags from sips strcucture and directly ingest them
-    demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
+    # demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
 
     # pyrilo.delete_objects(MY_PROJECT)
 
@@ -79,3 +79,9 @@ if __name__ == "__main__":
 
     # pyrilo.integrate_project_object(MY_PROJECT, "o:derla.vor146")
     # pyrilo.disintegrate_project_object(MY_PROJECT, "o:derla.vor146")
+
+
+
+    DerlaDataProcessor()
+    # pyrilo.transform_sips_to_bags(MY_PROJECT)
+    demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
