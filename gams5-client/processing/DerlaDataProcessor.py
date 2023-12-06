@@ -2,6 +2,7 @@
 
 from service.content_model.TEIService import TEIService
 from service.SubInfoPackService import SubInfoPackService
+from statics.GAMS5APIStatics import GAMS5APIStatics
 from PIL import Image
 import os
 import logging
@@ -42,14 +43,13 @@ class DerlaDataProcessor:
         Generates a thumbnail for a given sip folder if 
         """
         try:
-            # TODO needs be at least handled via static variable
-            # 
-            image = Image.open(os.path.join(sip_folder_path, "1.JPG"))
+            EXPECTED_IMAGE_FILE_PATH = os.path.join(sip_folder_path, GAMS5APIStatics.THUMBNAIL_SIP_SOURCE_FILE_NAME)
+            image = Image.open(EXPECTED_IMAGE_FILE_PATH)
             image.thumbnail((90,90))
-            image.save(os.path.join(sip_folder_path, "THUMBNAIL.jpg"))
+            image.save(os.path.join(sip_folder_path, GAMS5APIStatics.THUMBNAIL_FILE_NAME))
         except FileNotFoundError:
-            logging.info(f"No image found in SIP folder. Skipping creation of thumbnail for sip {sip_folder_path}")
+            logging.info(f"No image found in SIP folder at expected location for thumbnail generation: {EXPECTED_IMAGE_FILE_PATH}.")
             pass
         except IOError:
-            logging.info(f"Failed to create thumbnail for SIP {sip_folder_path}")
+            logging.info(f"Failed to create thumbnail for SIP {sip_folder_path} {IOError}")
             pass

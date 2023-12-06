@@ -19,6 +19,7 @@ class GAMS5APIStatics:
     # Thumbnail
     THUMBNAIL_FILE_NAME = "THUMBNAIL.jpg"
     THUMBNAIL_DATASTREAM_ID = "THUMBNAIL"
+    THUMBNAIL_SIP_SOURCE_FILE_NAME = "1.JPG"
 
     def __init__(self) -> None:
         pass
