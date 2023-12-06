@@ -6,6 +6,7 @@ from statics.GAMS5APIStatics import GAMS5APIStatics
 from PIL import Image
 import os
 import logging
+import json
 
 class DerlaDataProcessor:
     """
@@ -25,6 +26,9 @@ class DerlaDataProcessor:
         
         # creates thumbnails for the sips
         self.generate_thumbnail(sip_folder_path)    
+
+        # creates search.json files for the sips
+        self.generate_search_json(sip_folder_path)
 
         # project worker needs to decide which content model to use.
         # tei_service = TEIService(MY_PROJECT, source_file_path, sip_folder_path)
@@ -53,3 +57,38 @@ class DerlaDataProcessor:
         except IOError:
             logging.info(f"Failed to create thumbnail for SIP {sip_folder_path} {IOError}")
             pass
+
+
+    def generate_search_json(self, sip_folder_path: str):
+        """
+        Generates a search.json file for a given SIP folder.
+        """
+
+        # TODO needs to be adapted
+        search_data = {
+            "title": "Search Results",
+            "results": [
+                {
+                    "id": 1,
+                    "title": "Result 1",
+                    "description": "This is the first search result."
+                },
+                {
+                    "id": 2,
+                    "title": "Result 2",
+                    "description": "This is the second search result."
+                },
+                {
+                    "id": 3,
+                    "title": "Result 3",
+                    "description": "This is the third search result."
+                }
+            ]
+        }
+
+        search_json_path = os.path.join(sip_folder_path, "search.json")
+        with open(search_json_path, "w") as search_file:
+            json.dump(search_data, search_file, indent=4)
+
+        logging.info(f"Generated search.json file for SIP at {search_json_path}.")
+
