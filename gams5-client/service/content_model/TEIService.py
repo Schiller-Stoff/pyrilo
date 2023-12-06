@@ -3,25 +3,28 @@ import json
 import logging
 import xml.etree.ElementTree as ET
 from typing import List
+from statics.GAMS5APIStatics import GAMS5APIStatics
 from service.content_model.ContentModels import ContentModels
 from service.content_model.SIPMetadata import SIPMetadata
 from service.content_model.SIPFileMetadata import SIPFileMetadata
 from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
 import utils.xml_operations as xml_operations
+import os
 
 class TEIService:
     """
+    Operates on the transformation from SIP to bags.
     Handles all TEI related operations, like extracting pid from a TEI document.
-
     """
 
     PROJECT_ABBR: str
     XML_ROOT: ET.Element
+    SIP_FOLDER_PATH: str
 
-    def __init__(self, project_abbr: str, xml_path: str) -> None:
+    def __init__(self, project_abbr: str, xml_path: str, sip_folder_path: str) -> None:
         self.PROJECT_ABBR = project_abbr
         self.XML_ROOT = self.read_xml(xml_path)
-
+        self.SIP_FOLDER_PATH = sip_folder_path
 
     def read_xml(self, path: str) -> ET.Element:
         """
@@ -115,7 +118,13 @@ class TEIService:
         for image_file in image_files:
             object_metadata.contentFiles.append(image_file)
         
-        # TODO process other files defined in the TEI document
+        # TODO process other files defined in the TEI document? Like arbitrary files? -> maybe not needed?
+
+
+        # process of thumbnail
+        thumbnails = self.resolve_thumbnail()
+        for thumbnail in thumbnails:
+            object_metadata.contentFiles.append(thumbnail)
 
         logging.info(f"Extracted metadata from TEI document. {object_metadata}")
         return object_metadata
@@ -221,7 +230,6 @@ class TEIService:
         # TODO what if the url does no contain "file:///"? -> throw an exception?
 
         return url
-
     
     def _resolve_mimetype(self, graphic_elem: ET.Element) -> str:
         """
@@ -256,3 +264,65 @@ class TEIService:
         # TODO could add some checks if the size is valid / if the size actually corresponds to the file etc.
 
         return 9999999
+    
+    def resolve_thumbnail(self) -> List[SIPFileMetadata]:
+        """
+        Checks if a thumbnail is defined in the SIP folder and returns it as SIPFileMetadata if available0
+        :return: SIPFileMetadata of the thumbnail if available, otherwise an empty list
+        """
+        
+        thumbnail_path = os.path.join(self.SIP_FOLDER_PATH, GAMS5APIStatics.THUMBNAIL_FILE_NAME)
+        logging.info(f"Checking if thumbnail exists at {thumbnail_path}")
+        if not os.path.exists(thumbnail_path):
+            return []
+        
+        sip_file_description = SIPFileMetadata(
+                    bagpath="/data/content/" + GAMS5APIStatics.THUMBNAIL_FILE_NAME, 
+                    dsid=GAMS5APIStatics.THUMBNAIL_DATASTREAM_ID, 
+                    mimetype="image/jpeg",
+                    creator=f"{self.PROJECT_ABBR} GAMS-project",
+                    description=f"Thumbnail generated for the {self.PROJECT_ABBR} project.",
+                    publisher="TODO",
+                    rights="TODO",
+                    size=9999999,
+                    title=GAMS5APIStatics.THUMBNAIL_FILE_NAME
+            )
+        
+        logging.info(f"Created thumbnail entry {sip_file_description}")
+
+        return [sip_file_description]
+
+
+    def resolve_additional_files(self):
+        """"
+        TODO
+        """
+        sip_file_descriptions: List[SIPFileMetadata] = []
+        # go through files in SIP (skip every file that is not described via elements in the TEI document)
+        # Loop through the SIPs folder
+        for file_name in os.listdir(self.SIP_FOLDER_PATH):
+            # all folders are being ignored
+            if not os.path.isfile(os.path.join(self.SIP_FOLDER_PATH, file_name)):
+                continue
+            
+            if file_name == "SOURCE.xml":
+                continue
+
+            if file_name != "THUMBNAIL.jpg":
+                continue
+
+            sip_file_description = SIPFileMetadata(
+                    bagpath="/data/content/" + file_name, 
+                    dsid=file_name, 
+                    mimetype="TODO",
+                    creator=self.PROJECT_ABBR,
+                    description="TODO",
+                    publisher="TODO",
+                    rights="TODO",
+                    size=9999999,
+                    title=file_name
+            )
+
+            sip_file_descriptions.append(sip_file_description)
+
+        return sip_file_descriptions
