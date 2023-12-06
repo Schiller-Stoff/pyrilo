@@ -16,6 +16,9 @@ class GAMS5APIStatics:
     LOCAL_BAGIT_FILES_PATH = LOCAL_PROJECT_FILES_PATH + "/bags"
     # source file name of sips
     SIP_SOURCE_FILE_NAME = "SOURCE.xml"
+    # Thumbnail
+    THUMBNAIL_FILE_NAME = "THUMBNAIL.jpg"
+    THUMBNAIL_DATASTREAM_ID = "THUMBNAIL"
 
     def __init__(self) -> None:
         pass
