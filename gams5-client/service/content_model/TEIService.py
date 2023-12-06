@@ -126,6 +126,11 @@ class TEIService:
         for thumbnail in thumbnails:
             object_metadata.contentFiles.append(thumbnail)
 
+        # process of search json
+        search_json = self.resolve_search_json()
+        for search_json in search_json:
+            object_metadata.contentFiles.append(search_json)
+
         logging.info(f"Extracted metadata from TEI document. {object_metadata}")
         return object_metadata
 
@@ -289,6 +294,30 @@ class TEIService:
             )
         
         logging.info(f"Created thumbnail entry {sip_file_description}")
+
+        return [sip_file_description]
+
+    def resolve_search_json(self):
+        """
+        Checks if a search json is defined in the SIP folder and returns it as SIPFileMetadata if available
+        :return: SIPFileMetadata of the search json if available, otherwise an empty list
+        """
+        search_json_path = os.path.join(self.SIP_FOLDER_PATH, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
+        logging.info(f"Checking if thumbnail exists at {search_json_path}")
+        if not os.path.exists(search_json_path):
+            return []
+        
+        sip_file_description = SIPFileMetadata(
+                    bagpath="/data/content/" + GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME, 
+                    dsid=GAMS5APIStatics.SIP_SEARCH_JSON_DATASTREAM_ID, 
+                    mimetype="application/json",
+                    creator=f"{self.PROJECT_ABBR} GAMS-project",
+                    description=f"Base search json generated for the {self.PROJECT_ABBR} project.",
+                    publisher="TODO",
+                    rights="TODO",
+                    size=9999999,
+                    title=GAMS5APIStatics.SIP_SOURCE_DATASTREAM_ID
+            )
 
         return [sip_file_description]
 

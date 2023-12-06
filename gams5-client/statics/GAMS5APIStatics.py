@@ -16,10 +16,14 @@ class GAMS5APIStatics:
     LOCAL_BAGIT_FILES_PATH = LOCAL_PROJECT_FILES_PATH + "/bags"
     # source file name of sips
     SIP_SOURCE_FILE_NAME = "SOURCE.xml"
+    SIP_SOURCE_DATASTREAM_ID = "SOURCE"
     # Thumbnail
     THUMBNAIL_FILE_NAME = "THUMBNAIL.jpg"
     THUMBNAIL_DATASTREAM_ID = "THUMBNAIL"
     THUMBNAIL_SIP_SOURCE_FILE_NAME = "1.JPG"
+    # search json
+    SIP_SEARCH_JSON_FILE_NAME = "search.json"
+    SIP_SEARCH_JSON_DATASTREAM_ID = "SEARCH_JSON"
 
     def __init__(self) -> None:
         pass
