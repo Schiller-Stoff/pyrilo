@@ -21,10 +21,13 @@ class DerlaDataProcessor:
         Demo lambda function for processing a SIP folder. (for DERLA)
         """
         MY_PROJECT = "demo"
-        # project worker needs to decide which content model to use.
-        tei_service = TEIService(MY_PROJECT, source_file_path)
-        print(tei_service.XML_ROOT)
+        
+        # creates thumbnails for the sips
         self.generate_thumbnail(sip_folder_path)    
+
+        # project worker needs to decide which content model to use.
+        # tei_service = TEIService(MY_PROJECT, source_file_path, sip_folder_path)
+        
 
 
     def demo_data_processing(self):
