@@ -60,19 +60,8 @@ class TEISIP:
         """
         
         id = self.resolve_pid()
-
-        # TODO transfer to own method
-        title_title_elem = self.XML_ROOT.find(".//titleStmt/title", GAMSXMLNamespaces.TEI_NAMESPACES)
-        if title_title_elem is None:
-            raise ReferenceError("No title found in TEI document.")
-        
-        title = title_title_elem.text
-
-        logging.info("Extracted pid: " + id)
-        logging.info("Extracted title: " + title)
-
+        title = self.resolve_title()
         description = self.resolve_sip_description()
-        
         creator = self._resolve_tei_creator()
 
         object_metadata = SIPMetadata(
@@ -137,9 +126,23 @@ class TEISIP:
             raise ReferenceError(f"No pid at {pid_xpath} found in TEI document.")        
         
         if pid_idno_elem.text is None:
-            raise ReferenceError("No text assigned to pid indo {pid_xpath} in TEI document.") 
+            raise ReferenceError(f"No text assigned to pid indo {pid_xpath} in TEI document.") 
 
         return pid_idno_elem.text
+    
+    def resolve_title(self):
+        """
+        Reads out the defined title of the TEI.
+        """
+        title_xpath = ".//titleStmt/title"
+        title_title_elem = self.XML_ROOT.find(title_xpath, GAMSXMLNamespaces.TEI_NAMESPACES) 
+        if title_title_elem is None:
+            raise ReferenceError(f"No title at {title_xpath} found in TEI document.")        
+        
+        if title_title_elem.text is None:
+            raise ReferenceError(f"No text assigned to title {title_xpath} in TEI document.") 
+
+        return title_title_elem.text
 
     def resolve_sip_description(self):
         """
