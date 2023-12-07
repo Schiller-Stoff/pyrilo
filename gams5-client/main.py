@@ -2,7 +2,6 @@
 import logging
 import os
 from processing.DerlaDataProcessor import DerlaDataProcessor
-from service.content_model.TEIService import TEIService
 from statics import GAMS5APIStatics
 from service.SubInfoPackService import SubInfoPackService
 from GAMS5APIClient import GAMS5APIClient

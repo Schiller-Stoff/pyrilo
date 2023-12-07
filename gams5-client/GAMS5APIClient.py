@@ -4,7 +4,6 @@ from service.SIPBagitTransformerService import SIPBagitTransformerService
 from service.BagService import BagService
 from service.IntegrationService import IntegrationService
 from typing import List
-from service.content_model.TEIService import TEIService
 
 class GAMS5APIClient:
     """

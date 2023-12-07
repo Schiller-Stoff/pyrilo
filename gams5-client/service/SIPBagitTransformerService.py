@@ -3,7 +3,7 @@ import logging
 import os
 import shutil
 
-from service.content_model.TEIService import TEIService
+from service.content_model.TEISIP import TEISIP
 from statics.GAMS5APIStatics import GAMS5APIStatics
 
 
@@ -90,10 +90,10 @@ class SIPBagitTransformerService:
             source_xml_path = os.path.join(sip_folder_path, "SOURCE.xml")
             # TODO decide here which kind of service should be triggered!
             # extract the sip.json from source.xml
-            # TODO instead of TEIService would be better to call it TEISip - because instantiated per SIP? 
-            tei_service = TEIService(project_abbr, source_xml_path, sip_folder_path)
-            sip_object = tei_service.extract_metadata()
-            tei_service.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
+            # TODO instead of TEISIP would be better to call it TEISip - because instantiated per SIP? 
+            tei_sip = TEISIP(project_abbr, source_xml_path, sip_folder_path)
+            sip_object = tei_sip.extract_metadata()
+            tei_sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 
             # Create basic bag files
             self.create_bag_files(bags_folder_path)

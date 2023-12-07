@@ -11,7 +11,7 @@ from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
 import utils.xml_operations as xml_operations
 import os
 
-class TEIService:
+class TEISIP:
     """
     Operates on the transformation from SIP to bags.
     Handles all TEI related operations, like extracting pid from a TEI document.
