@@ -87,11 +87,9 @@ class SIPBagitTransformerService:
             meta_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "meta")
             os.makedirs(meta_folder_path, exist_ok=True)
 
-            source_xml_path = os.path.join(sip_folder_path, "SOURCE.xml")
             # TODO decide here which kind of service should be triggered!
             # extract the sip.json from source.xml
-            # TODO instead of TEISIP would be better to call it TEISip - because instantiated per SIP? 
-            tei_sip = TEISIP(project_abbr, source_xml_path, sip_folder_path)
+            tei_sip = TEISIP(project_abbr, sip_folder_path)
             sip_object = tei_sip.extract_metadata()
             tei_sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 

@@ -20,12 +20,14 @@ class TEISIP:
     PROJECT_ABBR: str
     XML_ROOT: ET.Element
     SIP_FOLDER_PATH: str
+    SIP_SOURCE_FILE_PATH: str
 
-    def __init__(self, project_abbr: str, xml_path: str, sip_folder_path: str) -> None:
+    def __init__(self, project_abbr: str, sip_folder_path: str) -> None:
         self.PROJECT_ABBR = project_abbr
-        self.XML_ROOT = self.read_xml(xml_path)
         self.SIP_FOLDER_PATH = sip_folder_path
-
+        self.SIP_SOURCE_FILE_PATH = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SOURCE_FILE_NAME)
+        self.XML_ROOT = self.read_xml(self.SIP_SOURCE_FILE_PATH)
+        
     def read_xml(self, path: str) -> ET.Element:
         """
         Parses given xml file and returns root element.
