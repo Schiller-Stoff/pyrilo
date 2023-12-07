@@ -70,11 +70,11 @@ class DerlaDataProcessor:
         desc = tei_sip.resolve_sip_description()
 
         # TODO needs to be adapted
-        search_data = {
+        search_data = [{
             "title": title,
             "id": id,
-            "description": desc
-        }
+            "desc": desc
+        }]
 
         search_json_path = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
         with open(search_json_path, "w", encoding="utf-8") as search_file:
