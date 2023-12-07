@@ -76,7 +76,7 @@ class DerlaDataProcessor:
             "description": desc
         }
 
-        search_json_path = os.path.join(sip_folder_path, "search.json")
+        search_json_path = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
         with open(search_json_path, "w", encoding="utf-8") as search_file:
             # setting ensure ascii to false to allow umlauts
             json.dump(search_data, search_file, indent=4, ensure_ascii=False)
