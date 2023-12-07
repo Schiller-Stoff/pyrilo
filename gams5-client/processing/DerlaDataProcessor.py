@@ -1,6 +1,4 @@
-
-
-from service.content_model.TEIService import TEIService
+from service.content_model.TEISIP import TEISIP
 from service.SubInfoPackService import SubInfoPackService
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from PIL import Image
@@ -14,6 +12,8 @@ class DerlaDataProcessor:
 
     """
 
+    PROJECT_ABBREVIATION = "demo"
+
     def __init__(self):
         self.demo_data_processing()
 
@@ -22,7 +22,6 @@ class DerlaDataProcessor:
         """
         Demo lambda function for processing a SIP folder. (for DERLA)
         """
-        MY_PROJECT = "demo"
         
         # creates thumbnails for the sips
         self.generate_thumbnail(sip_folder_path)    
@@ -64,31 +63,23 @@ class DerlaDataProcessor:
         Generates a search.json file for a given SIP folder.
         """
 
+        tei_sip = TEISIP(self.PROJECT_ABBREVIATION, sip_folder_path)
+
+        title = tei_sip.resolve_title()
+        id = tei_sip.resolve_pid()
+        desc = tei_sip.resolve_sip_description()
+
         # TODO needs to be adapted
         search_data = {
-            "title": "Search Results",
-            "results": [
-                {
-                    "id": 1,
-                    "title": "Result 1",
-                    "description": "This is the first search result."
-                },
-                {
-                    "id": 2,
-                    "title": "Result 2",
-                    "description": "This is the second search result."
-                },
-                {
-                    "id": 3,
-                    "title": "Result 3",
-                    "description": "This is the third search result."
-                }
-            ]
+            "title": title,
+            "id": id,
+            "description": desc
         }
 
         search_json_path = os.path.join(sip_folder_path, "search.json")
-        with open(search_json_path, "w") as search_file:
-            json.dump(search_data, search_file, indent=4)
+        with open(search_json_path, "w", encoding="utf-8") as search_file:
+            # setting ensure ascii to false to allow umlauts
+            json.dump(search_data, search_file, indent=4, ensure_ascii=False)
 
         logging.info(f"Generated search.json file for SIP at {search_json_path}.")
 
