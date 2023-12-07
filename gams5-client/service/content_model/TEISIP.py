@@ -58,18 +58,8 @@ class TEISIP:
         Extracts metadata from a TEI document.
 
         """
-        # read out pid
-        # read out description
-        # read out title
-        # read out creator
-        # ...
-
-        # TODO move to own method
-        pid_idno_elem = self.XML_ROOT.find(".//idno[@type='PID']", GAMSXMLNamespaces.TEI_NAMESPACES) 
-        if pid_idno_elem is None:
-            raise ReferenceError("No pid found in TEI document.")
         
-        id = pid_idno_elem.text
+        id = self.resolve_pid()
 
         # TODO transfer to own method
         title_title_elem = self.XML_ROOT.find(".//titleStmt/title", GAMSXMLNamespaces.TEI_NAMESPACES)
@@ -136,6 +126,20 @@ class TEISIP:
         logging.info(f"Extracted metadata from TEI document. {object_metadata}")
         return object_metadata
 
+
+    def resolve_pid(self):
+        """
+        Reads out the defined pid of the TEI.
+        """
+        pid_xpath = ".//idno[@type='PID']"
+        pid_idno_elem = self.XML_ROOT.find(pid_xpath, GAMSXMLNamespaces.TEI_NAMESPACES) 
+        if pid_idno_elem is None:
+            raise ReferenceError(f"No pid at {pid_xpath} found in TEI document.")        
+        
+        if pid_idno_elem.text is None:
+            raise ReferenceError("No text assigned to pid indo {pid_xpath} in TEI document.") 
+
+        return pid_idno_elem.text
 
     def resolve_sip_description(self):
         """
