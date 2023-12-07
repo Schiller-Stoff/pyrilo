@@ -23,7 +23,7 @@ class GAMS5APIStatics:
     THUMBNAIL_SIP_SOURCE_FILE_NAME = "1.JPG"
     # search json
     SIP_SEARCH_JSON_FILE_NAME = "search.json"
-    SIP_SEARCH_JSON_DATASTREAM_ID = "SEARCH_JSON"
+    SIP_SEARCH_JSON_DATASTREAM_ID = "SEARCH_INDEX"
 
     def __init__(self) -> None:
         pass
