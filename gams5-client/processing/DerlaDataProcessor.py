@@ -18,6 +18,7 @@ class DerlaDataProcessor:
 
     def __init__(self):
         SubInfoPackService.walk_sip_folder(self.process_sip_folder)
+        SubInfoPackService.walk_sip_folder(self.process_perslist_sip, "perslist")
 
 
     def process_sip_folder(self, sip_folder_path, source_file_path):
@@ -33,6 +34,15 @@ class DerlaDataProcessor:
 
         # project worker needs to decide which content model to use.
         # tei_service = TEIService(MY_PROJECT, source_file_path, sip_folder_path)
+
+    
+    def process_perslist_sip(self, sip_folder_path: str, source_file_path: str):
+        """
+        Processes a perslist SIP folder.
+        """
+        pass
+        # print(f"We are processing a perslist SIP folder. {sip_folder_path}")
+
         
     
     def generate_thumbnail(self, sip_folder_path: str):
