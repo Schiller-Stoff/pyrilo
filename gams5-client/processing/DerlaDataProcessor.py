@@ -17,6 +17,7 @@ class DerlaDataProcessor:
     PROJECT_ABBREVIATION = "demo"
 
     def __init__(self):
+        SubInfoPackService.walk_sip_folder(self.process_sip_folder)
         self.demo_data_processing()
 
 
@@ -34,14 +35,6 @@ class DerlaDataProcessor:
         # project worker needs to decide which content model to use.
         # tei_service = TEIService(MY_PROJECT, source_file_path, sip_folder_path)
         
-
-
-    def demo_data_processing(self):
-        """
-        Demo for data processing operations.
-        """
-        SubInfoPackService.walk_sip_folder(self.process_sip_folder)
-
     
     def generate_thumbnail(self, sip_folder_path: str):
         """
