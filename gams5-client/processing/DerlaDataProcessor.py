@@ -18,7 +18,6 @@ class DerlaDataProcessor:
 
     def __init__(self):
         SubInfoPackService.walk_sip_folder(self.process_sip_folder)
-        self.demo_data_processing()
 
 
     def process_sip_folder(self, sip_folder_path, source_file_path):
