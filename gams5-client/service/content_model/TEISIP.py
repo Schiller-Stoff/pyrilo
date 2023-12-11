@@ -388,3 +388,10 @@ class TEISIP:
             sip_file_descriptions.append(sip_file_description)
 
         return sip_file_descriptions
+    
+
+    def extract_full_text(self):
+        """
+        Extracts the full text from the TEI document.
+        """
+        return ET.tostring(self.XML_ROOT, encoding='utf-8', method='text').decode("utf-8")
