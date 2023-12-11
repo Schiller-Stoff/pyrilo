@@ -1,3 +1,4 @@
+from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
 from service.content_model.TEISIP import TEISIP
 from service.SubInfoPackService import SubInfoPackService
 from statics.GAMS5APIStatics import GAMS5APIStatics
@@ -64,18 +65,21 @@ class DerlaDataProcessor:
         """
 
         tei_sip = TEISIP(self.PROJECT_ABBREVIATION, sip_folder_path)
-
+        # default operations provided by the TEISIP
         title = tei_sip.resolve_title()
         id = tei_sip.resolve_pid()
         desc = tei_sip.resolve_sip_description()
         types = tei_sip.resolve_terms()
+        # DERLA specific operations
+        location = self.extract_geo_location(tei_sip)
 
-        # TODO needs to be adapted
+        # solr dict to be written to json file
         search_data = [{
             "title": title,
             "id": id,
             "desc": desc,
-            "types": types
+            "types": types,
+            "location": location,
         }]
 
         search_json_path = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
@@ -84,4 +88,19 @@ class DerlaDataProcessor:
             json.dump(search_data, search_file, indent=4, ensure_ascii=False)
 
         logging.info(f"Generated search.json file for SIP at {search_json_path}.")
+
+    
+    def extract_geo_location(self, tei_sip: TEISIP):
+        """
+        Extracts the geo location from a DERLA TEISIP object.
+        """
+        geo_elems = tei_sip.XML_ROOT.findall(".//geo", GAMSXMLNamespaces.TEI_NAMESPACES)
+
+        if len(geo_elems) < 2:
+            raise Exception("Not enough geo elements found in TEI SIP.")
+        
+        if geo_elems[0].text is None or geo_elems[1].text is None:
+            raise Exception("Geo elements in TEI SIP are empty.")
+
+        return f"{geo_elems[0].text},{geo_elems[1].text}"          
 
