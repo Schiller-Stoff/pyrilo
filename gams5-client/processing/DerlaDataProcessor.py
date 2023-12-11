@@ -4,6 +4,7 @@ from service.content_model.TEISIP import TEISIP
 from service.SubInfoPackService import SubInfoPackService
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from PIL import Image
+from typing import List, Dict
 import os
 import logging
 import json
@@ -40,8 +41,50 @@ class DerlaDataProcessor:
         """
         Processes a perslist SIP folder.
         """
-        pass
-        # print(f"We are processing a perslist SIP folder. {sip_folder_path}")
+
+        persons = []
+
+        tei_sip = TEISIP(self.PROJECT_ABBREVIATION, sip_folder_path)
+        object_id = tei_sip.resolve_pid()
+
+        # get all person elements
+        person_elems = tei_sip.XML_ROOT.findall(".//listPerson/person", GAMSXMLNamespaces.TEI_NAMESPACES)
+
+        for person_elem in person_elems:
+            # get the person id
+            person_id = person_elem.get("{http://www.w3.org/XML/1998/namespace}id")
+
+            # get the person name
+            person_name_surname = person_elem.find("persName/surname", GAMSXMLNamespaces.TEI_NAMESPACES).text
+            # get the person description
+            person_name_forename = person_elem.find("persName/forename", GAMSXMLNamespaces.TEI_NAMESPACES).text
+
+            # person types
+            person_term_elems = person_elem.findall("listEvent//event/label/term", GAMSXMLNamespaces.TEI_NAMESPACES)
+            person_types = ["person"]
+            for person_term_elem in person_term_elems:
+                person_types.append(person_term_elem.text)
+
+            # add description
+            desc_elem = person_elem.find("listEvent/head/desc", GAMSXMLNamespaces.TEI_NAMESPACES)
+            if desc_elem is None:
+                raise Exception(f"Person description element is missing in TEI SIP. {tei_sip.SIP_FOLDER_PATH}")
+
+            person_desc = desc_elem.text
+
+            # create a person dict
+            person = {
+                "id": f"{object_id}_{person_id}",
+                "surname": person_name_surname,
+                "firstname": person_name_forename,
+                "types": person_types,
+                "desc": person_desc
+            }
+
+            # add the person dict to the persons list
+            persons.append(person)
+
+        self.generate_search_index_json(persons, sip_folder_path)
 
         
     
@@ -87,12 +130,7 @@ class DerlaDataProcessor:
             "creation_date_dt": creation_date,
         }]
 
-        search_json_path = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
-        with open(search_json_path, "w", encoding="utf-8") as search_file:
-            # setting ensure ascii to false to allow umlauts
-            json.dump(search_data, search_file, indent=4, ensure_ascii=False)
-
-        logging.info(f"Generated search.json file for SIP at {search_json_path}.")
+        self.generate_search_index_json(search_data, sip_folder_path)
 
     
     def extract_geo_location(self, tei_sip: TEISIP):
@@ -139,3 +177,20 @@ class DerlaDataProcessor:
         solr_date = parsed_date.strftime(output_format)
 
         return solr_date
+    
+
+    def generate_search_index_json(self, entries: List[Dict[str, str]], sip_folder_path: str):
+        """
+        Generates a search index json file for a given list of dicts at given sip_folder_path
+        :param entries: list of dicts containing the search index entries
+        :param sip_folder_path: path to the sip folder
+        """
+        # TODO validate the entries here?
+        # TODO validate muts contain id / _id?
+
+        search_json_path = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
+        with open(search_json_path, "w", encoding="utf-8") as search_file:
+            # setting ensure ascii to false to allow umlauts
+            json.dump(entries, search_file, indent=4, ensure_ascii=False)
+
+        logging.info(f"Generated search.json file for SIP at {search_json_path}.")
