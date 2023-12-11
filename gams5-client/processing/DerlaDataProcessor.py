@@ -1,3 +1,4 @@
+from datetime import datetime
 from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
 from service.content_model.TEISIP import TEISIP
 from service.SubInfoPackService import SubInfoPackService
@@ -72,6 +73,7 @@ class DerlaDataProcessor:
         types = tei_sip.resolve_terms()
         # DERLA specific operations
         location = self.extract_geo_location(tei_sip)
+        creation_date = self.extract_creation_date(tei_sip)
 
         # solr dict to be written to json file
         search_data = [{
@@ -80,6 +82,7 @@ class DerlaDataProcessor:
             "desc": desc,
             "types": types,
             "location": location,
+            "creation_date_dt": creation_date,
         }]
 
         search_json_path = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
@@ -102,5 +105,35 @@ class DerlaDataProcessor:
         if geo_elems[0].text is None or geo_elems[1].text is None:
             raise Exception(f"Geo elements in TEI SIP are empty. {tei_sip.SIP_FOLDER_PATH}")
 
-        return f"{geo_elems[0].text},{geo_elems[1].text}"          
+        return f"{geo_elems[0].text},{geo_elems[1].text}" 
 
+
+    def extract_creation_date(self, tei_sip: TEISIP):
+        """
+        Extracts the creation date from a DERLA TEISIP object.
+        """
+
+        creation_date_elem = tei_sip.XML_ROOT.find(".//date[@type='creation']", GAMSXMLNamespaces.TEI_NAMESPACES)
+
+        creation_date = "01.01.2023"
+        # check if tei element is not none and if the text is not none
+        if creation_date_elem is not None:
+            if creation_date_elem.text is not None:
+                creation_date = creation_date_elem.text
+
+        # if the creation date is only a year, we add a default month and day
+        if len(creation_date) <= 4:
+            logging.info(f"Creation date element is invalid in TEI SIP. {tei_sip.SIP_FOLDER_PATH}")
+            creation_date = f"01.01.{creation_date}"
+
+
+        input_format = "%d.%m.%Y"
+        output_format = "%Y-%m-%dT%H:%M:%SZ"
+
+        # Convert input date string to a datetime object
+        parsed_date = datetime.strptime(creation_date, input_format)
+
+        # Format the datetime object in the desired output format
+        solr_date = parsed_date.strftime(output_format)
+
+        return solr_date
