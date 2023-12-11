@@ -143,6 +143,28 @@ class TEISIP:
             raise ReferenceError(f"No text assigned to title {title_xpath} in TEI document.") 
 
         return title_title_elem.text
+    
+    def resolve_terms(self):
+        """
+        Reads out the defined terms of the TEI.
+        Removes duplicates.
+        """
+        all_terms_xpath = ".//term"
+        all_terms_elem = self.XML_ROOT.findall(all_terms_xpath, GAMSXMLNamespaces.TEI_NAMESPACES)
+        if len(all_terms_elem) == 0:
+            return [] 
+        
+        terms = []
+        for term_elem in all_terms_elem:
+            if term_elem.text is not None:
+                terms.append(term_elem.text)
+            else:
+                logging.warning(f"Found empty term in TEI document at {term_elem}. Selected all terms at {all_terms_xpath}")
+
+        # removing potential duplicates
+        terms_set = set(terms)
+        terms = list(terms_set)
+        return terms
 
     def resolve_sip_description(self):
         """
