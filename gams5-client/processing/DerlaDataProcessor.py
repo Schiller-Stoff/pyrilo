@@ -75,7 +75,7 @@ class DerlaDataProcessor:
             "title": title,
             "id": id,
             "desc": desc,
-            "types_ss": types
+            "types": types
         }]
 
         search_json_path = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
