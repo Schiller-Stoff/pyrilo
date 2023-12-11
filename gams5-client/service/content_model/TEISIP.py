@@ -202,13 +202,15 @@ class TEISIP:
         Extracts image metadata from a TEI document.
         """
         
-        graphic_elems = self.XML_ROOT.findall(".//facsimile/graphic", GAMSXMLNamespaces.TEI_NAMESPACES)
+        graphic_elems_xpath = ".//facsimile/graphic"
+
+        graphic_elems = self.XML_ROOT.findall(graphic_elems_xpath, GAMSXMLNamespaces.TEI_NAMESPACES)
 
         # check if there are images defined in the TEI document
         if (graphic_elems is None) or (len(graphic_elems) == 0):
-            raise ReferenceError("No images found in TEI document.")
+            logging.info(f"No images found in TEI document for SIP at {self.SIP_FOLDER_PATH} with xpath {graphic_elems_xpath}")
+            return []
         
-
         image_datastreams: List[SIPFileMetadata] = []
 
         for graphic_elem in graphic_elems:
@@ -219,7 +221,7 @@ class TEISIP:
             dsid = graphic_elem.get("{http://www.w3.org/XML/1998/namespace}id")
             logging.info(f"{graphic_elem.attrib}")
             if dsid is None:
-                raise ReferenceError("No xml:id found on image <graphic> element.")
+                raise ReferenceError(f"No xml:id found on image <graphic> element. For sip at {self.SIP_FOLDER_PATH} with xpath {graphic_elems_xpath}")
 
             # TODO ectract description, title, creator, rights, publisher, size, mimetype
 
