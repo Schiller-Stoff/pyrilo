@@ -72,13 +72,18 @@ class DerlaDataProcessor:
 
             person_desc = desc_elem.text
 
+            # add birthdate
+            birthdate_elem = person_elem.find("birth/date", GAMSXMLNamespaces.TEI_NAMESPACES)
+            birthdate = self.transform_to_solr_date(birthdate_elem.text if birthdate_elem is not None else "01.01.2023"	 )
+
             # create a person dict
             person = {
                 "id": f"{object_id}_{person_id}",
                 "surname": person_name_surname,
                 "firstname": person_name_forename,
                 "types": person_types,
-                "desc": person_desc
+                "desc": person_desc,
+                "birthdate": birthdate
             }
 
             # add the person dict to the persons list
@@ -161,22 +166,7 @@ class DerlaDataProcessor:
             if creation_date_elem.text is not None:
                 creation_date = creation_date_elem.text
 
-        # if the creation date is only a year, we add a default month and day
-        if len(creation_date) <= 4:
-            logging.info(f"Creation date element is invalid in TEI SIP. {tei_sip.SIP_FOLDER_PATH}")
-            creation_date = f"01.01.{creation_date}"
-
-
-        input_format = "%d.%m.%Y"
-        output_format = "%Y-%m-%dT%H:%M:%SZ"
-
-        # Convert input date string to a datetime object
-        parsed_date = datetime.strptime(creation_date, input_format)
-
-        # Format the datetime object in the desired output format
-        solr_date = parsed_date.strftime(output_format)
-
-        return solr_date
+        return self.transform_to_solr_date(creation_date)
     
 
     def generate_search_index_json(self, entries: List[Dict[str, str]], sip_folder_path: str):
@@ -194,3 +184,24 @@ class DerlaDataProcessor:
             json.dump(entries, search_file, indent=4, ensure_ascii=False)
 
         logging.info(f"Generated search.json file for SIP at {search_json_path}.")
+
+
+    def transform_to_solr_date(self, date: str):
+        """
+        Transforms a date string to a solr date string.
+        """
+        # if the creation date is only a year, we add a default month and day
+        if len(date) <= 4:
+            date = f"01.01.{date}"
+
+
+        input_format = "%d.%m.%Y"
+        output_format = "%Y-%m-%dT%H:%M:%SZ"
+
+        # Convert input date string to a datetime object
+        parsed_date = datetime.strptime(date, input_format)
+
+        # Format the datetime object in the desired output format
+        solr_date = parsed_date.strftime(output_format)
+
+        return solr_date
