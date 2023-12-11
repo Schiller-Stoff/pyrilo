@@ -28,8 +28,12 @@ class SubInfoPackService:
 
       source_file_path = os.path.join(folder_path, GAMS5APIStatics.SIP_SOURCE_FILE_NAME)
       # if pattern is not given, process all folders
-      if (pattern is None) and ("_" not in folder_name):
+      if pattern is None:
+        # skip folders with underscore in name
+        if "_" in folder_name: 
+          continue
         lambda_func(folder_path, source_file_path)
+
       # if pattern is given, process only folders with matching name  
       else:
         if "_" in pattern:
