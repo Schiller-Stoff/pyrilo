@@ -76,6 +76,11 @@ class DerlaDataProcessor:
             birthdate_elem = person_elem.find("birth/date", GAMSXMLNamespaces.TEI_NAMESPACES)
             birthdate = self.transform_to_solr_date(birthdate_elem.text if birthdate_elem is not None else "01.01.2023"	 )
 
+
+            # add deathdate
+            deathdate_elem = person_elem.find("death/date", GAMSXMLNamespaces.TEI_NAMESPACES)
+            deathdate = self.transform_to_solr_date(deathdate_elem.text if deathdate_elem is not None else "01.01.2023"	 )
+
             # create a person dict
             person = {
                 "id": f"{object_id}_{person_id}",
@@ -83,7 +88,8 @@ class DerlaDataProcessor:
                 "firstname": person_name_forename,
                 "types": person_types,
                 "desc": person_desc,
-                "birthdate": birthdate
+                "birthdate": birthdate,
+                "deathdate": deathdate
             }
 
             # add the person dict to the persons list
@@ -191,15 +197,18 @@ class DerlaDataProcessor:
         Transforms a date string to a solr date string.
         """
         # if the creation date is only a year, we add a default month and day
-        if len(date) <= 4:
+        if len(date) == 4:
             date = f"01.01.{date}"
-
 
         input_format = "%d.%m.%Y"
         output_format = "%Y-%m-%dT%H:%M:%SZ"
 
         # Convert input date string to a datetime object
-        parsed_date = datetime.strptime(date, input_format)
+        try:
+            parsed_date = datetime.strptime(date, input_format)
+        except ValueError:
+            logging.error(f"Failed to parse date string {date} with format {input_format}. Appliying default value 01.01.2023.")
+            parsed_date = datetime.strptime("01.01.2023", input_format)
 
         # Format the datetime object in the desired output format
         solr_date = parsed_date.strftime(output_format)
