@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
 from service.content_model.TEISIP import TEISIP
 from service.SubInfoPackService import SubInfoPackService
@@ -8,6 +9,12 @@ from typing import List, Dict
 import os
 import logging
 import json
+import fasttext
+
+# reading in machine learning model
+model_path = './models/cc.de.20.bin'
+model = fasttext.load_model(model_path)
+
 
 class DerlaDataProcessor:
     """
@@ -81,6 +88,26 @@ class DerlaDataProcessor:
             deathdate_elem = person_elem.find("death/date", GAMSXMLNamespaces.TEI_NAMESPACES)
             deathdate = self.transform_to_solr_date(deathdate_elem.text if deathdate_elem is not None else "01.01.2023"	 )
 
+            # word embeddings for person description
+            word_embeddings = self.calculate_word_embeddings(person_desc)
+            for word in word_embeddings:
+                word_id = person_id + "_" + word
+
+                word_dict = {}
+
+                # word_dict["pid"] = digital_object_pid
+                # word_dict["project_abbr"] = "admin"
+                word_dict["id"] = word_id
+                word_dict["pers_id_s"] = person_id
+                word_dict["types"] = "word-vector"
+                word_dict["word_s"] = word
+                # numpy array needs to be converted to list for json serialization later on
+                word_dict["vector"] = word_embeddings[word].tolist()
+
+                persons.append(word_dict)
+
+
+
             # create a person dict
             person = {
                 "id": f"{object_id}_{person_id}",
@@ -91,6 +118,7 @@ class DerlaDataProcessor:
                 "birthdate": birthdate,
                 "deathdate": deathdate
             }
+
 
             # add the person dict to the persons list
             persons.append(person)
@@ -214,3 +242,33 @@ class DerlaDataProcessor:
         solr_date = parsed_date.strftime(output_format)
 
         return solr_date
+    
+
+    def calculate_word_embeddings(self, text: str):
+        """
+        Calculates word embeddings for given text.
+        :param text: text to calculate word embeddings for.
+        :return:
+        """
+        
+        words = self.tokenize_text(text)
+        # logging.debug(f"Tokenized text: {words}")
+        embeddings_dict = {}
+        for word in words:
+            # Get the fasttext embedding for the word
+            embedding = model.get_word_vector(word)
+            embeddings_dict[word] = embedding
+
+        return embeddings_dict
+    
+    
+    def tokenize_text(self, text: str):
+        """
+        Tokenizes given text.
+        :param text: text to tokenize.
+        :return:
+        """
+        pattern = r'\w+'
+        tokens = re.findall(pattern, text.lower())  # Convert to lowercase to handle case-insensitivity
+        return tokens
+
