@@ -11,10 +11,6 @@ import logging
 import json
 import fasttext
 
-# reading in machine learning model
-model_path = './models/cc.de.20.bin'
-model = fasttext.load_model(model_path)
-
 
 class DerlaDataProcessor:
     """
@@ -49,6 +45,10 @@ class DerlaDataProcessor:
         Processes a perslist SIP folder.
         """
 
+        # reading in machine learning model (needed later for word embeddings)
+        model_path = './models/cc.de.20.bin'
+        model = fasttext.load_model(model_path)
+        
         persons = []
 
         tei_sip = TEISIP(self.PROJECT_ABBREVIATION, sip_folder_path)
@@ -89,7 +89,7 @@ class DerlaDataProcessor:
             deathdate = self.transform_to_solr_date(deathdate_elem.text if deathdate_elem is not None else "01.01.2023"	 )
 
             # word embeddings for person description
-            word_embeddings = self.calculate_word_embeddings(person_desc)
+            word_embeddings = self.calculate_word_embeddings(person_desc, model)
             for word in word_embeddings:
                 word_id = person_id + "_" + word
 
@@ -244,11 +244,12 @@ class DerlaDataProcessor:
         return solr_date
     
 
-    def calculate_word_embeddings(self, text: str):
+    def calculate_word_embeddings(self, text: str, model):
         """
         Calculates word embeddings for given text.
         :param text: text to calculate word embeddings for.
-        :return:
+        :param model: fasttext model to use for word embeddings.
+        :return: dict containing the word embeddings for the given text.
         """
         
         words = self.tokenize_text(text)
