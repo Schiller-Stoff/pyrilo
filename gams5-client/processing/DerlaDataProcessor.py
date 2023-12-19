@@ -25,7 +25,7 @@ class DerlaDataProcessor:
         SubInfoPackService.walk_sip_folder(self.process_perslist_sip, "perslist")
 
 
-    def process_sip_folder(self, sip_folder_path, source_file_path):
+    def process_sip_folder(self, sip_folder_path, source_file_path, folder_pattern: str):
         """
         Demo lambda function for processing a SIP folder. (for DERLA)
         """
@@ -40,7 +40,7 @@ class DerlaDataProcessor:
         # tei_service = TEIService(MY_PROJECT, source_file_path, sip_folder_path)
 
     
-    def process_perslist_sip(self, sip_folder_path: str, source_file_path: str):
+    def process_perslist_sip(self, sip_folder_path: str, source_file_path: str, folder_pattern: str):
         """
         Processes a perslist SIP folder.
         """

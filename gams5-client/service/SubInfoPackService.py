@@ -1,9 +1,7 @@
 import logging
 import os
-import tempfile
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from urllib3 import encode_multipart_formdata, make_headers, request
-import zipfile
 import os
 import xml.etree.ElementTree as ET
 from typing import Callable
@@ -14,10 +12,10 @@ class SubInfoPackService:
   """
   
   @staticmethod
-  def walk_sip_folder(lambda_func: Callable[[str, str], None], pattern: str = None):
+  def walk_sip_folder(lambda_func: Callable[[str, str, str], None], pattern: str = None):
     """
-    Walks through all SIP files and calls given function for each folder. 
-    :param lambda_func: function to call for each folder - gets the folderpath as first parameter and the path to the source file as second parameter
+    Walks through all SIP files and calls given function for each folder. Skips all folder with underscore in name / path. 
+    :param lambda_func: function to call for each folder - gets the folderpath as first parameter and the path to the source file as second parameter. Third parameter is the actually encountered folder pattern, like folder_demo --> "demo"
     :param pattern: optional pattern to filter folders by name
     """
     for folder_name in os.listdir(GAMS5APIStatics.LOCAL_SIP_FOLDERS_PATH):
@@ -32,7 +30,7 @@ class SubInfoPackService:
         # skip folders with underscore in name
         if "_" in folder_name: 
           continue
-        lambda_func(folder_path, source_file_path)
+        lambda_func(folder_path, source_file_path, "")
 
       # if pattern is given, process only folders with matching name  
       else:
@@ -40,7 +38,9 @@ class SubInfoPackService:
           msg = f"Pattern cannot contain an underscore. An underscore is prepended automatically. Given pattern: {pattern}"
           logging.error(msg)
           raise ValueError(msg)
-        
+
         if folder_path.endswith("_" + pattern):
-          lambda_func(folder_path, source_file_path)
+          # pass the actually encountered folder pattern to the lambda function
+          encountered_folder_pattern = folder_path.split("_",1)[1]
+          lambda_func(folder_path, source_file_path, encountered_folder_pattern)
 
