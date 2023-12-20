@@ -20,7 +20,11 @@ class SIPMetadata:
     creator: str
     rights: str
     publisher: str
+    # content model of the object
     object_type: str
+    # types like TEI, TEIPerslist, TEIManuscript, TEIManuscriptPage, TEIManuscriptPageImage
+    types: List[str] = field(default_factory=list)
+
     # needs to be named in camelCase otherwise there will be a serialization error 
     contentFiles: List[SIPFileMetadata] = field(default_factory=list)
 
@@ -41,6 +45,7 @@ class SIPMetadata:
 
         # rewrite keys to correspond to the sip.json schema 
         sip_object_dict.pop("id")
+        # rewrite keys to correspond to the sip.json schema
         sip_object_dict.pop("object_type")
 
         return json.dumps(sip_object_dict)
