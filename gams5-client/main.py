@@ -6,7 +6,7 @@ from statics import GAMS5APIStatics
 from service.SubInfoPackService import SubInfoPackService
 from GAMS5APIClient import GAMS5APIClient
 
-def setup_client() -> GAMS5APIClient:
+def setup_client(project_abbr: str) -> GAMS5APIClient:
     log_file_path = f"{os.getcwd()}/logs/app.log"
 
     # setup logging
@@ -15,7 +15,7 @@ def setup_client() -> GAMS5APIClient:
     # example usage of the client
     # TODO configuring - maybe for handling auth thats not a good idea? e.g. GET requesting should possible all the time VS state changing operations
     # need to throw an error. --> maybe own configure_auth() method?
-    client = GAMS5APIClient("http://localhost:18085")
+    client = GAMS5APIClient("http://localhost:18085", project_abbr)
     # configure authentication ins separate method.
     client.configure_auth("admin", "admin")
     return client
@@ -44,10 +44,12 @@ def demo_create_bags_and_ingest_them(pyrilo: GAMS5APIClient, MY_PROJECT: str):
 
 if __name__ == "__main__":
 
-    pyrilo = setup_client()
-    
-    
     MY_PROJECT = "demo"
+
+    pyrilo = setup_client(MY_PROJECT)
+    
+    
+    
     # found_objects = pyrilo.list_objects(MY_PROJECT)
     # print(found_objects) 
 
