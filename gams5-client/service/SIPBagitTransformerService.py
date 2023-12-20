@@ -5,15 +5,19 @@ import shutil
 
 from service.content_model.TEISIP import TEISIP
 from statics.GAMS5APIStatics import GAMS5APIStatics
-
+from service.SubInfoPackService import SubInfoPackService
 
 class SIPBagitTransformerService:
     """
     This class is responsible for transforming a project's SIP to the required bagit format.	
     """
 
-    def __init__(self):
-        pass
+    PROJECT_ABBR: str | None = None
+    sub_info_pack_service: SubInfoPackService
+
+    def __init__(self, project_abbr: str):
+        self.PROJECT_ABBR = project_abbr
+        self.sub_info_pack_service = SubInfoPackService(project_abbr)
 
     def validate(self, input_data):
         raise NotImplementedError()
@@ -59,46 +63,60 @@ class SIPBagitTransformerService:
         TODO: rename! --> creates the base folder structure in the first place!
         """
 
-        # Get the path of the SIPs folder
-        sips_folder = GAMS5APIStatics.LOCAL_SIP_FOLDERS_PATH
-
         # Get the path of the bags folder
         bags_folder = GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH
         # delete all child folder inside bags folder
         self.delete_child_folders(bags_folder)
         
         # Loop through the SIPs folder
-        for folder_name in os.listdir(sips_folder):
-            # all files on folder root level are ignored
-            if os.path.isfile(os.path.join(sips_folder, folder_name)):
-                continue
+        # TODO reuse walk method from SubInfoPackService (include pattern as type information?)
 
-            # Create the corresponding bags folder
-            # TODO reneame variable - better cur_bag_folder_path
-            bags_folder_path = os.path.join(bags_folder, folder_name)
-            os.makedirs(bags_folder_path, exist_ok=True)
+        self.sub_info_pack_service.walk_sip_folder(self._build_bag, pattern="*")
 
-            # Copy contents from SIP folder to the data/content directory inside the generated bag
-            sip_folder_path = os.path.join(sips_folder, folder_name)
-            data_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "content")
-            shutil.copytree(sip_folder_path, data_folder_path, dirs_exist_ok=True)
 
-            # create meta folder for bagit
-            meta_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "meta")
-            os.makedirs(meta_folder_path, exist_ok=True)
+    def _build_bag(self, folder_path: str, source_file_path: str, encountered_folder_pattern: str, folder_name: str):
+        """
+        # TODO
+        # ...
+        """
 
-            # TODO decide here which kind of service should be triggered!
-            # extract the sip.json from source.xml
-            tei_sip = TEISIP(project_abbr, sip_folder_path)
-            sip_object = tei_sip.extract_metadata()
-            tei_sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
+        # Get the path of the SIPs folder
+        sips_folder = GAMS5APIStatics.LOCAL_SIP_FOLDERS_PATH
 
-            # Create basic bag files
-            self.create_bag_files(bags_folder_path)
-            self.create_bagit_checksum_files(bags_folder_path)
+        # Get the path of the bags folder
+        bags_folder = GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH
 
-            logging.info(f"Successfully transformed SIP {folder_name} to bag {bags_folder_path}.")
+        # all files on folder root level are ignored
+        if os.path.isfile(os.path.join(sips_folder, folder_name)):
+            return
 
+        # Create the corresponding bags folder
+        # TODO rename variable - better cur_bag_folder_path
+        bags_folder_path = os.path.join(bags_folder, folder_name)
+        os.makedirs(bags_folder_path, exist_ok=True)
+
+        # Copy contents from SIP folder to the data/content directory inside the generated bag
+        sip_folder_path = os.path.join(sips_folder, folder_name)
+        data_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "content")
+        shutil.copytree(sip_folder_path, data_folder_path, dirs_exist_ok=True)
+
+        # create meta folder for bagit
+        meta_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "meta")
+        os.makedirs(meta_folder_path, exist_ok=True)
+
+        # TODO decide here which kind of service should be triggered!
+        # extract the sip.json from source.xml
+        print("***encountered_folder_pattern")
+        print(encountered_folder_pattern)
+        tei_sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        sip_object = tei_sip.extract_metadata()
+        tei_sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
+
+        # Create basic bag files
+        self.create_bag_files(bags_folder_path)
+        self.create_bagit_checksum_files(bags_folder_path)
+
+        logging.info(f"Successfully transformed SIP {folder_name} to bag {bags_folder_path}.")
 
     def delete_child_folders(self, bags_folder_path: str):
         """
