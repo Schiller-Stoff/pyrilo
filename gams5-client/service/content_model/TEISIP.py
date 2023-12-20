@@ -21,12 +21,14 @@ class TEISIP:
     XML_ROOT: ET.Element
     SIP_FOLDER_PATH: str
     SIP_SOURCE_FILE_PATH: str
+    TEI_SUBTYPE: str
 
-    def __init__(self, project_abbr: str, sip_folder_path: str) -> None:
+    def __init__(self, project_abbr: str, sip_folder_path: str, tei_subtype: str = "") -> None:
         self.PROJECT_ABBR = project_abbr
         self.SIP_FOLDER_PATH = sip_folder_path
         self.SIP_SOURCE_FILE_PATH = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SOURCE_FILE_NAME)
         self.XML_ROOT = self.read_xml(self.SIP_SOURCE_FILE_PATH)
+        self.TEI_SUBTYPE = tei_subtype
         
     def read_xml(self, path: str) -> ET.Element:
         """
@@ -64,6 +66,11 @@ class TEISIP:
         description = self.resolve_sip_description()
         creator = self._resolve_tei_creator()
 
+        # add type information 
+        types = []
+        if self.TEI_SUBTYPE != "":
+            types.append(self.TEI_SUBTYPE)
+
         object_metadata = SIPMetadata(
             id=id, 
             title=title, 
@@ -73,7 +80,8 @@ class TEISIP:
             object_type=ContentModels.TEI, 
             publisher="TODO", 
             rights="TODO",
-            contentFiles=[]
+            types=types,
+            contentFiles=[],
         )
 
         # add SOURCE.xml as content file
