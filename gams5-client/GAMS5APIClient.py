@@ -17,10 +17,10 @@ class GAMS5APIClient:
     bag_service: BagService
     integration_service: IntegrationService
 
-    def __init__(self, host: str) -> None:
+    def __init__(self, host: str, project_abbr: str) -> None:
         self.digital_object_service = DigitalObjectService(host)
         self.bag_service = BagService(host)
-        self.sip_bagit_transformer_service = SIPBagitTransformerService()
+        self.sip_bagit_transformer_service = SIPBagitTransformerService(project_abbr)
         self.integration_service = IntegrationService(host)
 
     def configure_auth(self, user_name: str, user_pw: str):
