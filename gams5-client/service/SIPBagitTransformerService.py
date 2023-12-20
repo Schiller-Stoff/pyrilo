@@ -62,22 +62,16 @@ class SIPBagitTransformerService:
         Transforms all project files to the bagit format.
         TODO: rename! --> creates the base folder structure in the first place!
         """
-
-        # Get the path of the bags folder
-        bags_folder = GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH
         # delete all child folder inside bags folder
-        self.delete_child_folders(bags_folder)
-        
+        self.delete_child_folders(GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH)
         # Loop through the SIPs folder
-        # TODO reuse walk method from SubInfoPackService (include pattern as type information?)
-
         self.sub_info_pack_service.walk_sip_folder(self._build_bag, pattern="*")
 
 
     def _build_bag(self, folder_path: str, source_file_path: str, encountered_folder_pattern: str, folder_name: str):
         """
-        # TODO
-        # ...
+        Build a singular bag from a SIP folder.
+        Parameters are passed by the SubInfoPackService.
         """
 
         # Get the path of the SIPs folder
@@ -105,9 +99,6 @@ class SIPBagitTransformerService:
         os.makedirs(meta_folder_path, exist_ok=True)
 
         # TODO decide here which kind of service should be triggered!
-        # extract the sip.json from source.xml
-        print("***encountered_folder_pattern")
-        print(encountered_folder_pattern)
         tei_sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
         sip_object = tei_sip.extract_metadata()
         tei_sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
