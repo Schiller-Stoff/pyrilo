@@ -2,8 +2,8 @@
 import logging
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from domain.DigitalObject import DigitalObject
-from typing import Dict
-from urllib3 import make_headers, request
+from typing import Dict, List
+from urllib3 import make_headers, request, encode_multipart_formdata
 
 class DigitalObjectService:
     """
@@ -63,6 +63,33 @@ class DigitalObjectService:
             )
 
         return digital_objects
+
+
+    def assign_child_objects(self, parent_id: str, children_ids: List[str], project_abbr: str):
+        """
+        Assigns child objects to a parent object. Sends the correspondnet request to the gams-api.
+        :param parent_id: id of the parent object
+        :param children_ids: list of ids of child objects 
+        """
+        # enpoint allowing to create child parent relationships.
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{parent_id}/collect"
+
+        # construct headers
+        headers = make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}')
+        child_ids_string = ",".join(children_ids)
+        body_form_data, content_type = encode_multipart_formdata({"childObjects": child_ids_string}, boundary=None)
+        headers["Content-Type"] = content_type
+
+        # construct a multipart request via formdata
+        r = request("PATCH", url, headers=headers, redirect=False, body=body_form_data)
+
+        if r.status >= 400:
+            msg = f"Failed to request against {url}. API response: {r.json()}"
+            logging.error(msg)
+            raise ConnectionError(msg)
+        else:
+            logging.info(f"Successfully assigned child-objects to object {parent_id} for project {project_abbr}.")
+
 
 
     def delete_object(self, id: str, project_abbr: str):

@@ -44,6 +44,13 @@ class GAMS5APIClient:
         """
         return self.digital_object_service.save_object(id, project_abbr)
     
+
+    def assign_child_objects(self, parent_id: str, children_ids: List[str], project_abbr: str):
+        """
+        Assigns a child object to a parent object
+        """
+        return self.digital_object_service.assign_child_objects(parent_id, children_ids, project_abbr)
+
     def delete_object(self, id: str, project_abbr: str):
         """
         Deletes a digital object
