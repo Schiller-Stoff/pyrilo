@@ -55,7 +55,7 @@ class BagService:
             headers["Content-Type"] = content_type
 
             # construct a multipart request via formdata
-            r = request("POST", url, headers=headers, redirect=False, body=body_form_data)
+            r = request("POST", url, headers=headers, redirect=False, body=body_form_data, timeout=100)
 
             # include CSRF token? (NOT NECESSARY FROM PYTHON CLIENT?)
 
