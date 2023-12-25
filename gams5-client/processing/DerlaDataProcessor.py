@@ -90,7 +90,15 @@ class DerlaDataProcessor:
             deathdate = self.transform_to_solr_date(deathdate_elem.text if deathdate_elem is not None else "01.01.2023"	 )
 
             # word embeddings for person description
-            word_embeddings = self.calculate_word_embeddings(person_desc, model)
+            word_embeddings = {}
+            try:
+                # word embeddings for person name
+                word_embeddings = self.calculate_word_embeddings(person_desc, model)
+            except ReferenceError:
+                msg = f"Failed to calculate word embeddings for person {person_id}. {ReferenceError}"
+                logging.info(msg)
+                raise ReferenceError(msg)
+
             for word in word_embeddings:
                 word_id = person_id + "_" + word
 
@@ -201,6 +209,10 @@ class DerlaDataProcessor:
             if creation_date_elem.text is not None:
                 creation_date = creation_date_elem.text
 
+        # if creation date is none, we set it to a default value
+        if creation_date is None:
+            creation_date = "01.01.2023"
+
         return self.transform_to_solr_date(creation_date)
     
 
@@ -225,6 +237,11 @@ class DerlaDataProcessor:
         """
         Transforms a date string to a solr date string.
         """
+
+        # also assigns a default date if missing
+        if date is None:
+            date = "01.01.2023"
+
         # if the creation date is only a year, we add a default month and day
         if len(date) == 4:
             date = f"01.01.{date}"
@@ -251,8 +268,14 @@ class DerlaDataProcessor:
         :param text: text to calculate word embeddings for.
         :param model: fasttext model to use for word embeddings.
         :return: dict containing the word embeddings for the given text.
+        :raises ReferenceError: if text is None.
         """
         
+        if text is None:
+            msg = "Text is None. Cannot calculate word embeddings."
+            logging.error(msg)
+            raise ReferenceError(msg)
+
         words = self.tokenize_text(text)
         # logging.debug(f"Tokenized text: {words}")
         embeddings_dict = {}
