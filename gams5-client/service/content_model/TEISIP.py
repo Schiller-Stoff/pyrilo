@@ -97,10 +97,10 @@ class TEISIP(SIP):
         pid_xpath = ".//idno[@type='PID']"
         pid_idno_elem = self.XML_ROOT.find(pid_xpath, GAMSXMLNamespaces.TEI_NAMESPACES) 
         if pid_idno_elem is None:
-            raise ReferenceError(f"No pid at {pid_xpath} found in TEI document.")        
+            raise ReferenceError(f"No pid at {pid_xpath} found in TEI document. At SIP: {self.SIP_FOLDER_PATH}")        
         
         if pid_idno_elem.text is None:
-            raise ReferenceError(f"No text assigned to pid indo {pid_xpath} in TEI document.") 
+            raise ReferenceError(f"No text assigned to pid indo {pid_xpath} in TEI document. At SIP: {self.SIP_FOLDER_PATH}") 
 
         return pid_idno_elem.text
     
