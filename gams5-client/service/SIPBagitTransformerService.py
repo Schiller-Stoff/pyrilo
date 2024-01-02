@@ -2,7 +2,7 @@ import datetime
 import logging
 import os
 import shutil
-
+from service.content_model.SIP import SIP
 from service.content_model.TEISIP import TEISIP
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from service.SubInfoPackService import SubInfoPackService
@@ -65,15 +65,15 @@ class SIPBagitTransformerService:
         # delete all child folder inside bags folder
         self.delete_child_folders(GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH)
         # Loop through the SIPs folder
-        self.sub_info_pack_service.walk_sip_folder(self._build_bag, pattern="*")
+        self.sub_info_pack_service.walk_sip_folder(self._build_bag, pattern="*", content_model="*")
 
 
-    def _build_bag(self, folder_path: str, source_file_path: str, encountered_folder_pattern: str, folder_name: str):
+    def _build_bag(self, folder_path: str, source_file_path: str, encountered_folder_pattern: str, folder_name: str, content_model: str):
         """
         Build a singular bag from a SIP folder.
         Parameters are passed by the SubInfoPackService.
         """
-
+        
         # Get the path of the SIPs folder
         sips_folder = GAMS5APIStatics.LOCAL_SIP_FOLDERS_PATH
 
@@ -98,13 +98,18 @@ class SIPBagitTransformerService:
         meta_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "meta")
         os.makedirs(meta_folder_path, exist_ok=True)
 
-        # TODO decide here which kind of service should be triggered!
-        tei_sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-        # here must be the logic for the different SIP types (and subtypes?)
 
+        sip = None
+        if content_model == "tei":
+            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        elif content_model == "":
+            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        else:
+            sip = SIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+         
 
-        sip_object = tei_sip.extract_metadata()
-        tei_sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
+        sip_object = sip.extract_metadata()
+        sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 
         # Create basic bag files
         self.create_bag_files(bags_folder_path)
