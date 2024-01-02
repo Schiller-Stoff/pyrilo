@@ -4,6 +4,7 @@ import os
 import shutil
 from service.content_model.SIP import SIP
 from service.content_model.TEISIP import TEISIP
+from service.content_model.GMLSIP import GMLSIP
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from service.SubInfoPackService import SubInfoPackService
 
@@ -104,6 +105,8 @@ class SIPBagitTransformerService:
             sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
         elif content_model == "":
             sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        elif content_model == "gml":
+            sip = GMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
         else:
             sip = SIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
          
