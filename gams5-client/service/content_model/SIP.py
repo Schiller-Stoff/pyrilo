@@ -6,6 +6,7 @@ import os
 from service.content_model.SIPMetadata import SIPMetadata
 from service.content_model.SIPFileMetadata import SIPFileMetadata
 import logging
+import uuid
 
 class SIP:
     """
@@ -58,3 +59,34 @@ class SIP:
         Extracts the full text from the TEI document.
         """
         return ET.tostring(self.XML_ROOT, encoding='utf-8', method='text').decode("utf-8")
+    
+
+    def extract_metadata(self) -> SIPMetadata:
+        """
+        Creates default metadata for a SIP without an implemented content model Subclass.
+        Extracts metadata from the SIP. 
+        Method is meant to be overridden by subclasses and acts as default.
+        """
+
+        logging.warning("Method should be overridden by a subclass for the content model. No metadata extraction implemented for this content model. Creating dummy metadata object.")
+
+        print("*** " + self.SIP_FOLDER_PATH)
+
+        object_id = self.SIP_FOLDER_PATH.rsplit('/', 1)[-1]
+        title = f"Object for project: {self.PROJECT_ABBR}"
+        creator = f"{self.PROJECT_ABBR}"
+        description = f"Object created without implemented metadata extraction for the content model. For SIP: {self.SIP_FOLDER_PATH}"
+
+        object_metadata = SIPMetadata(
+            id=object_id, 
+            title=title, 
+            creator=creator, 
+            description=description,
+            object_type="Base object", 
+            publisher=creator, 
+            rights="CC BY-SA 4.0",
+            types=[],
+            contentFiles=[],
+        )
+
+        return object_metadata
