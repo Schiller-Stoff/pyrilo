@@ -7,5 +7,6 @@ class ContentModels:
     """
     TEI: final = "TEI"
     LIDO: final = "LIDO"
+    GML: final = "GML"
 
     
