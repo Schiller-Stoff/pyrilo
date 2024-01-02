@@ -100,6 +100,9 @@ class SIPBagitTransformerService:
 
         # TODO decide here which kind of service should be triggered!
         tei_sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        # here must be the logic for the different SIP types (and subtypes?)
+
+
         sip_object = tei_sip.extract_metadata()
         tei_sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 

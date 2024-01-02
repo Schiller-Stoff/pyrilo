@@ -15,14 +15,17 @@ class SubInfoPackService:
   def __init__(self, project_abbr: str) -> None:
     self.PROJECT_ABBR = project_abbr
   
-  def walk_sip_folder(self, lambda_func: Callable[[str, str, str], None], pattern: str = None):
+  def walk_sip_folder(self, lambda_func: Callable[[str, str, str], None], pattern: str = None, sip_folder_path: str = GAMS5APIStatics.LOCAL_SIP_FOLDERS_PATH):
     """
     Walks through all SIP files and calls given function for each folder. Skips all folder with underscore in name / path. 
     :param lambda_func: function to call for each folder - gets the folderpath as first parameter and the path to the source file as second parameter. Third parameter is the actually encountered folder pattern, like folder_demo --> "demo". Fourth parameter is the actual foldername.
     :param pattern: optional pattern to filter folders by name. By default filters all folders with underscore in name. If pattern is "*", all folders are processed.
     """
-    for folder_name in os.listdir(GAMS5APIStatics.LOCAL_SIP_FOLDERS_PATH):
-      folder_path = os.path.join(GAMS5APIStatics.LOCAL_SIP_FOLDERS_PATH, folder_name)
+
+    # TODO validate given sip_folder_path? e.g. is it even a path like object
+
+    for folder_name in os.listdir(sip_folder_path):
+      folder_path = os.path.join(sip_folder_path, folder_name)
       # skip if not a folder
       if not os.path.isdir(folder_path): 
         continue
