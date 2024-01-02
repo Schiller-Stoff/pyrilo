@@ -85,7 +85,7 @@ class SIP:
             object_type="Base object", 
             publisher=creator, 
             rights="CC BY-SA 4.0",
-            types=[],
+            types=[self.SUBTYPE],
             contentFiles=[],
         )
 
