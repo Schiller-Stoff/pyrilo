@@ -1,8 +1,9 @@
 import dataclasses
 import json
 import logging
+import mimetypes
 import xml.etree.ElementTree as ET
-from typing import List
+from typing import Dict, List
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from service.content_model.ContentModels import ContentModels
 from service.content_model.SIPMetadata import SIPMetadata
@@ -50,9 +51,12 @@ class TEISIP(SIP):
             contentFiles=[],
         )
 
-        # add SOURCE.xml as content file
-        object_metadata.contentFiles.append(
-            SIPFileMetadata(
+        # create a dictionary of datastream-ids with content file metadata
+        # needs to be mapped later on to contentFiles
+        files_dict = self.resolve_datastream_files()
+
+
+        files_dict["SOURCE"] = SIPFileMetadata(
                 # TODO tink about actual data assignment
                 title="SOURCE", 
                 dsid="SOURCE", 
@@ -66,25 +70,18 @@ class TEISIP(SIP):
                 rights="TODO", 
                 publisher="TODO", 
             )
-        )
 
         # process images defined in the TEI document
         image_files = self._handle_tei_images()
         for image_file in image_files:
-            object_metadata.contentFiles.append(image_file)
-        
-        # TODO process other files defined in the TEI document? Like arbitrary files? -> maybe not needed?
+            files_dict[image_file.dsid] = image_file
+            # necessary because image files are not named correctly
+            # files_dict.pop("1")
+            # files_dict.pop("2")
 
-
-        # process of thumbnail
-        thumbnails = self.resolve_thumbnail()
-        for thumbnail in thumbnails:
-            object_metadata.contentFiles.append(thumbnail)
-
-        # process of search json
-        search_json = self.resolve_search_json()
-        for search_json in search_json:
-            object_metadata.contentFiles.append(search_json)
+        # everything in dictionary is being added as content file
+        for key in files_dict.keys():
+            object_metadata.contentFiles.append(files_dict[key])
 
         logging.info(f"Extracted metadata from TEI document. {object_metadata}")
         return object_metadata
@@ -327,39 +324,4 @@ class TEISIP(SIP):
             )
 
         return [sip_file_description]
-
-
-    def resolve_additional_files(self):
-        """"
-        TODO
-        """
-        sip_file_descriptions: List[SIPFileMetadata] = []
-        # go through files in SIP (skip every file that is not described via elements in the TEI document)
-        # Loop through the SIPs folder
-        for file_name in os.listdir(self.SIP_FOLDER_PATH):
-            # all folders are being ignored
-            if not os.path.isfile(os.path.join(self.SIP_FOLDER_PATH, file_name)):
-                continue
-            
-            if file_name == "SOURCE.xml":
-                continue
-
-            if file_name != "THUMBNAIL.jpg":
-                continue
-
-            sip_file_description = SIPFileMetadata(
-                    bagpath="/data/content/" + file_name, 
-                    dsid=file_name, 
-                    mimetype="TODO",
-                    creator=self.PROJECT_ABBR,
-                    description="TODO",
-                    publisher="TODO",
-                    rights="TODO",
-                    size=9999999,
-                    title=file_name
-            )
-
-            sip_file_descriptions.append(sip_file_description)
-
-        return sip_file_descriptions
     
