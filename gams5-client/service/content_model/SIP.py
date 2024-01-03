@@ -1,4 +1,6 @@
 
+import mimetypes
+from typing import Dict
 import xml.etree.ElementTree as ET
 import utils.xml_operations as xml_operations
 from statics.GAMS5APIStatics import GAMS5APIStatics
@@ -89,4 +91,50 @@ class SIP:
             contentFiles=[],
         )
 
+        
+        datastream_files = self.resolve_datastream_files()
+        # map to array
+        for file in datastream_files:
+            object_metadata.contentFiles.append(datastream_files[file])
+
         return object_metadata
+
+
+    def resolve_datastream_files(self):
+        """"
+        Resolves all datastream files in the SIP folder.
+        :returns Returns a dictionary of all datastream files with the dsid as key and a SIPFileMetadata object as value.
+        """
+        sip_file_descriptions: Dict[str, SIPFileMetadata] = {}
+        # go through files in SIP (skip every file that is not described via elements in the TEI document)
+        # Loop through the SIPs folder
+        for file_name in os.listdir(self.SIP_FOLDER_PATH):
+            # all folders are being ignored
+            if not os.path.isfile(os.path.join(self.SIP_FOLDER_PATH, file_name)):
+                continue
+
+            # split in root and extension
+            file_root, file_extension = os.path.splitext(file_name)
+
+            # guess mimetype from path
+            file_mimetype = mimetypes.guess_type(os.path.join(self.SIP_FOLDER_PATH, file_name))[0]
+
+            sip_file_description = SIPFileMetadata(
+                    bagpath="/data/content/" + file_name, 
+                    dsid=file_root, 
+                    # TODO add mimetype
+                    mimetype=file_mimetype,
+                    creator=self.PROJECT_ABBR,
+                    description="Datastream for project " + self.PROJECT_ABBR + ".",
+                    # TODO add publisher
+                    publisher="TODO",
+                    # TODO add rights
+                    rights="TODO",
+                    # TODO calc file size
+                    size=9999999,
+                    title=file_name
+            )
+
+            sip_file_descriptions[file_root] = sip_file_description
+
+        return sip_file_descriptions
