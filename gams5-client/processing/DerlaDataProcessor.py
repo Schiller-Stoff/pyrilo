@@ -167,6 +167,8 @@ class DerlaDataProcessor:
         # DERLA specific operations
         location = self.extract_geo_location(tei_sip)
         creation_date = self.extract_creation_date(tei_sip)
+        # extracting fulltext field
+        fulltext = tei_sip.extract_full_text()
 
         # solr dict to be written to json file
         search_data = [{
@@ -176,6 +178,7 @@ class DerlaDataProcessor:
             "types": types,
             "location": location,
             "creation_date_dt": creation_date,
+            "_fulltext": fulltext
         }]
 
         self.generate_search_index_json(search_data, sip_folder_path)
