@@ -53,31 +53,12 @@ class TEISIP(SIP):
 
         # create a dictionary of datastream-ids with content file metadata
         # needs to be mapped later on to contentFiles
-        files_dict = self.resolve_datastream_files()
-
-
-        files_dict["SOURCE"] = SIPFileMetadata(
-                # TODO tink about actual data assignment
-                title="SOURCE", 
-                dsid="SOURCE", 
-                bagpath="data/content/SOURCE.xml", 
-                mimetype="text/xml",
-                # TODO add actual size 
-                size=9999999,
-                # TODO add processing of missing statements! 
-                creator=creator, 
-                description="TODO", 
-                rights="TODO", 
-                publisher="TODO", 
-            )
+        files_dict = self.resolve_datastream_files(ignore_files=["1.JPG", "2.JPG"])
 
         # process images defined in the TEI document
         image_files = self._handle_tei_images()
         for image_file in image_files:
             files_dict[image_file.dsid] = image_file
-            # necessary because image files are not named correctly
-            # files_dict.pop("1")
-            # files_dict.pop("2")
 
         # everything in dictionary is being added as content file
         for key in files_dict.keys():

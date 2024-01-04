@@ -1,6 +1,6 @@
 
 import mimetypes
-from typing import Dict
+from typing import Dict, List
 import xml.etree.ElementTree as ET
 import utils.xml_operations as xml_operations
 from statics.GAMS5APIStatics import GAMS5APIStatics
@@ -99,9 +99,10 @@ class SIP:
         return object_metadata
 
 
-    def resolve_datastream_files(self) -> Dict[str, SIPFileMetadata]:
+    def resolve_datastream_files(self, ignore_files: List[str] = []) -> Dict[str, SIPFileMetadata]:
         """"
         Resolves all datastream files in the SIP folder and returns them as a dictionary of SIPFileMetadata objects.
+        :param ignore_files: List of file names that should be ignored.
         :returns Returns a dictionary of all datastream files with the dsid as key and a SIPFileMetadata object as value.
         """
         sip_file_descriptions: Dict[str, SIPFileMetadata] = {}
@@ -111,6 +112,10 @@ class SIP:
             # all folders are being ignored
             if not os.path.isfile(os.path.join(self.SIP_FOLDER_PATH, file_name)):
                 continue
+            # optionally ignore certain files
+            if file_name in ignore_files:
+                logging.debug(f"Ignoring file to map as sip contentFile: {file_name}")
+                continue    
 
             # split in root and extension
             file_root, file_extension = os.path.splitext(file_name)
@@ -128,8 +133,10 @@ class SIP:
                     publisher=f"{self.PROJECT_ABBR} GAMS project",
                     rights=f"CC BY 4.0",
                     size=file_size,
-                    title=f"{file_name} datastream"
+                    title=f"Datastream containing the {file_name} file"
             )
+
+            
 
             sip_file_descriptions[file_root] = sip_file_description
 
