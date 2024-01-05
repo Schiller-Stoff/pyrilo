@@ -178,7 +178,9 @@ class DerlaDataProcessor:
             "types": types,
             "location": location,
             "creation_date_dt": creation_date,
-            "_fulltext": fulltext
+            "_fulltext": fulltext,
+            # needs to be assigned if the index of an object is being overwritten
+            "_type": GAMS5APIStatics.INTEGRATION_API_OBJECT_TYPE
         }]
 
         self.generate_search_index_json(search_data, sip_folder_path)

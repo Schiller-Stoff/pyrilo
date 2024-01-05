@@ -24,6 +24,9 @@ class GAMS5APIStatics:
     # search json
     SIP_SEARCH_JSON_DATASTREAM_ID = "SEARCH_INDEX"
     SIP_SEARCH_JSON_FILE_NAME = SIP_SEARCH_JSON_DATASTREAM_ID + ".json"
+    # integration api statics, e.g. type of digital object
+    # type field category for digital object type
+    INTEGRATION_API_OBJECT_TYPE = "digitalObject"
 
     def __init__(self) -> None:
         pass
