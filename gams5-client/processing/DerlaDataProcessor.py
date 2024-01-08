@@ -2,6 +2,7 @@ from datetime import datetime
 import re
 from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
 from service.content_model.TEISIP import TEISIP
+from service.content_model.GMLSIP import GMLSIP
 from service.SubInfoPackService import SubInfoPackService
 from statics.GAMS5APIStatics import GAMS5APIStatics
 from PIL import Image
@@ -24,6 +25,7 @@ class DerlaDataProcessor:
         subinfo_pack_service = SubInfoPackService(self.PROJECT_ABBREVIATION)
         subinfo_pack_service.walk_sip_folder(lambda_func=self.process_sip_folder)
         subinfo_pack_service.walk_sip_folder(lambda_func=self.process_perslist_sip, pattern="perslist", content_model="tei")
+        subinfo_pack_service.walk_sip_folder(lambda_func=self.process_gml_sip, pattern="placelist", content_model="gml")
 
 
     def process_sip_folder(self, sip_folder_path, source_file_path, folder_pattern: str, folder_name: str, content_model: str):
@@ -302,3 +304,49 @@ class DerlaDataProcessor:
         tokens = re.findall(pattern, text.lower())  # Convert to lowercase to handle case-insensitivity
         return tokens
 
+
+    def process_gml_sip(self, sip_folder_path, source_file_path, folder_pattern: str, folder_name: str, content_model: str):
+        """
+
+        """
+
+        gml_sip = GMLSIP(self.PROJECT_ABBREVIATION, sip_folder_path)
+        gml_metadata = gml_sip.extract_metadata()
+
+        # get all placename elements
+        place_elems = gml_sip.XML_ROOT.findall(".//derla:placeOfRemembrance", GAMSXMLNamespaces.GML_NAMESPACES)
+
+        places: List[Dict[str, str]] = []
+
+
+        # reading in machine learning model (needed later for word embeddings)
+        model_path = './models/cc.de.20.bin'
+        model = fasttext.load_model(model_path)
+
+        for place_elem in place_elems:
+            # get the placename id
+            place_id = place_elem.find("gdas:ref", GAMSXMLNamespaces.GML_NAMESPACES).text
+
+
+            description = place_elem.find("gdas:desc", GAMSXMLNamespaces.GML_NAMESPACES).text            
+
+            # sentence embeddings for placename description
+            description_vector = model.get_sentence_vector(description)
+
+            # create a placename dict
+            placename = {
+                "id": f"{place_id}_gml",
+                "source_id_s": place_id,
+                "vector": description_vector.tolist(),
+                "types": "description-vector",
+                "title": f"Description vector for {place_id}"    
+                # "name": placename_name,
+                # "desc": placename_desc,
+                # "type": placename_type,
+                # "coordinates": placename_coordinates
+            }
+
+            # add the placename dict to the placenames list
+            places.append(placename)
+
+        self.generate_search_index_json(places, sip_folder_path)
