@@ -327,11 +327,13 @@ class DerlaDataProcessor:
             # get the placename id
             place_id = place_elem.find("gdas:ref", GAMSXMLNamespaces.GML_NAMESPACES).text
 
+            place_title = place_elem.find("gdas:title", GAMSXMLNamespaces.GML_NAMESPACES).text
 
             description = place_elem.find("gdas:desc", GAMSXMLNamespaces.GML_NAMESPACES).text            
 
             # sentence embeddings for placename description
             description_vector = model.get_sentence_vector(description)
+
 
             # create a placename dict
             placename = {
@@ -339,7 +341,7 @@ class DerlaDataProcessor:
                 "source_id_s": place_id,
                 "vector": description_vector.tolist(),
                 "types": "description-vector",
-                "title": f"Description vector for {place_id}"    
+                "title": place_title    
                 # "name": placename_name,
                 # "desc": placename_desc,
                 # "type": placename_type,
