@@ -8,7 +8,8 @@ class GAMSXMLNamespaces:
     GML_NAMESPACES: Final = {
         "xml": "http://www.w3.org/XML/1998/namespace",
         "gml": "http://www.opengis.net/gml", 
-        "gdas": "http://cm4f.org/gdas/"
+        "gdas": "http://cm4f.org/gdas/",
+        "derla": "https://gams.uni-graz.at/o:derla.ontology#"
     }
 
     TEI_NAMESPACES: Final = {
