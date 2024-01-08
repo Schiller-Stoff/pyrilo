@@ -42,23 +42,10 @@ class GMLSIP(SIP):
             contentFiles=[],
         )
 
-        # add SOURCE.xml as content file
-        object_metadata.contentFiles.append(
-            SIPFileMetadata(
-                # TODO think about actual data assignment
-                title="SOURCE", 
-                dsid="SOURCE", 
-                bagpath="data/content/SOURCE.xml", 
-                mimetype="text/xml",
-                # TODO add actual size 
-                size=9999999,
-                # TODO add processing of missing statements! 
-                creator=publisher_creator, 
-                description="Source GML datastreams", 
-                rights="CC BY-SA 4.0", 
-                publisher=publisher_creator, 
-            )
-        )
+        # resolve files as datastreams
+        files_dict = self.resolve_datastream_files()
+        for key in files_dict.keys():
+            object_metadata.contentFiles.append(files_dict[key])
 
         return object_metadata
 
