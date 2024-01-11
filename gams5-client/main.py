@@ -82,7 +82,14 @@ if __name__ == "__main__":
     # pyrilo.disintegrate_project_object(MY_PROJECT, "o:derla.vor146")
 
 
+    # pyrilo.save_object("context:derlapers", MY_PROJECT)
+
+    # demo assignment of child objects
+    # pyrilo.assign_child_objects("context:derlapers", ["o:derla.persvor", "o:derla.perssty"], MY_PROJECT)
+
 
     DerlaDataProcessor()
     # pyrilo.transform_sips_to_bags(MY_PROJECT)
     demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
+
+    
