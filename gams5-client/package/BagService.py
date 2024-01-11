@@ -1,7 +1,7 @@
 import logging
 import os
 import tempfile
-from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
+from api.GAMS5APIStatics import GAMS5APIStatics
 from urllib3 import encode_multipart_formdata, make_headers, request
 import zipfile
 

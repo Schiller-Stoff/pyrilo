@@ -2,7 +2,7 @@
 import logging
 import os
 from refine.DerlaDataProcessor import DerlaDataProcessor
-from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
+from api.GAMS5APIStatics import GAMS5APIStatics
 from ingest.SubInfoPackService import SubInfoPackService
 from GAMS5APIClient import GAMS5APIClient
 

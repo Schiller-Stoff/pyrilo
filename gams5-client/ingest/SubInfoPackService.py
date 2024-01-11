@@ -1,6 +1,6 @@
 import logging
 import os
-from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
+from api.GAMS5APIStatics import GAMS5APIStatics
 import os
 from typing import Callable
 

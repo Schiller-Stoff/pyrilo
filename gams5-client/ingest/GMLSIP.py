@@ -1,8 +1,7 @@
-from ingest.content_model.SIP import SIP
-from ingest.content_model.SIPMetadata import SIPMetadata
-from ingest.content_model.SIPFileMetadata import SIPFileMetadata
-from ingest.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
-from ingest.content_model.ContentModels import ContentModels
+from ingest.SIP import SIP
+from ingest.SIPMetadata import SIPMetadata
+from ingest.GAMSXMLNamespaces import GAMSXMLNamespaces
+from ingest.ContentModels import ContentModels
 
 class GMLSIP(SIP):
     """

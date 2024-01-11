@@ -2,10 +2,10 @@ import datetime
 import logging
 import os
 import shutil
-from ingest.content_model.SIP import SIP
-from ingest.content_model.TEISIP import TEISIP
-from ingest.content_model.GMLSIP import GMLSIP
-from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
+from ingest.SIP import SIP
+from ingest.TEISIP import TEISIP
+from ingest.GMLSIP import GMLSIP
+from api.GAMS5APIStatics import GAMS5APIStatics
 from ingest.SubInfoPackService import SubInfoPackService
 
 class SIPBagitTransformerService:

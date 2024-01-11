@@ -3,10 +3,10 @@ import mimetypes
 from typing import Dict, List
 import xml.etree.ElementTree as ET
 import ingest.utils.xml_operations as xml_operations
-from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
+from api.GAMS5APIStatics import GAMS5APIStatics
 import os
-from ingest.content_model.SIPMetadata import SIPMetadata
-from ingest.content_model.SIPFileMetadata import SIPFileMetadata
+from ingest.SIPMetadata import SIPMetadata
+from ingest.SIPFileMetadata import SIPFileMetadata
 import logging
 
 class SIP:

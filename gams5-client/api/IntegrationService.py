@@ -1,4 +1,4 @@
-from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
+from api.GAMS5APIStatics import GAMS5APIStatics
 from urllib3 import make_headers, request
 import logging
 
