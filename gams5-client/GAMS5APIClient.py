@@ -1,8 +1,8 @@
-from service.SubInfoPackService import SubInfoPackService
-from service.DigitalObjectService import DigitalObjectService
-from service.SIPBagitTransformerService import SIPBagitTransformerService
-from service.BagService import BagService
-from service.IntegrationService import IntegrationService
+from ingest.SubInfoPackService import SubInfoPackService
+from ingest.DigitalObjectService import DigitalObjectService
+from package.SIPBagitTransformerService import SIPBagitTransformerService
+from package.BagService import BagService
+from ingest.IntegrationService import IntegrationService
 from typing import List
 
 class GAMS5APIClient:

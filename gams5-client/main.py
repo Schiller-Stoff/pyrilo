@@ -1,9 +1,9 @@
 
 import logging
 import os
-from processing.DerlaDataProcessor import DerlaDataProcessor
-from statics import GAMS5APIStatics
-from service.SubInfoPackService import SubInfoPackService
+from refine.DerlaDataProcessor import DerlaDataProcessor
+from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
+from ingest.SubInfoPackService import SubInfoPackService
 from GAMS5APIClient import GAMS5APIClient
 
 def setup_client(project_abbr: str) -> GAMS5APIClient:

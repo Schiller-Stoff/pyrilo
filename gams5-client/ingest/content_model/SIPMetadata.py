@@ -3,9 +3,8 @@
 from dataclasses import dataclass, field
 import dataclasses
 import json
-from service.content_model.SIPFileMetadata import SIPFileMetadata
+from ingest.content_model.SIPFileMetadata import SIPFileMetadata
 from typing import List
-import copy
 
 
 @dataclass

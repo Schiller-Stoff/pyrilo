@@ -1,10 +1,10 @@
 from datetime import datetime
 import re
-from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
-from service.content_model.TEISIP import TEISIP
-from service.content_model.GMLSIP import GMLSIP
-from service.SubInfoPackService import SubInfoPackService
-from statics.GAMS5APIStatics import GAMS5APIStatics
+from ingest.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
+from ingest.content_model.TEISIP import TEISIP
+from ingest.content_model.GMLSIP import GMLSIP
+from ingest.SubInfoPackService import SubInfoPackService
+from ingest.statics.GAMS5APIStatics  import GAMS5APIStatics
 from PIL import Image
 from typing import List, Dict
 import os

@@ -1,16 +1,13 @@
-import dataclasses
-import json
 import logging
-import mimetypes
 import xml.etree.ElementTree as ET
 from typing import Dict, List
-from statics.GAMS5APIStatics import GAMS5APIStatics
-from service.content_model.ContentModels import ContentModels
-from service.content_model.SIPMetadata import SIPMetadata
-from service.content_model.SIPFileMetadata import SIPFileMetadata
-from service.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
+from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
+from ingest.content_model.ContentModels import ContentModels
+from ingest.content_model.SIPMetadata import SIPMetadata
+from ingest.content_model.SIPFileMetadata import SIPFileMetadata
+from ingest.content_model.GAMSXMLNamespaces import GAMSXMLNamespaces
 import os
-from service.content_model.SIP import SIP
+from ingest.content_model.SIP import SIP
 
 class TEISIP(SIP):
     """

@@ -1,8 +1,7 @@
 import logging
 import os
-from statics.GAMS5APIStatics import GAMS5APIStatics
+from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
 import os
-import xml.etree.ElementTree as ET
 from typing import Callable
 
 class SubInfoPackService:

@@ -1,7 +1,7 @@
 
 import logging
-from statics.GAMS5APIStatics import GAMS5APIStatics
-from domain.DigitalObject import DigitalObject
+from ingest.statics.GAMS5APIStatics import GAMS5APIStatics
+from ingest.DigitalObject import DigitalObject
 from typing import Dict, List
 from urllib3 import make_headers, request, encode_multipart_formdata
 
