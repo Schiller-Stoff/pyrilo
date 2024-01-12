@@ -4,14 +4,12 @@ prototypical python based gams5 client application - as proxy against the REST-A
 
 imitates the behavior of Cirilo in Python.
 
-(work in progress)
-
 # Quickstart
 
 ## Deployment / usage
 
 1. Standard python venv workflow (initialize local venv, install from requirements.txt)
-2. Run gams6-client/main.py
+2. Run pyrilo/main.py
 
 
 ## Additional
@@ -25,5 +23,5 @@ imitates the behavior of Cirilo in Python.
 
 # Dependencies
 
-- available GAMS5 instance.
+- available GAMS5 instance (e.g. via docker-compose.yml)
 - python 3.12
