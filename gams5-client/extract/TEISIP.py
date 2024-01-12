@@ -2,12 +2,12 @@ import logging
 import xml.etree.ElementTree as ET
 from typing import Dict, List
 from api.GAMS5APIStatics import GAMS5APIStatics
-from ingest.ContentModels import ContentModels
-from ingest.SIPMetadata import SIPMetadata
-from ingest.SIPFileMetadata import SIPFileMetadata
-from ingest.GAMSXMLNamespaces import GAMSXMLNamespaces
+from extract.ContentModels import ContentModels
+from extract.SIPMetadata import SIPMetadata
+from extract.SIPFileMetadata import SIPFileMetadata
+from extract.GAMSXMLNamespaces import GAMSXMLNamespaces
 import os
-from ingest.SIP import SIP
+from extract.SIP import SIP
 
 class TEISIP(SIP):
     """

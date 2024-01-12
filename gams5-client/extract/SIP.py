@@ -2,11 +2,11 @@
 import mimetypes
 from typing import Dict, List
 import xml.etree.ElementTree as ET
-import ingest.utils.xml_operations as xml_operations
+import extract.utils.xml_operations as xml_operations
 from api.GAMS5APIStatics import GAMS5APIStatics
 import os
-from ingest.SIPMetadata import SIPMetadata
-from ingest.SIPFileMetadata import SIPFileMetadata
+from extract.SIPMetadata import SIPMetadata
+from extract.SIPFileMetadata import SIPFileMetadata
 import logging
 
 class SIP:

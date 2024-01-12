@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 import dataclasses
 import json
-from ingest.SIPFileMetadata import SIPFileMetadata
+from extract.SIPFileMetadata import SIPFileMetadata
 from typing import List
 
 

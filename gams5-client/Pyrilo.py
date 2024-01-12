@@ -1,4 +1,4 @@
-from ingest.SubInfoPackService import SubInfoPackService
+from extract.SubInfoPackService import SubInfoPackService
 from api.DigitalObjectService import DigitalObjectService
 from package.SIPBagitTransformerService import SIPBagitTransformerService
 from package.BagService import BagService

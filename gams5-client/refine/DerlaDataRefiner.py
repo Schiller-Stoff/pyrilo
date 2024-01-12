@@ -1,9 +1,9 @@
 from datetime import datetime
 import re
-from ingest.GAMSXMLNamespaces import GAMSXMLNamespaces
-from ingest.TEISIP import TEISIP
-from ingest.GMLSIP import GMLSIP
-from ingest.SubInfoPackService import SubInfoPackService
+from extract.GAMSXMLNamespaces import GAMSXMLNamespaces
+from extract.TEISIP import TEISIP
+from extract.GMLSIP import GMLSIP
+from extract.SubInfoPackService import SubInfoPackService
 from api.GAMS5APIStatics  import GAMS5APIStatics
 from PIL import Image
 from typing import List, Dict

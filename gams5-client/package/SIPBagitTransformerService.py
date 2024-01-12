@@ -2,11 +2,11 @@ import datetime
 import logging
 import os
 import shutil
-from ingest.SIP import SIP
-from ingest.TEISIP import TEISIP
-from ingest.GMLSIP import GMLSIP
+from extract.SIP import SIP
+from extract.TEISIP import TEISIP
+from extract.GMLSIP import GMLSIP
 from api.GAMS5APIStatics import GAMS5APIStatics
-from ingest.SubInfoPackService import SubInfoPackService
+from extract.SubInfoPackService import SubInfoPackService
 
 class SIPBagitTransformerService:
     """

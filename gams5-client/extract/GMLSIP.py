@@ -1,7 +1,7 @@
-from ingest.SIP import SIP
-from ingest.SIPMetadata import SIPMetadata
-from ingest.GAMSXMLNamespaces import GAMSXMLNamespaces
-from ingest.ContentModels import ContentModels
+from extract.SIP import SIP
+from extract.SIPMetadata import SIPMetadata
+from extract.GAMSXMLNamespaces import GAMSXMLNamespaces
+from extract.ContentModels import ContentModels
 
 class GMLSIP(SIP):
     """

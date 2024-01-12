@@ -3,7 +3,7 @@ import logging
 import os
 from refine.DerlaDataRefiner import DerlaDataRefiner
 from api.GAMS5APIStatics import GAMS5APIStatics
-from ingest.SubInfoPackService import SubInfoPackService
+from extract.SubInfoPackService import SubInfoPackService
 from Pyrilo import Pyrilo
 
 def setup_client(project_abbr: str) -> Pyrilo:
@@ -90,6 +90,6 @@ if __name__ == "__main__":
 
     DerlaDataRefiner()
     # pyrilo.transform_sips_to_bags(MY_PROJECT)
-    # demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
+    demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
 
     
