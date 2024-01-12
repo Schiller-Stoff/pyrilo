@@ -13,7 +13,7 @@ import json
 import fasttext
 
 
-class DerlaDataProcessor:
+class DerlaDataRefiner:
     """
     Handles / controls the data processing operations for the DERLA project.
 
