@@ -4,9 +4,9 @@ import os
 from refine.DerlaDataProcessor import DerlaDataProcessor
 from api.GAMS5APIStatics import GAMS5APIStatics
 from ingest.SubInfoPackService import SubInfoPackService
-from GAMS5APIClient import GAMS5APIClient
+from Pyrilo import Pyrilo
 
-def setup_client(project_abbr: str) -> GAMS5APIClient:
+def setup_client(project_abbr: str) -> Pyrilo:
     log_file_path = f"{os.getcwd()}/logs/app.log"
 
     # setup logging
@@ -15,13 +15,13 @@ def setup_client(project_abbr: str) -> GAMS5APIClient:
     # example usage of the client
     # TODO configuring - maybe for handling auth thats not a good idea? e.g. GET requesting should possible all the time VS state changing operations
     # need to throw an error. --> maybe own configure_auth() method?
-    client = GAMS5APIClient("http://localhost:18085", project_abbr)
+    client = Pyrilo("http://localhost:18085", project_abbr)
     # configure authentication ins separate method.
     client.configure_auth("admin", "admin")
     return client
 
 
-def demo_create_bags_and_ingest_them(pyrilo: GAMS5APIClient, MY_PROJECT: str):
+def demo_create_bags_and_ingest_them(pyrilo: Pyrilo, MY_PROJECT: str):
     """
     Demo for creating bags and ingesting them directly afterwards.
     

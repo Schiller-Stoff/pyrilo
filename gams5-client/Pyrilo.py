@@ -5,7 +5,7 @@ from package.BagService import BagService
 from api.IntegrationService import IntegrationService
 from typing import List
 
-class GAMS5APIClient:
+class Pyrilo:
     """
     Provides abstractions for the usage of the gams5-api, like:
     - creating digital objects
