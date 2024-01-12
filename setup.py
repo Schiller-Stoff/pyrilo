@@ -12,12 +12,12 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    author="Sebastian Schiller-Stoff",
+    author="Sebastian David Schiller-Stoff",
     author_email="SebastianStoff@gmx.at",
     description="Small cli - tool to support GAMS5 local development",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    name='gams5-client',
+    name='Pyrilo',
     version='0.1.0',
     packages=find_packages(exclude=("tests")),
     include_package_date=True,

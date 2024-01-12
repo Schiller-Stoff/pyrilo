@@ -1,6 +1,8 @@
-# gams5-client
+# Pyrilo
 
 prototypical python based gams5 client application - as proxy against the REST-API.
+
+imitates the behavior of Cirilo in Python.
 
 (work in progress)
 
