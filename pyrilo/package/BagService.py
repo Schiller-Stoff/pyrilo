@@ -31,9 +31,7 @@ class BagService:
 
         # validate folder? 
 
-        # zip folder?
-        # TODO should use values from GAMSAPIStatics
-        folder_path =  os.getcwd() + "/project/bags/" + folder_name
+        folder_path =  os.path.join(GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH, folder_name)
         logging.debug(f"Zipping folder {folder_path} ...")
 
         # zip files / folder
@@ -69,7 +67,6 @@ class BagService:
         """
         Walks through project directory and ingest the bags as individual objects.
         """
-        # TODO access via GAMS5APIStatics
         bags_dir = GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH
         for folder_name in os.listdir(bags_dir):
             # skip files
