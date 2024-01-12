@@ -7,7 +7,7 @@ import zipfile
 
 class BagService:
     """
-    Handles operations on GAMS bags, like ingesting etc.
+    Zips and sends bags to the GAMS5 REST-API with correspondent http requests.
     """
 
     auth: tuple | None = None

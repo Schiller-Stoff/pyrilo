@@ -6,7 +6,7 @@ from dataclasses import dataclass
 @dataclass
 class SIPFileMetadata:
     """
-    Holds metadata for individual datastreams / files in a SIP.
+    Represents metadata for individual datastreams / files in a SIP folder.
     """
     
     size: str

@@ -5,8 +5,9 @@ from ingest.ContentModels import ContentModels
 
 class GMLSIP(SIP):
     """
-    Operates on the transformation from SIP to bags. (and preprocessing)
-    Handles all GML related operations, like extracting pid from a GML document.
+    Extracts metadata from a SIP folder and it's contained files.
+
+    Handles the GML specific extraction, like extracting pid from a GML specific xml element.
     """
 
     def __init__(self, project_abbr: str, sip_folder_path: str, subtype: str = "") -> None:

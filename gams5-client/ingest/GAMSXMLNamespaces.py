@@ -2,7 +2,7 @@ from typing import Final
 
 class GAMSXMLNamespaces:
     """
-    Defines namespaces for GAMS source documents.
+    Defines namespaces for GAMS source documents (former content models)
     """
 
     GML_NAMESPACES: Final = {

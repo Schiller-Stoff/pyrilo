@@ -11,6 +11,8 @@ import logging
 
 class SIP:
     """
+    Extracts metadata from a SIP folder and it's contained files.
+    
     Operates on the transformation from SIP to bags.
     Handles all SIP related operations, like creating a json serialization.
     """

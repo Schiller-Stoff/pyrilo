@@ -10,7 +10,8 @@ from typing import List
 @dataclass
 class SIPMetadata:
     """
-    Contains data needed to construct a sip.json describin a digital object.
+    Contains data needed to construct a sip.json describing a digital object.
+    Representation of the sip.json schema.
     """
 
     id: str

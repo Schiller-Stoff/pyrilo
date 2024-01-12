@@ -11,8 +11,9 @@ from ingest.SIP import SIP
 
 class TEISIP(SIP):
     """
-    Operates on the transformation from SIP to bags.
-    Handles all TEI related operations, like extracting pid from a TEI document.
+    Extracts metadata from a SIP folder and it's contained files.
+
+    Handles extractiom related to the TEI content model, like extracting pid from a specific xml-element.
     """
 
     def __init__(self, project_abbr: str, sip_folder_path: str, subtype: str = "") -> None:

@@ -6,7 +6,7 @@ from typing import Callable
 
 class SubInfoPackService:
   """
-  Handles submission information packages.
+  Provides methods to operate on the SIP folder structure, like looping through the folders and calling a function for each folder.
   """
 
   PROJECT_ABBR: str | None = None

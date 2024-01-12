@@ -19,12 +19,6 @@ class SIPBagitTransformerService:
     def __init__(self, project_abbr: str):
         self.PROJECT_ABBR = project_abbr
         self.sub_info_pack_service = SubInfoPackService(project_abbr)
-
-    def validate(self, input_data):
-        raise NotImplementedError()
-
-    def save(self, output_data):
-        raise NotImplementedError()
     
     def create_bag_files(self, bag_folder_path: str):
         """
@@ -50,7 +44,7 @@ class SIPBagitTransformerService:
         """
         Creates checksum files for the bagit format.
         """
-        # TODO add real logic for creating cheksum files
+        # TODO add real logic for creating checksum files
         
         # Generate manifest-md5.txt file
         manifest_md5_file_path = os.path.join(bag_folder_path, "manifest-md5.txt")

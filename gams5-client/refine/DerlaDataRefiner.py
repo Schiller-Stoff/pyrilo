@@ -15,7 +15,7 @@ import fasttext
 
 class DerlaDataRefiner:
     """
-    Handles / controls the data processing operations for the DERLA project.
+    Handles / controls the data refinement operations for the DERLA project.
 
     """
 
