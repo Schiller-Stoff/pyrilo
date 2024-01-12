@@ -1,4 +1,4 @@
-from api.GAMS5APIStatics import GAMS5APIStatics
+from PyriloStatics import PyriloStatics
 from urllib3 import make_headers, request
 import logging
 
@@ -16,7 +16,7 @@ class IntegrationService:
     def __init__(self, host: str, auth: tuple | None = None) -> None:
         self.host = host
         self.auth = auth
-        self.API_BASE_PATH = f"{host}{GAMS5APIStatics.API_ROOT}"
+        self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
 
     
     def integrate_all(self, project_abbr: str):

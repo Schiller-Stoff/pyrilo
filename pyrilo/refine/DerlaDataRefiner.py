@@ -4,7 +4,7 @@ from extract.GAMSXMLNamespaces import GAMSXMLNamespaces
 from extract.TEISIP import TEISIP
 from extract.GMLSIP import GMLSIP
 from extract.SubInfoPackService import SubInfoPackService
-from api.GAMS5APIStatics  import GAMS5APIStatics
+from PyriloStatics import PyriloStatics
 from PIL import Image
 from typing import List, Dict
 import os
@@ -143,10 +143,10 @@ class DerlaDataRefiner:
         Generates a thumbnail for a given sip folder if 
         """
         try:
-            EXPECTED_IMAGE_FILE_PATH = os.path.join(sip_folder_path, GAMS5APIStatics.THUMBNAIL_SIP_SOURCE_FILE_NAME)
+            EXPECTED_IMAGE_FILE_PATH = os.path.join(sip_folder_path, PyriloStatics.THUMBNAIL_SIP_SOURCE_FILE_NAME)
             image = Image.open(EXPECTED_IMAGE_FILE_PATH)
             image.thumbnail((90,90))
-            image.save(os.path.join(sip_folder_path, GAMS5APIStatics.THUMBNAIL_FILE_NAME))
+            image.save(os.path.join(sip_folder_path, PyriloStatics.THUMBNAIL_FILE_NAME))
         except FileNotFoundError:
             logging.info(f"No image found in SIP folder at expected location for thumbnail generation: {EXPECTED_IMAGE_FILE_PATH}.")
             pass
@@ -182,7 +182,7 @@ class DerlaDataRefiner:
             "creation_date_dt": creation_date,
             "_fulltext": fulltext,
             # needs to be assigned if the index of an object is being overwritten
-            "_type": GAMS5APIStatics.INTEGRATION_API_OBJECT_TYPE
+            "_type": PyriloStatics.INTEGRATION_API_OBJECT_TYPE
         }]
 
         self.generate_search_index_json(search_data, sip_folder_path)
@@ -232,7 +232,7 @@ class DerlaDataRefiner:
         # TODO validate the entries here?
         # TODO validate muts contain id / _id?
 
-        search_json_path = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
+        search_json_path = os.path.join(sip_folder_path, PyriloStatics.SIP_SEARCH_JSON_FILE_NAME)
         with open(search_json_path, "w", encoding="utf-8") as search_file:
             # setting ensure ascii to false to allow umlauts
             json.dump(entries, search_file, indent=4, ensure_ascii=False)

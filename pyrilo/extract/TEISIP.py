@@ -1,7 +1,7 @@
 import logging
 import xml.etree.ElementTree as ET
 from typing import Dict, List
-from api.GAMS5APIStatics import GAMS5APIStatics
+from PyriloStatics import PyriloStatics
 from extract.ContentModels import ContentModels
 from extract.SIPMetadata import SIPMetadata
 from extract.SIPFileMetadata import SIPFileMetadata
@@ -259,21 +259,21 @@ class TEISIP(SIP):
         :return: SIPFileMetadata of the thumbnail if available, otherwise an empty list
         """
         
-        thumbnail_path = os.path.join(self.SIP_FOLDER_PATH, GAMS5APIStatics.THUMBNAIL_FILE_NAME)
+        thumbnail_path = os.path.join(self.SIP_FOLDER_PATH, PyriloStatics.THUMBNAIL_FILE_NAME)
         logging.info(f"Checking if thumbnail exists at {thumbnail_path}")
         if not os.path.exists(thumbnail_path):
             return []
         
         sip_file_description = SIPFileMetadata(
-                    bagpath="/data/content/" + GAMS5APIStatics.THUMBNAIL_FILE_NAME, 
-                    dsid=GAMS5APIStatics.THUMBNAIL_DATASTREAM_ID, 
+                    bagpath="/data/content/" + PyriloStatics.THUMBNAIL_FILE_NAME, 
+                    dsid=PyriloStatics.THUMBNAIL_DATASTREAM_ID, 
                     mimetype="image/jpeg",
                     creator=f"{self.PROJECT_ABBR} GAMS-project",
                     description=f"Thumbnail generated for the {self.PROJECT_ABBR} project.",
                     publisher="TODO",
                     rights="TODO",
                     size=9999999,
-                    title=GAMS5APIStatics.THUMBNAIL_FILE_NAME
+                    title=PyriloStatics.THUMBNAIL_FILE_NAME
             )
         
         logging.info(f"Created thumbnail entry {sip_file_description}")
@@ -285,21 +285,21 @@ class TEISIP(SIP):
         Checks if a search json is defined in the SIP folder and returns it as SIPFileMetadata if available
         :return: SIPFileMetadata of the search json if available, otherwise an empty list
         """
-        search_json_path = os.path.join(self.SIP_FOLDER_PATH, GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME)
+        search_json_path = os.path.join(self.SIP_FOLDER_PATH, PyriloStatics.SIP_SEARCH_JSON_FILE_NAME)
         logging.info(f"Checking if thumbnail exists at {search_json_path}")
         if not os.path.exists(search_json_path):
             return []
         
         sip_file_description = SIPFileMetadata(
-                    bagpath="/data/content/" + GAMS5APIStatics.SIP_SEARCH_JSON_FILE_NAME, 
-                    dsid=GAMS5APIStatics.SIP_SEARCH_JSON_DATASTREAM_ID, 
+                    bagpath="/data/content/" + PyriloStatics.SIP_SEARCH_JSON_FILE_NAME, 
+                    dsid=PyriloStatics.SIP_SEARCH_JSON_DATASTREAM_ID, 
                     mimetype="application/json",
                     creator=f"{self.PROJECT_ABBR} GAMS-project",
                     description=f"Base search json generated for the {self.PROJECT_ABBR} project.",
                     publisher="TODO",
                     rights="TODO",
                     size=9999999,
-                    title=GAMS5APIStatics.SIP_SOURCE_DATASTREAM_ID
+                    title=PyriloStatics.SIP_SOURCE_DATASTREAM_ID
             )
 
         return [sip_file_description]

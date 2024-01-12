@@ -2,7 +2,7 @@
 import logging
 import os
 from refine.DerlaDataRefiner import DerlaDataRefiner
-from api.GAMS5APIStatics import GAMS5APIStatics
+from PyriloStatics import PyriloStatics
 from extract.SubInfoPackService import SubInfoPackService
 from Pyrilo import Pyrilo
 

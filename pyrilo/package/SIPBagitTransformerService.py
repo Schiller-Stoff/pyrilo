@@ -5,7 +5,7 @@ import shutil
 from extract.SIP import SIP
 from extract.TEISIP import TEISIP
 from extract.GMLSIP import GMLSIP
-from api.GAMS5APIStatics import GAMS5APIStatics
+from PyriloStatics import PyriloStatics
 from extract.SubInfoPackService import SubInfoPackService
 
 class SIPBagitTransformerService:
@@ -58,7 +58,7 @@ class SIPBagitTransformerService:
         TODO: rename! --> creates the base folder structure in the first place!
         """
         # delete all child folder inside bags folder
-        self.delete_child_folders(GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH)
+        self.delete_child_folders(PyriloStatics.LOCAL_BAGIT_FILES_PATH)
         # Loop through the SIPs folder
         self.sub_info_pack_service.walk_sip_folder(self._build_bag, pattern="*", content_model="*")
 
@@ -70,10 +70,10 @@ class SIPBagitTransformerService:
         """
         
         # Get the path of the SIPs folder
-        sips_folder = GAMS5APIStatics.LOCAL_SIP_FOLDERS_PATH
+        sips_folder = PyriloStatics.LOCAL_SIP_FOLDERS_PATH
 
         # Get the path of the bags folder
-        bags_folder = GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH
+        bags_folder = PyriloStatics.LOCAL_BAGIT_FILES_PATH
 
         # all files on folder root level are ignored
         if os.path.isfile(os.path.join(sips_folder, folder_name)):

@@ -1,6 +1,6 @@
 
 import logging
-from api.GAMS5APIStatics import GAMS5APIStatics
+from PyriloStatics import PyriloStatics
 from api.DigitalObject import DigitalObject
 from typing import Dict, List
 from urllib3 import make_headers, request, encode_multipart_formdata
@@ -18,7 +18,7 @@ class DigitalObjectService:
     def __init__(self, host: str, auth: tuple | None = None) -> None:
         self.host = host
         self.auth = auth
-        self.API_BASE_PATH = f"{host}{GAMS5APIStatics.API_ROOT}"
+        self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
 
     def save_object(self, id: str, project_abbr: str):
         """

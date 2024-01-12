@@ -1,7 +1,7 @@
 import logging
 import os
 import tempfile
-from api.GAMS5APIStatics import GAMS5APIStatics
+from PyriloStatics import PyriloStatics
 from urllib3 import encode_multipart_formdata, make_headers, request
 import zipfile
 
@@ -19,7 +19,7 @@ class BagService:
     def __init__(self, host: str, auth: tuple | None = None) -> None:
         self.host = host
         self.auth = auth
-        self.API_BASE_PATH = f"{host}{GAMS5APIStatics.API_ROOT}"
+        self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
 
     
     def ingest_bag(self, project_abbr: str, folder_name: str):
@@ -31,7 +31,7 @@ class BagService:
 
         # validate folder? 
 
-        folder_path =  os.path.join(GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH, folder_name)
+        folder_path =  os.path.join(PyriloStatics.LOCAL_BAGIT_FILES_PATH, folder_name)
         logging.debug(f"Zipping folder {folder_path} ...")
 
         # zip files / folder
@@ -67,7 +67,7 @@ class BagService:
         """
         Walks through project directory and ingest the bags as individual objects.
         """
-        bags_dir = GAMS5APIStatics.LOCAL_BAGIT_FILES_PATH
+        bags_dir = PyriloStatics.LOCAL_BAGIT_FILES_PATH
         for folder_name in os.listdir(bags_dir):
             # skip files
             if not os.path.isdir(os.path.join(bags_dir, folder_name)):

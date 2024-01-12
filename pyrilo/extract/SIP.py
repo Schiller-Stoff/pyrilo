@@ -3,7 +3,7 @@ import mimetypes
 from typing import Dict, List
 import xml.etree.ElementTree as ET
 import extract.utils.xml_operations as xml_operations
-from api.GAMS5APIStatics import GAMS5APIStatics
+from PyriloStatics import PyriloStatics
 import os
 from extract.SIPMetadata import SIPMetadata
 from extract.SIPFileMetadata import SIPFileMetadata
@@ -27,7 +27,7 @@ class SIP:
     def __init__(self, project_abbr: str, sip_folder_path: str, subtype: str = "") -> None:
         self.PROJECT_ABBR = project_abbr
         self.SIP_FOLDER_PATH = sip_folder_path
-        self.SIP_SOURCE_FILE_PATH = os.path.join(sip_folder_path, GAMS5APIStatics.SIP_SOURCE_FILE_NAME)
+        self.SIP_SOURCE_FILE_PATH = os.path.join(sip_folder_path, PyriloStatics.SIP_SOURCE_FILE_NAME)
         self.XML_ROOT = self.read_xml(self.SIP_SOURCE_FILE_PATH)
         self.SUBTYPE = subtype
 

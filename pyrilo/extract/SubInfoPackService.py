@@ -1,6 +1,6 @@
 import logging
 import os
-from api.GAMS5APIStatics import GAMS5APIStatics
+from PyriloStatics import PyriloStatics
 import os
 from typing import Callable
 
@@ -15,7 +15,7 @@ class SubInfoPackService:
     self.PROJECT_ABBR = project_abbr
   
   # TODO: allow to set a content model --> only these folder are being looped
-  def walk_sip_folder(self, lambda_func: Callable[[str, str, str, str, str], None], pattern: str = None, sip_folder_path: str = GAMS5APIStatics.LOCAL_SIP_FOLDERS_PATH, content_model: str = "*"):
+  def walk_sip_folder(self, lambda_func: Callable[[str, str, str, str, str], None], pattern: str = None, sip_folder_path: str = PyriloStatics.LOCAL_SIP_FOLDERS_PATH, content_model: str = "*"):
     """
     Walks through all SIP files and calls given function for each folder. Skips all folder with underscore in name / path. 
     :param lambda_func: function to call for each folder - 
@@ -49,7 +49,7 @@ class SubInfoPackService:
         if ("_" + content_model) not in folder_name:
           continue
 
-      source_file_path = os.path.join(folder_path, GAMS5APIStatics.SIP_SOURCE_FILE_NAME)
+      source_file_path = os.path.join(folder_path, PyriloStatics.SIP_SOURCE_FILE_NAME)
 
       # if the pattern is a star -> all folders will be processed
       if pattern == "*":
