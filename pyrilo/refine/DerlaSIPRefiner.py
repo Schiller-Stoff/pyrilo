@@ -13,7 +13,7 @@ import json
 import fasttext
 
 
-class DerlaDataRefiner:
+class DerlaSIPRefiner:
     """
     Handles / controls the data refinement operations for the DERLA project.
 

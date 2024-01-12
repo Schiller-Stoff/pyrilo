@@ -1,7 +1,7 @@
 
 import logging
 import os
-from refine.DerlaDataRefiner import DerlaDataRefiner
+from refine.DerlaSIPRefiner import DerlaSIPRefiner
 from PyriloStatics import PyriloStatics
 from extract.SubInfoPackService import SubInfoPackService
 from Pyrilo import Pyrilo
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     # pyrilo.assign_child_objects("context:derlapers", ["o:derla.persvor", "o:derla.perssty"], MY_PROJECT)
 
 
-    DerlaDataRefiner()
+    DerlaSIPRefiner()
     # pyrilo.transform_sips_to_bags(MY_PROJECT)
     demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
 
