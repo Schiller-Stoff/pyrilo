@@ -7,9 +7,9 @@ from typing import List
 
 class Pyrilo:
     """
-    Provides abstractions for the usage of the gams5-api, like:
-    - creating digital objects
-    - requesting lists of datastreams for a digital object etc.
+    Provides abstractions for the usage of GAMS5 REST-API, like:
+    - ingesting SIPs as digital objects and datastreams
+    - check method names for more
     """
 
     digital_object_service: DigitalObjectService
