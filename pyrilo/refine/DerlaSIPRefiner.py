@@ -11,22 +11,29 @@ import os
 import logging
 import json
 import fasttext
+from refine.SIPRefiner import SIPRefiner
 
 
-class DerlaSIPRefiner:
+class DerlaSIPRefiner(SIPRefiner):
     """
     Handles / controls the data refinement operations for the DERLA project.
 
     """
 
-    PROJECT_ABBREVIATION = "demo"
+    def __init__(self, project_abbreviation: str):
+        """
+        Constructor.
+        """
+        super().__init__(project_abbreviation)	
+        
 
-    def __init__(self):
-        subinfo_pack_service = SubInfoPackService(self.PROJECT_ABBREVIATION)
-        subinfo_pack_service.walk_sip_folder(lambda_func=self.process_sip_folder)
-        subinfo_pack_service.walk_sip_folder(lambda_func=self.process_perslist_sip, pattern="perslist", content_model="tei")
-        subinfo_pack_service.walk_sip_folder(lambda_func=self.process_gml_sip, pattern="placelist", content_model="gml")
-
+    def refine(self):
+        """
+        Refines the SIPs of the DERLA project.
+        """
+        self.SUB_INFO_PACK_SERVICE.walk_sip_folder(lambda_func=self.process_sip_folder)
+        self.SUB_INFO_PACK_SERVICE.walk_sip_folder(lambda_func=self.process_perslist_sip, pattern="perslist", content_model="tei")
+        self.SUB_INFO_PACK_SERVICE.walk_sip_folder(lambda_func=self.process_gml_sip, pattern="placelist", content_model="gml")
 
     def process_sip_folder(self, sip_folder_path, source_file_path, folder_pattern: str, folder_name: str, content_model: str):
         """
@@ -136,24 +143,7 @@ class DerlaSIPRefiner:
 
         self.generate_search_index_json(persons, sip_folder_path)
 
-        
     
-    def generate_thumbnail(self, sip_folder_path: str):
-        """
-        Generates a thumbnail for a given sip folder if 
-        """
-        try:
-            EXPECTED_IMAGE_FILE_PATH = os.path.join(sip_folder_path, PyriloStatics.THUMBNAIL_SIP_SOURCE_FILE_NAME)
-            image = Image.open(EXPECTED_IMAGE_FILE_PATH)
-            image.thumbnail((90,90))
-            image.save(os.path.join(sip_folder_path, PyriloStatics.THUMBNAIL_FILE_NAME))
-        except FileNotFoundError:
-            logging.info(f"No image found in SIP folder at expected location for thumbnail generation: {EXPECTED_IMAGE_FILE_PATH}.")
-            pass
-        except IOError:
-            logging.info(f"Failed to create thumbnail for SIP {sip_folder_path} {IOError}")
-            pass
-
 
     def generate_search_json(self, sip_folder_path: str):
         """
@@ -222,23 +212,6 @@ class DerlaSIPRefiner:
 
         return self.transform_to_solr_date(creation_date)
     
-
-    def generate_search_index_json(self, entries: List[Dict[str, str]], sip_folder_path: str):
-        """
-        Generates a search index json file for a given list of dicts at given sip_folder_path
-        :param entries: list of dicts containing the search index entries
-        :param sip_folder_path: path to the sip folder
-        """
-        # TODO validate the entries here?
-        # TODO validate muts contain id / _id?
-
-        search_json_path = os.path.join(sip_folder_path, PyriloStatics.SIP_SEARCH_JSON_FILE_NAME)
-        with open(search_json_path, "w", encoding="utf-8") as search_file:
-            # setting ensure ascii to false to allow umlauts
-            json.dump(entries, search_file, indent=4, ensure_ascii=False)
-
-        logging.info(f"Generated search.json file for SIP at {search_json_path}.")
-
 
     def transform_to_solr_date(self, date: str):
         """
