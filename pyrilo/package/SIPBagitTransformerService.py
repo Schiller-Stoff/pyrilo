@@ -96,10 +96,7 @@ class SIPBagitTransformerService:
         meta_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "meta")
         os.makedirs(meta_folder_path, exist_ok=True)
 
-
-        # TODO processing: if none defined it is a normal SIP? --> check if this is correct
-        # TODO Also: IF there is a source xml file --> use the XMLSIP? --> check if this is correct
-
+        
         sip = None
         # process xml based SIPs
         if self.SIP_SERVICE.contains_source_xml(sip_folder_path):
