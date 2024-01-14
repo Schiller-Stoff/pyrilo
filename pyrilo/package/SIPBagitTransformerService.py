@@ -71,29 +71,24 @@ class SIPBagitTransformerService:
         """
 
         # TODO think about method implementation - many things might be included in SIPService.py
-        
-        # Get the path of the SIPs folder
-        sips_folder = PyriloStatics.LOCAL_SIP_FOLDERS_PATH
-
-        # Get the path of the bags folder
-        bags_folder = PyriloStatics.LOCAL_BAGIT_FILES_PATH
 
         # all files on folder root level are ignored
-        if os.path.isfile(os.path.join(sips_folder, folder_name)):
+        if os.path.isfile(os.path.join(PyriloStatics.LOCAL_SIP_FOLDERS_PATH, folder_name)):
             return
 
-        # Create the corresponding bags folder
-        # TODO rename variable - better cur_bag_folder_path
-        bags_folder_path = os.path.join(bags_folder, folder_name)
-        os.makedirs(bags_folder_path, exist_ok=True)
+        # Create the corresponding bags folder if it does not exist
+        cur_bag_folder_path = os.path.join(PyriloStatics.LOCAL_BAGIT_FILES_PATH, folder_name)
+        os.makedirs(cur_bag_folder_path, exist_ok=True)
 
         # Copy contents from SIP folder to the data/content directory inside the generated bag
-        sip_folder_path = os.path.join(sips_folder, folder_name)
-        data_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "content")
+        sip_folder_path = os.path.join(PyriloStatics.LOCAL_SIP_FOLDERS_PATH, folder_name)
+        # TODO data / content folder -> via PyriloStatics?
+        data_folder_path = os.path.join(cur_bag_folder_path, "data" + os.path.sep + "content")
         shutil.copytree(sip_folder_path, data_folder_path, dirs_exist_ok=True)
 
         # create meta folder for bagit
-        meta_folder_path = os.path.join(bags_folder_path, "data" + os.path.sep + "meta")
+        # TODO data and meta folder --> via PyriloStatics?
+        meta_folder_path = os.path.join(cur_bag_folder_path, "data" + os.path.sep + "meta")
         os.makedirs(meta_folder_path, exist_ok=True)
 
         
@@ -114,19 +109,20 @@ class SIPBagitTransformerService:
  
 
         sip_object = sip.extract_metadata()
+        # TODO sip.json --> pyrilo statics
         sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 
         # Create basic bag files
-        self.create_bag_files(bags_folder_path)
-        self.create_bagit_checksum_files(bags_folder_path)
+        self.create_bag_files(cur_bag_folder_path)
+        self.create_bagit_checksum_files(cur_bag_folder_path)
 
-        logging.info(f"Successfully transformed SIP {folder_name} to bag {bags_folder_path}.")
+        logging.info(f"Successfully transformed SIP {folder_name} to bag {cur_bag_folder_path}.")
 
-    def delete_child_folders(self, bags_folder_path: str):
+    def delete_child_folders(self, cur_bag_folder_path: str):
         """
         Deletes all folders inside given path
         """
-        for folder_name in os.listdir(bags_folder_path):
-            folder_path = os.path.join(bags_folder_path, folder_name)
+        for folder_name in os.listdir(cur_bag_folder_path):
+            folder_path = os.path.join(cur_bag_folder_path, folder_name)
             if os.path.isdir(folder_path):
                 shutil.rmtree(folder_path)
