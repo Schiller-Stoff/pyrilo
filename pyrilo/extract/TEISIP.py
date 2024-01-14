@@ -7,9 +7,9 @@ from extract.SIPMetadata import SIPMetadata
 from extract.SIPFileMetadata import SIPFileMetadata
 from extract.GAMSXMLNamespaces import GAMSXMLNamespaces
 import os
-from extract.SIP import SIP
+from extract.XMLSIP import XMLSIP
 
-class TEISIP(SIP):
+class TEISIP(XMLSIP):
     """
     Extracts metadata from a SIP folder and it's contained files.
 
@@ -17,7 +17,7 @@ class TEISIP(SIP):
     """
 
     def __init__(self, project_abbr: str, sip_folder_path: str, subtype: str = "") -> None:
-        SIP.__init__(self, project_abbr, sip_folder_path, subtype)
+        XMLSIP.__init__(self, project_abbr, sip_folder_path, subtype)
         
 
     def extract_metadata(self) -> SIPMetadata:

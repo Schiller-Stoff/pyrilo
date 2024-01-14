@@ -1,9 +1,9 @@
-from extract.SIP import SIP
+from extract.XMLSIP import XMLSIP
 from extract.SIPMetadata import SIPMetadata
 from extract.GAMSXMLNamespaces import GAMSXMLNamespaces
 from extract.ContentModels import ContentModels
 
-class GMLSIP(SIP):
+class GMLSIP(XMLSIP):
     """
     Extracts metadata from a SIP folder and it's contained files.
 
@@ -11,7 +11,7 @@ class GMLSIP(SIP):
     """
 
     def __init__(self, project_abbr: str, sip_folder_path: str, subtype: str = "") -> None:
-        SIP.__init__(self, project_abbr, sip_folder_path, subtype)
+        XMLSIP.__init__(self, project_abbr, sip_folder_path, subtype)
 
 
     def extract_metadata(self) -> SIPMetadata:

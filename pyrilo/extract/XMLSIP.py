@@ -9,12 +9,12 @@ from extract.SIPMetadata import SIPMetadata
 from extract.SIPFileMetadata import SIPFileMetadata
 import logging
 
-class SIP:
+class XMLSIP:
     """
-    Extracts metadata from a SIP folder and it's contained files.
+    Extracts metadata from a XMLSIP folder and it's contained files.
     
-    Operates on the transformation from SIP to bags.
-    Handles all SIP related operations, like creating a json serialization.
+    Operates on the transformation from XMLSIP to bags.
+    Handles all XMLSIP related operations, like creating a json serialization.
     """
 
     PROJECT_ABBR: str
@@ -66,8 +66,8 @@ class SIP:
 
     def extract_metadata(self) -> SIPMetadata:
         """
-        Creates default metadata for a SIP without an implemented content model Subclass.
-        Extracts metadata from the SIP. 
+        Creates default metadata for a XMLSIP without an implemented content model Subclass.
+        Extracts metadata from the XMLSIP. 
         Method is meant to be overridden by subclasses and acts as default.
         """
 
@@ -78,7 +78,7 @@ class SIP:
         object_id = self.SIP_FOLDER_PATH.rsplit('/', 1)[-1]
         title = f"Object for project: {self.PROJECT_ABBR}"
         creator = f"{self.PROJECT_ABBR}"
-        description = f"Object created without implemented metadata extraction for the content model. For SIP: {self.SIP_FOLDER_PATH}"
+        description = f"Object created without implemented metadata extraction for the content model. For XMLSIP: {self.SIP_FOLDER_PATH}"
 
         object_metadata = SIPMetadata(
             id=object_id, 
@@ -103,12 +103,12 @@ class SIP:
 
     def resolve_datastream_files(self, ignore_files: List[str] = []) -> Dict[str, SIPFileMetadata]:
         """"
-        Resolves all datastream files in the SIP folder and returns them as a dictionary of SIPFileMetadata objects.
+        Resolves all datastream files in the XMLSIP folder and returns them as a dictionary of SIPFileMetadata objects.
         :param ignore_files: List of file names that should be ignored.
         :returns Returns a dictionary of all datastream files with the dsid as key and a SIPFileMetadata object as value.
         """
         sip_file_descriptions: Dict[str, SIPFileMetadata] = {}
-        # go through files in SIP (skip every file that is not described via elements in the TEI document)
+        # go through files in XMLSIP (skip every file that is not described via elements in the TEI document)
         # Loop through the SIPs folder
         for file_name in os.listdir(self.SIP_FOLDER_PATH):
             # all folders are being ignored

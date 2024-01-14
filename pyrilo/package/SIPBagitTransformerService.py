@@ -2,7 +2,7 @@ import datetime
 import logging
 import os
 import shutil
-from extract.SIP import SIP
+from extract.XMLSIP import XMLSIP
 from extract.TEISIP import TEISIP
 from extract.GMLSIP import GMLSIP
 from PyriloStatics import PyriloStatics
@@ -102,7 +102,7 @@ class SIPBagitTransformerService:
         elif content_model == "gml":
             sip = GMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
         else:
-            sip = SIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+            sip = XMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
          
 
         sip_object = sip.extract_metadata()
