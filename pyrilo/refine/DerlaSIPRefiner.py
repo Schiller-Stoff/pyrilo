@@ -3,13 +3,10 @@ import re
 from extract.GAMSXMLNamespaces import GAMSXMLNamespaces
 from extract.TEISIP import TEISIP
 from extract.GMLSIP import GMLSIP
-from extract.SubInfoPackService import SubInfoPackService
 from PyriloStatics import PyriloStatics
 from PIL import Image
 from typing import List, Dict
-import os
 import logging
-import json
 import fasttext
 from refine.SIPRefiner import SIPRefiner
 
@@ -31,9 +28,9 @@ class DerlaSIPRefiner(SIPRefiner):
         """
         Refines the SIPs of the DERLA project.
         """
-        self.SUB_INFO_PACK_SERVICE.walk_sip_folder(lambda_func=self.process_sip_folder)
-        self.SUB_INFO_PACK_SERVICE.walk_sip_folder(lambda_func=self.process_perslist_sip, pattern="perslist", content_model="tei")
-        self.SUB_INFO_PACK_SERVICE.walk_sip_folder(lambda_func=self.process_gml_sip, pattern="placelist", content_model="gml")
+        self.SIP_SERVICE.walk_sip_folder(lambda_func=self.process_sip_folder)
+        self.SIP_SERVICE.walk_sip_folder(lambda_func=self.process_perslist_sip, pattern="perslist", content_model="tei")
+        self.SIP_SERVICE.walk_sip_folder(lambda_func=self.process_gml_sip, pattern="placelist", content_model="gml")
 
     def process_sip_folder(self, sip_folder_path, source_file_path, folder_pattern: str, folder_name: str, content_model: str):
         """

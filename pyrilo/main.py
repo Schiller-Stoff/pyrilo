@@ -3,7 +3,7 @@ import logging
 import os
 from refine.DerlaSIPRefiner import DerlaSIPRefiner
 from PyriloStatics import PyriloStatics
-from extract.SubInfoPackService import SubInfoPackService
+from extract.SIPService import SIPService
 from Pyrilo import Pyrilo
 
 def setup_client(project_abbr: str) -> Pyrilo:

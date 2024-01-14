@@ -6,7 +6,7 @@ from extract.SIP import SIP
 from extract.TEISIP import TEISIP
 from extract.GMLSIP import GMLSIP
 from PyriloStatics import PyriloStatics
-from extract.SubInfoPackService import SubInfoPackService
+from extract.SIPService import SIPService
 
 class SIPBagitTransformerService:
     """
@@ -14,11 +14,11 @@ class SIPBagitTransformerService:
     """
 
     PROJECT_ABBR: str | None = None
-    sub_info_pack_service: SubInfoPackService
+    SIP_SERVICE: SIPService
 
     def __init__(self, project_abbr: str):
         self.PROJECT_ABBR = project_abbr
-        self.sub_info_pack_service = SubInfoPackService(project_abbr)
+        self.SIP_SERVICE = SIPService(project_abbr)
     
     def create_bag_files(self, bag_folder_path: str):
         """
@@ -60,13 +60,13 @@ class SIPBagitTransformerService:
         # delete all child folder inside bags folder
         self.delete_child_folders(PyriloStatics.LOCAL_BAGIT_FILES_PATH)
         # Loop through the SIPs folder
-        self.sub_info_pack_service.walk_sip_folder(self._build_bag, pattern="*", content_model="*")
+        self.SIP_SERVICE.walk_sip_folder(self._build_bag, pattern="*", content_model="*")
 
 
     def _build_bag(self, folder_path: str, source_file_path: str, encountered_folder_pattern: str, folder_name: str, content_model: str):
         """
         Build a singular bag from a SIP folder.
-        Parameters are passed by the SubInfoPackService.
+        Parameters are passed by the SIPService.
         """
         
         # Get the path of the SIPs folder

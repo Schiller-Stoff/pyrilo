@@ -4,7 +4,7 @@ from PyriloStatics import PyriloStatics
 import os
 from typing import Callable
 
-class SubInfoPackService:
+class SIPService:
   """
   Provides methods to operate on the SIP folder structure, like looping through the folders and calling a function for each folder.
   """

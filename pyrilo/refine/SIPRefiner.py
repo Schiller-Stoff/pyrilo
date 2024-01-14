@@ -5,7 +5,7 @@ import logging
 import os
 from typing import Dict, List
 from PyriloStatics import PyriloStatics
-from extract.SubInfoPackService import SubInfoPackService
+from extract.SIPService import SIPService
 from PIL import Image
 
 class SIPRefiner:
@@ -15,14 +15,14 @@ class SIPRefiner:
     """
 
     PROJECT_ABBREVIATION: str
-    SUB_INFO_PACK_SERVICE: SubInfoPackService
+    SIP_SERVICE: SIPService
 
     def __init__(self, project_abbreviation):
         """
         Constructor.
         """
         self.PROJECT_ABBREVIATION = project_abbreviation
-        self.SUB_INFO_PACK_SERVICE = SubInfoPackService(project_abbreviation)
+        self.SIP_SERVICE = SIPService(project_abbreviation)
 
 
     def refine(self):
@@ -31,8 +31,8 @@ class SIPRefiner:
         Meant to be overwritten by project specific subclasses.
         """
         # TODO add more?
-        self.SUB_INFO_PACK_SERVICE.walk_sip_folder(self.process_tei_sip, content_model="tei")
-        self.SUB_INFO_PACK_SERVICE.walk_sip_folder(self.process_tei_sip, content_model="lido")
+        self.SIP_SERVICE.walk_sip_folder(self.process_tei_sip, content_model="tei")
+        self.SIP_SERVICE.walk_sip_folder(self.process_tei_sip, content_model="lido")
 
 
     def generate_thumbnail(self, sip_folder_path: str):
