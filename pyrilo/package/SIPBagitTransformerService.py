@@ -7,6 +7,7 @@ from extract.TEISIP import TEISIP
 from extract.GMLSIP import GMLSIP
 from PyriloStatics import PyriloStatics
 from extract.SIPService import SIPService
+from extract.SIP import SIP
 
 class SIPBagitTransformerService:
     """
@@ -68,6 +69,8 @@ class SIPBagitTransformerService:
         Build a singular bag from a SIP folder.
         Parameters are passed by the SIPService.
         """
+
+        # TODO think about method implementation - many things might be included in SIPService.py
         
         # Get the path of the SIPs folder
         sips_folder = PyriloStatics.LOCAL_SIP_FOLDERS_PATH
@@ -94,16 +97,24 @@ class SIPBagitTransformerService:
         os.makedirs(meta_folder_path, exist_ok=True)
 
 
+        # TODO processing: if none defined it is a normal SIP? --> check if this is correct
+        # TODO Also: IF there is a source xml file --> use the XMLSIP? --> check if this is correct
+
         sip = None
-        if content_model == "tei":
-            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-        elif content_model == "":
-            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-        elif content_model == "gml":
-            sip = GMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        # process xml based SIPs
+        if self.SIP_SERVICE.contains_source_xml(sip_folder_path):
+            if content_model == "tei":
+                sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+            elif content_model == "":
+                sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+            elif content_model == "gml":
+                sip = GMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+            else:
+                sip = XMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        # process not xml based SIPSs
         else:
-            sip = XMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-         
+            sip = SIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+ 
 
         sip_object = sip.extract_metadata()
         sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))

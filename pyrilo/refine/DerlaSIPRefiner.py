@@ -36,6 +36,10 @@ class DerlaSIPRefiner(SIPRefiner):
         """
         Demo lambda function for processing a SIP folder. (for DERLA)
         """
+
+        # skip all that are not XML sips
+        if not self.SIP_SERVICE.contains_source_xml(sip_folder_path):
+            return 
         
         # creates thumbnails for the sips
         self.generate_thumbnail(sip_folder_path)    

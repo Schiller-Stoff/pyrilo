@@ -3,7 +3,7 @@ from typing import Dict, List
 from PyriloStatics import PyriloStatics
 import logging
 import mimetypes
-from extract import SIPMetadata
+from extract.SIPMetadata import SIPMetadata
 from extract.SIPFileMetadata import SIPFileMetadata
 
 

@@ -84,3 +84,12 @@ class SIPService:
           encountered_folder_pattern = folder_path_parts[2].lower()
           lambda_func(folder_path, source_file_path, encountered_folder_pattern, folder_name, encountered_contentmodel_pattern)
 
+
+  def contains_source_xml(self, sip_folder_path: str) -> bool:
+    """
+    Checks if given sip folder contains a source xml file.
+    """
+    # TODO validate given sip_folder_path? e.g. is it even a path like object
+
+    source_file_path = os.path.join(sip_folder_path, PyriloStatics.SIP_SOURCE_FILE_NAME)
+    return os.path.isfile(source_file_path)
