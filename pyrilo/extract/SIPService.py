@@ -3,6 +3,10 @@ import os
 from PyriloStatics import PyriloStatics
 import os
 from typing import Callable
+from extract.XMLSIP import XMLSIP
+from extract.TEISIP import TEISIP
+from extract.GMLSIP import GMLSIP
+from extract.SIP import SIP
 
 class SIPService:
   """
@@ -93,3 +97,28 @@ class SIPService:
 
     source_file_path = os.path.join(sip_folder_path, PyriloStatics.SIP_SOURCE_FILE_NAME)
     return os.path.isfile(source_file_path)
+  
+
+  def resolve(self, sip_folder_path: str, content_model: str, encountered_folder_pattern: str) -> SIP:
+    """
+    Detects the type of the given SIP folder and returns it as SIP superclass instance.
+    """
+    # TODO validate given sip_folder_path? e.g. is it even a path like object
+
+    # write sip.json specific to content model
+    sip = None
+    # process xml based SIPs
+    if self.contains_source_xml(sip_folder_path):
+        if content_model == "tei":
+            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        elif content_model == "":
+            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        elif content_model == "gml":
+            sip = GMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        else:
+            sip = XMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+    # process not xml based SIPSs
+    else:
+        sip = SIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+
+    return sip

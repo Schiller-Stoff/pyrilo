@@ -91,22 +91,8 @@ class SIPBagitTransformerService:
         meta_folder_path = os.path.join(cur_bag_folder_path, "data" + os.path.sep + "meta")
         os.makedirs(meta_folder_path, exist_ok=True)
 
-        # write sip.json specific to content model
-        sip = None
-        # process xml based SIPs
-        if self.SIP_SERVICE.contains_source_xml(sip_folder_path):
-            if content_model == "tei":
-                sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-            elif content_model == "":
-                sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-            elif content_model == "gml":
-                sip = GMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-            else:
-                sip = XMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-        # process not xml based SIPSs
-        else:
-            sip = SIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
- 
+        # makes sure that the appropriate SIP class is used (like a TEISIP class for a TEI SIP folder)
+        sip = self.SIP_SERVICE.resolve(sip_folder_path, content_model, encountered_folder_pattern)
 
         sip_object = sip.extract_metadata()
         sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
