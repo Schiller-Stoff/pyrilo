@@ -27,7 +27,7 @@ class SIP:
         self.SUBTYPE = subtype
 
 
-    def write_sip_object_to_json(self, sip_object_metadata: SIPMetadata, target_path: str):
+    def write_metadata_to_json(self, sip_object_metadata: SIPMetadata, target_path: str):
         """
         Transforms given sip object to json and writes it to the given path. 
         """

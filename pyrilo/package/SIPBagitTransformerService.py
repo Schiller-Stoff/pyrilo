@@ -72,8 +72,6 @@ class SIPBagitTransformerService:
         Parameters are passed by the SIPService.
         """
 
-        # TODO think about method implementation - many things might be included in SIPService.py
-
         # all files on folder root level are ignored
         if os.path.isfile(os.path.join(PyriloStatics.LOCAL_SIP_FOLDERS_PATH, folder_name)):
             return
@@ -94,8 +92,9 @@ class SIPBagitTransformerService:
         # makes sure that the appropriate SIP class is used (like a TEISIP class for a TEI SIP folder)
         sip = self.SIP_SERVICE.resolve(sip_folder_path, content_model, encountered_folder_pattern)
 
-        sip_object = sip.extract_metadata()
-        sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
+        # build sip.json 
+        sip_metadata = sip.extract_metadata()
+        sip.write_metadata_to_json(sip_metadata, os.path.join(meta_folder_path, "sip.json"))
 
         # Create base bag files, like checksum files
         self.create_bag_files(cur_bag_folder_path)
