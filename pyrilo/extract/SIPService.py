@@ -99,26 +99,40 @@ class SIPService:
     return os.path.isfile(source_file_path)
   
 
-  def resolve(self, sip_folder_path: str, content_model: str, encountered_folder_pattern: str) -> SIP:
+  def resolve(self, sip_folder_path: str) -> SIP:
     """
     Detects the type of the given SIP folder and returns it as SIP superclass instance.
     """
     # TODO validate given sip_folder_path? e.g. is it even a path like object
+    if (sip_folder_path.count("_") == 1) or (sip_folder_path.count("_") > 2):
+      msg = f"SIP folder name must contain exactly two OR no underscores in it's path. Given folder name: {sip_folder_path}."
+      logging.error(msg)
+      raise ValueError(msg)
+
+
+    sip_folder_pattern = ""
+    sip_contentmodel_pattern = "tei"
+    # TODO now both must be defined!
+    if sip_folder_path.count("_") == 2:
+      folder_path_parts = sip_folder_path.split("_")
+      sip_contentmodel_pattern = folder_path_parts[1].lower()
+      sip_folder_pattern = folder_path_parts[2].lower()
+
 
     # write sip.json specific to content model
     sip = None
     # process xml based SIPs
     if self.contains_source_xml(sip_folder_path):
-        if content_model == "tei":
-            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-        elif content_model == "":
-            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
-        elif content_model == "gml":
-            sip = GMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        if sip_contentmodel_pattern == "tei":
+            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, sip_folder_pattern)
+        elif sip_contentmodel_pattern == "":
+            sip = TEISIP(self.PROJECT_ABBR, sip_folder_path, sip_folder_pattern)
+        elif sip_contentmodel_pattern == "gml":
+            sip = GMLSIP(self.PROJECT_ABBR, sip_folder_path, sip_folder_pattern)
         else:
-            sip = XMLSIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+            sip = XMLSIP(self.PROJECT_ABBR, sip_folder_path, sip_folder_pattern)
     # process not xml based SIPSs
     else:
-        sip = SIP(self.PROJECT_ABBR, sip_folder_path, encountered_folder_pattern)
+        sip = SIP(self.PROJECT_ABBR, sip_folder_path, sip_folder_pattern)
 
     return sip

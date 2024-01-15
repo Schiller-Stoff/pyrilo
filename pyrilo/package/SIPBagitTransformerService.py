@@ -90,7 +90,7 @@ class SIPBagitTransformerService:
         os.makedirs(meta_folder_path, exist_ok=True)
 
         # makes sure that the appropriate SIP class is used (like a TEISIP class for a TEI SIP folder)
-        sip = self.SIP_SERVICE.resolve(sip_folder_path, content_model, encountered_folder_pattern)
+        sip = self.SIP_SERVICE.resolve(sip_folder_path)
 
         # build sip.json 
         sip_metadata = sip.extract_metadata()
