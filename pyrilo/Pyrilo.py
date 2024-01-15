@@ -79,7 +79,7 @@ class Pyrilo:
         """
         Transforms all SIPs to the bagit format.
         """
-        return self.sip_bagit_transformer_service.transform(project_abbr)
+        return self.sip_bagit_transformer_service.transform()
     
     def integrate_project_objects(self, project_abbr: str):
         """

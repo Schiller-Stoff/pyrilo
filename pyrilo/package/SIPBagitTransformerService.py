@@ -55,10 +55,10 @@ class SIPBagitTransformerService:
             manifest_md5_file.write("data/content/TEI_SOURCE.xml HASH\n")
 
 
-    def transform(self, project_abbr: str):
+    def transform(self):
         """
-        Transforms all project files to the bagit format.
-        TODO: rename! --> creates the base folder structure in the first place!
+        Transforms all SIP folders to the correspondent bags.
+        Deletes all created bags first.
         """
         # delete all child folder inside bags folder
         self.delete_child_folders(PyriloStatics.LOCAL_BAGIT_FILES_PATH)
@@ -91,7 +91,7 @@ class SIPBagitTransformerService:
         meta_folder_path = os.path.join(cur_bag_folder_path, "data" + os.path.sep + "meta")
         os.makedirs(meta_folder_path, exist_ok=True)
 
-        
+        # write sip.json specific to content model
         sip = None
         # process xml based SIPs
         if self.SIP_SERVICE.contains_source_xml(sip_folder_path):
@@ -111,7 +111,7 @@ class SIPBagitTransformerService:
         sip_object = sip.extract_metadata()
         sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 
-        # Create basic bag files
+        # Create base bag files, like checksum files
         self.create_bag_files(cur_bag_folder_path)
         self.create_bagit_checksum_files(cur_bag_folder_path)
 
