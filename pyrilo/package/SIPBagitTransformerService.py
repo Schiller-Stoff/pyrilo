@@ -84,12 +84,10 @@ class SIPBagitTransformerService:
 
         # Copy contents from SIP folder to the data/content directory inside the generated bag
         sip_folder_path = os.path.join(PyriloStatics.LOCAL_SIP_FOLDERS_PATH, folder_name)
-        # TODO data / content folder -> via PyriloStatics?
         data_folder_path = os.path.join(cur_bag_folder_path, "data" + os.path.sep + "content")
         shutil.copytree(sip_folder_path, data_folder_path, dirs_exist_ok=True)
 
         # create meta folder for bagit
-        # TODO data and meta folder --> via PyriloStatics?
         meta_folder_path = os.path.join(cur_bag_folder_path, "data" + os.path.sep + "meta")
         os.makedirs(meta_folder_path, exist_ok=True)
 
@@ -111,7 +109,6 @@ class SIPBagitTransformerService:
  
 
         sip_object = sip.extract_metadata()
-        # TODO sip.json --> pyrilo statics
         sip.write_sip_object_to_json(sip_object, os.path.join(meta_folder_path, "sip.json"))
 
         # Create basic bag files
