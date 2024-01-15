@@ -6,7 +6,7 @@ from PyriloStatics import PyriloStatics
 from extract.SIPService import SIPService
 from Pyrilo import Pyrilo
 
-def setup_client(project_abbr: str) -> Pyrilo:
+def setup_client(project_abbr: str):
     log_file_path = f"{os.getcwd()}/logs/app.log"
 
     # setup logging
@@ -21,25 +21,25 @@ def setup_client(project_abbr: str) -> Pyrilo:
     return client
 
 
-def demo_create_bags_and_ingest_them(pyrilo: Pyrilo, MY_PROJECT: str):
-    """
-    Demo for creating bags and ingesting them directly afterwards.
+# def demo_create_bags_and_ingest_them(pyrilo: Pyrilo, MY_PROJECT: str):
+#     """
+#     Demo for creating bags and ingesting them directly afterwards.
     
-    """
-    # demo for transforming local SIPs to bagit format
-    pyrilo.transform_sips_to_bags(MY_PROJECT)
+#     """
+#     # demo for transforming local SIPs to bagit format
+#     pyrilo.transform_sips_to_bags(MY_PROJECT)
     
-    # optionally delete all objects first
-    pyrilo.delete_objects(MY_PROJECT)
+#     # optionally delete all objects first
+#     pyrilo.delete_objects(MY_PROJECT)
 
-    # delete all indices from dependend services
-    pyrilo.disintegrate_project_objects(MY_PROJECT)
+#     # delete all indices from dependend services
+#     pyrilo.disintegrate_project_objects(MY_PROJECT)
 
-    # demo for ingesting all bags from the local bag structure 
-    pyrilo.ingest_bags(MY_PROJECT)
+#     # demo for ingesting all bags from the local bag structure 
+#     pyrilo.ingest_bags(MY_PROJECT)
 
-    # demo index all
-    pyrilo.integrate_project_objects(MY_PROJECT)
+#     # demo index all
+#     pyrilo.integrate_project_objects(MY_PROJECT)
 
 
 if __name__ == "__main__":
@@ -90,6 +90,7 @@ if __name__ == "__main__":
 
     DerlaSIPRefiner("demo").refine()
     # pyrilo.transform_sips_to_bags(MY_PROJECT)
-    demo_create_bags_and_ingest_them(pyrilo, MY_PROJECT)
+
+    pyrilo.ingest(MY_PROJECT)
 
     

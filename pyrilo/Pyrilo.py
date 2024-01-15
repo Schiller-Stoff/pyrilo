@@ -105,3 +105,23 @@ class Pyrilo:
         Disintegrates a single object of a project in gams-integration services.
         """
         return self.integration_service.disintegrate(project_abbr, id)
+    
+
+    def ingest(self, project_abbr: str):
+        """
+        Performs a complete ingest operation based on the defined SIP folders.
+        """
+        # demo for transforming local SIPs to bagit format
+        self.transform_sips_to_bags(project_abbr)
+        
+        # optionally delete all objects first
+        self.delete_objects(project_abbr)
+
+        # delete all indices from dependend services
+        self.disintegrate_project_objects(project_abbr)
+
+        # ingesting all bags from the local bag structure 
+        self.ingest_bags(project_abbr)
+
+        # demo index all
+        self.integrate_project_objects(project_abbr)
