@@ -64,7 +64,10 @@ class DerlaSIPRefiner(SIPRefiner):
 
         # needs to be casted as TEI
         tei_sip: TEISIP = self.SIP_SERVICE.resolve(sip_folder_path)
-        object_id = tei_sip.resolve_pid()
+        # extract metadata
+        tei_sip_metadata = tei_sip.extract_metadata()
+        # get the object id
+        object_id = tei_sip_metadata.id
 
         # get all person elements
         person_elems = tei_sip.XML_ROOT.findall(".//listPerson/person", GAMSXMLNamespaces.TEI_NAMESPACES)
