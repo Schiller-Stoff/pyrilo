@@ -26,7 +26,7 @@ class TEISIP(XMLSIP):
 
         """
         
-        id = self.resolve_pid()
+        id = self.resolve_id()
         title = self.resolve_title()
         description = self.resolve_sip_description()
         creator = self._resolve_tei_creator()
@@ -66,17 +66,17 @@ class TEISIP(XMLSIP):
         return object_metadata
 
 
-    def resolve_pid(self):
+    def resolve_id(self):
         """
         Reads out the defined pid of the TEI.
         """
         pid_xpath = ".//idno[@type='PID']"
         pid_idno_elem = self.XML_ROOT.find(pid_xpath, GAMSXMLNamespaces.TEI_NAMESPACES) 
         if pid_idno_elem is None:
-            raise ReferenceError(f"No pid at {pid_xpath} found in TEI document. At SIP: {self.SIP_FOLDER_PATH}")        
+            raise ReferenceError(f"No id at {pid_xpath} found in TEI document. At SIP folder: {self.SIP_FOLDER_PATH}")        
         
         if pid_idno_elem.text is None:
-            raise ReferenceError(f"No text assigned to pid indo {pid_xpath} in TEI document. At SIP: {self.SIP_FOLDER_PATH}") 
+            raise ReferenceError(f"No text assigned to pid idno {pid_xpath} in TEI document. At SIP folder: {self.SIP_FOLDER_PATH}") 
 
         return pid_idno_elem.text
     

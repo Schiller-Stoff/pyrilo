@@ -155,10 +155,11 @@ class DerlaSIPRefiner(SIPRefiner):
         Generates a search.json file for a given SIP folder.
         """
 
+        # TODO use SIP_SERVICE instead? - looks quite specific
         tei_sip = TEISIP(self.PROJECT_ABBREVIATION, sip_folder_path)
         # default operations provided by the TEISIP
         title = tei_sip.resolve_title()
-        id = tei_sip.resolve_pid()
+        id = tei_sip.resolve_id()
         desc = tei_sip.resolve_sip_description()
         types = tei_sip.resolve_terms()
         # DERLA specific operations
