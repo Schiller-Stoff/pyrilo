@@ -103,12 +103,7 @@ class SIPService:
     """
     Detects the type of the given SIP folder and returns it as SIP superclass instance.
     """
-    # TODO validate given sip_folder_path? e.g. is it even a path like object
-    if (sip_folder_path.count("_") == 1) or (sip_folder_path.count("_") > 2):
-      msg = f"SIP folder name must contain exactly two OR no underscores in it's path. Given folder name: {sip_folder_path}."
-      logging.error(msg)
-      raise ValueError(msg)
-
+    self._validate_sip(sip_folder_path)
 
     sip_folder_pattern = ""
     sip_contentmodel_pattern = "tei"
@@ -136,3 +131,44 @@ class SIPService:
         sip = SIP(self.PROJECT_ABBR, sip_folder_path, sip_folder_pattern)
 
     return sip
+  
+
+  def _validate_sip(self, sip_folder_path: str) -> None:
+    """
+    Validates given sip folder path AND it's content.
+    (Like must contain files + no subfolders)
+    """
+
+    if os.path.isfile(sip_folder_path):
+      msg = f"Given sip folder path is not a valid directory (was detected as file). Given path: {sip_folder_path}"
+      logging.error(msg)
+      raise ValueError(msg)
+    
+    underscore_count = sip_folder_path.count("_")
+    if (underscore_count == 1) or (underscore_count > 2):
+      msg = f"SIP folder name must contain exactly two OR no underscores in it's path. Given SIP folder name: {sip_folder_path}."
+      logging.error(msg)
+      raise ValueError(msg)
+    
+    # raise a value error if the folder contains subfolders
+    sip_subdirs = list(self._folders_in(sip_folder_path))
+    sip_subdir_count = len(sip_subdirs)
+    if sip_subdir_count != 0:
+      msg = f"SIP folder must not contain subfolders. Given SIP folder: {sip_folder_path}. Expected folder count: 0. Actual folder count: {sip_subdir_count}"
+      logging.error(msg)
+      raise ValueError(msg)
+
+
+    # raise for empty SIP folder? 
+    file_contained_count = len(os.listdir(sip_folder_path)) 
+    if file_contained_count == 0:
+      msg = f"SIP folder must contain at least one file. Given SIP folder: {sip_folder_path}."
+      logging.error(msg)
+      raise ValueError(msg)
+
+
+
+  def _folders_in(self, path_to_parent):
+    for fname in os.listdir(path_to_parent):
+        if os.path.isdir(os.path.join(path_to_parent,fname)):
+            yield os.path.join(path_to_parent,fname)
