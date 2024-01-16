@@ -139,6 +139,18 @@ class SIPService:
     (Like must contain files + no subfolders)
     """
 
+    # sip_folder_path should not be None
+    if sip_folder_path is None:
+      msg = f"SIP folder path must not be None."
+      logging.error(msg)
+      raise ValueError(msg)
+    
+    # sip_folderpath should contain the os path separator
+    if os.path.sep not in sip_folder_path:	
+      msg = f"SIP folder path must contain the os' path separator.  SIP folder path: {sip_folder_path}"
+      logging.error(msg)
+      raise ValueError(msg)
+
     if os.path.isfile(sip_folder_path):
       msg = f"Given sip folder path is not a valid directory (was detected as file). Given path: {sip_folder_path}"
       logging.error(msg)
