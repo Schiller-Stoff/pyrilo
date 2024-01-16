@@ -62,7 +62,8 @@ class DerlaSIPRefiner(SIPRefiner):
         
         persons = []
 
-        tei_sip = TEISIP(self.PROJECT_ABBREVIATION, sip_folder_path)
+        # needs to be casted as TEI
+        tei_sip: TEISIP = self.SIP_SERVICE.resolve(sip_folder_path)
         object_id = tei_sip.resolve_pid()
 
         # get all person elements
