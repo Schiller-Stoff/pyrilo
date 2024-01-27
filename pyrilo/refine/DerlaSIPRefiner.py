@@ -44,6 +44,13 @@ class DerlaSIPRefiner(SIPRefiner):
         # creates thumbnails for the sips
         self.generate_thumbnail(sip_folder_path)    
 
+        # create iiif manifest for the sips
+        tei_sip = TEISIP(self.PROJECT_ABBREVIATION, sip_folder_path)
+        image_metadatas = tei_sip._handle_tei_images()
+        
+        # self.create_iiif_manifest_from_sip_folder(tei_sip.resolve_id(), sip_folder_path)
+        self.create_iiif_manifest(image_metadatas, tei_sip.resolve_id(), sip_folder_path)
+
         # creates search.json files for the sips
         self.generate_search_json(sip_folder_path)
 
