@@ -2,18 +2,21 @@ from PyriloStatics import PyriloStatics
 from urllib3 import make_headers, request
 import logging
 
+from pyrilo.auth.AuthCookie import AuthCookie
+
+
 class IntegrationService:
     """
     Handles operations on GAMS integration endpoints, like triggering indexation to 
     certain databases etc.
     """
 
-    auth: tuple | None = None
+    auth: AuthCookie | None = None
     host: str
     # do some error control? (should not contain trailing slashes etc.) 
     API_BASE_PATH: str
 
-    def __init__(self, host: str, auth: tuple | None = None) -> None:
+    def __init__(self, host: str, auth: AuthCookie | None = None) -> None:
         self.host = host
         self.auth = auth
         self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
@@ -24,7 +27,9 @@ class IntegrationService:
         Integrate all digital objects of a project to gams-integration services.
         """
         url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects"
-        r = request("POST", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=300)
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("POST", url, headers=headers, redirect=False, timeout=300)
 
         if r.status >= 400:
             msg = f"Failed to integrate all objects for project {project_abbr}. POST request against {url}. Status: {r.status}. Response: {r.json()}"
@@ -39,7 +44,9 @@ class IntegrationService:
         Disintegrate all digital objects of a project from gams-integration services.
         """
         url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects"
-        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=30)
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("DELETE", url, headers=headers, redirect=False, timeout=30)
 
         if r.status >= 400:
             msg = f"Failed to disintegrate all objects for project {project_abbr}. POST request against {url}. Status: {r.status}."
@@ -55,7 +62,9 @@ class IntegrationService:
         Creates database entries for a singular digital object of a project in gams-integration services.
         """
         url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects/{object_id}"
-        r = request("POST", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=30)
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("POST", url, headers=headers, redirect=False, timeout=30)
 
         if r.status >= 400:
             msg = f"Failed to integrate object {object_id} for project {project_abbr}. POST request against {url}. Status: {r.status}. Response: {r.json()}"
@@ -70,7 +79,9 @@ class IntegrationService:
         Disintegrate (=removes database entries) a single digital object of a project from gams-integration services.
         """
         url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects/{object_id}"
-        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=30)
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("DELETE", url, headers=headers, redirect=False, timeout=30)
 
         if r.status >= 400:
             msg = f"Failed to disintegrate object {object_id} for project {project_abbr}. DELETE request against {url}. Status: {r.status}. Response: {r.json()}"

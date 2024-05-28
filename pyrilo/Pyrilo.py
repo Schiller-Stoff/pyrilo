@@ -4,6 +4,8 @@ from package.SIPBagitTransformerService import SIPBagitTransformerService
 from package.BagService import BagService
 from api.IntegrationService import IntegrationService
 from typing import List
+from pyrilo.auth.AuthorizationService import AuthorizationService
+
 
 class Pyrilo:
     """
@@ -16,20 +18,29 @@ class Pyrilo:
     sip_bagit_transformer_service: SIPBagitTransformerService
     bag_service: BagService
     integration_service: IntegrationService
+    authorization_service: AuthorizationService
+
+
 
     def __init__(self, host: str, project_abbr: str) -> None:
+
+        self.authorization_service = AuthorizationService(host)
         self.digital_object_service = DigitalObjectService(host)
         self.bag_service = BagService(host)
         self.sip_bagit_transformer_service = SIPBagitTransformerService(project_abbr)
         self.integration_service = IntegrationService(host)
+        self.host = host
 
-    def configure_auth(self, user_name: str, user_pw: str):
+    def login(self):
         """
-        Configures authentication for state changing operations via the REST-API.
+        Logs in to the GAMS5 instance.
         """
-        self.digital_object_service.auth = (user_name, user_pw)
-        self.bag_service.auth = (user_name, user_pw)
-        self.integration_service.auth = (user_name, user_pw)
+        # first login
+        auth_cookie = self.authorization_service.login()
+        # set auth info on classes
+        self.digital_object_service.auth = auth_cookie
+        self.bag_service.auth = auth_cookie
+        self.integration_service.auth = auth_cookie
 
     def list_objects(self, project_abbr: str) -> List[str]:
         """
@@ -118,10 +129,12 @@ class Pyrilo:
         self.delete_objects(project_abbr)
 
         # delete all indices from dependend services
-        self.disintegrate_project_objects(project_abbr)
+        # TODO reenable
+        # self.disintegrate_project_objects(project_abbr)
 
         # ingesting all bags from the local bag structure 
         self.ingest_bags(project_abbr)
 
         # demo index all
-        self.integrate_project_objects(project_abbr)
+        # TODO reenable
+        # self.integrate_project_objects(project_abbr)
