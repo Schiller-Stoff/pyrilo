@@ -16,6 +16,8 @@ class SIPMetadata:
 
     id: str
     title: str
+    # project abbreviation
+    project: str
     description: str
     creator: str
     rights: str

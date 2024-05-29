@@ -32,7 +32,8 @@ class GMLSIP(XMLSIP):
 
         object_metadata = SIPMetadata(
             id=id, 
-            title=title, 
+            title=title,
+            project=self.PROJECT_ABBR,
             creator=publisher_creator, 
             description=description,
             object_type=ContentModels.GML, 

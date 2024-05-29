@@ -57,7 +57,8 @@ class SIP:
 
         object_metadata = SIPMetadata(
             id=object_id, 
-            title=title, 
+            title=title,
+            project=self.PROJECT_ABBR,
             creator=creator, 
             description=description,
             object_type="Base object", 
