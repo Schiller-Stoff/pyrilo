@@ -1,5 +1,6 @@
 from selenium import webdriver
 
+from pyrilo.PyriloStatics import PyriloStatics
 from pyrilo.auth.AuthCookie import AuthCookie
 
 
@@ -16,7 +17,7 @@ class AuthorizationService:
     def login(self):
         driver = webdriver.Chrome()
         # open the selenium browser
-        driver.get(self.host)
+        driver.get(self.host + PyriloStatics.AUTH_ENDPOINT)
         # wait until the user logs in and gets redirected to the spring security redirect page
         input("[ Press Enter] after you have logged in and have been redirected to the spring security redirect page...")
         cookies = driver.get_cookies()

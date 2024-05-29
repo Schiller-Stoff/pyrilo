@@ -9,6 +9,7 @@ class PyriloStatics:
     """
 
     API_ROOT = "/api/v1"
+    AUTH_ENDPOINT = API_ROOT + "/auth"
     DEMO_PROJECT_ABBR = "demo"
     DEMO_USER = "admin"
 
