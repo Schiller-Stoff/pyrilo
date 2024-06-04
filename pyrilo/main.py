@@ -26,8 +26,13 @@ if __name__ == "__main__":
     pyrilo = Pyrilo("http://localhost:18085", MY_PROJECT)
     # login
     pyrilo.login()
+
+    # pyrilo.create_project("hupfi", "Hupfi Project")
+    pyrilo.delete_project("hupfi")
+
+
     # ingest SIPs
-    pyrilo.ingest(MY_PROJECT)
+    # pyrilo.ingest(MY_PROJECT)
 
     # pyrilo.transform_sips_to_bags(MY_PROJECT)
 
