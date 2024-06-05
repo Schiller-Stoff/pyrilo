@@ -27,8 +27,8 @@ if __name__ == "__main__":
     # login
     pyrilo.login()
 
-    # pyrilo.create_project("hupfi", "Hupfi Project")
-    pyrilo.delete_project("hupfi")
+    pyrilo.create_project("hupfi", "Hupfi Project")
+    # pyrilo.delete_project("hupfi")
 
 
     # ingest SIPs
