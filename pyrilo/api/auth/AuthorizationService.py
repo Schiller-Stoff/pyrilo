@@ -30,20 +30,11 @@ class AuthorizationService:
         while not driver.current_url == redirect_url:
             pass
 
-        # todo there is a driver.get_cookie method!
+        # TODO there is a driver.get_cookie method!
         cookies = driver.get_cookies()
 
-        JSESSION_ID = ""
-        # Print the cookies
-        for cookie in cookies:
-            if cookie.get('name') == 'JSESSIONID':
-                JSESSION_ID = cookie.get('value')
-            else:
-                # TODO error handling
-                pass
-
-        # TODO error handling if JSESSION_ID is still empty
-
+        # TODO elaborate error handling
+        JSESSION_ID = driver.get_cookie("JSESSIONID").get("value")
 
         self.auth_cookie = AuthCookie(JSESSION_ID)
         # close browser again
