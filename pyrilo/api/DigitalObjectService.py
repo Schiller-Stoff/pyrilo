@@ -49,7 +49,7 @@ class DigitalObjectService:
 
         """
 
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects?style=idlist"
         # use cookie header if available
         headers = self.auth.build_auth_cookie_header() if self.auth else None
         r = request("GET", url, headers=headers)
@@ -66,7 +66,7 @@ class DigitalObjectService:
 
         digital_object_ids: List[str] = []
         for response_object in response_object_list:
-            digital_object_ids.append(response_object["id"])
+            digital_object_ids.append(response_object)
 
         return digital_object_ids
 

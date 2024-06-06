@@ -118,7 +118,7 @@ class Pyrilo:
         # delete all indices from dependend services
         self.disintegrate_project_objects(project_abbr)
 
-        # ingesting all bags from the local bag structure 
+        # ingesting all bags from the local bag structure admin
         self.ingest_bags(project_abbr)
 
         # demo index all
