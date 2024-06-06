@@ -111,8 +111,6 @@ class Pyrilo:
         """
         Performs a complete ingest operation based on the defined SIP folders.
         """
-        # demo for transforming local SIPs to bagit format
-        self.transform_sips_to_bags(project_abbr)
 
         # optionally delete all objects first
         self.delete_objects(project_abbr)
