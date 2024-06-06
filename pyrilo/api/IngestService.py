@@ -2,13 +2,13 @@ import logging
 import os
 import tempfile
 from PyriloStatics import PyriloStatics
-from urllib3 import encode_multipart_formdata, make_headers, request
+from urllib3 import encode_multipart_formdata, request
 import zipfile
 
-from pyrilo.auth.AuthCookie import AuthCookie
+from pyrilo.api.auth.AuthCookie import AuthCookie
 
 
-class BagService:
+class IngestService:
     """
     Zips and sends bags to the GAMS5 REST-API with correspondent http requests.
     """

@@ -2,10 +2,10 @@
 import logging
 from PyriloStatics import PyriloStatics
 from api.DigitalObject import DigitalObject
-from typing import Dict, List
-from urllib3 import make_headers, request, encode_multipart_formdata
+from typing import List
+from urllib3 import request, encode_multipart_formdata
 
-from pyrilo.auth.AuthCookie import AuthCookie
+from pyrilo.api.auth.AuthCookie import AuthCookie
 
 
 class DigitalObjectService:
@@ -49,7 +49,7 @@ class DigitalObjectService:
 
         """
 
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects?style=idlist"
         # use cookie header if available
         headers = self.auth.build_auth_cookie_header() if self.auth else None
         r = request("GET", url, headers=headers)
@@ -62,15 +62,13 @@ class DigitalObjectService:
             logging.info(f"Successfully retrieved digital objects for project {project_abbr}.")
         
         response_object_list = r.json()
+        # TODO update! this will atm only return 10 objects because of pagination
 
-        digital_objects = []
+        digital_object_ids: List[str] = []
         for response_object in response_object_list:
-            # TODO mapping from api-response to digital object is error prone here
-            digital_objects.append(
-                DigitalObject(response_object["id"], project_abbr, response_object["datastreams"])
-            )
+            digital_object_ids.append(response_object)
 
-        return digital_objects
+        return digital_object_ids
 
 
     def assign_child_objects(self, parent_id: str, children_ids: List[str], project_abbr: str):

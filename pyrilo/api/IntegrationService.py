@@ -1,8 +1,8 @@
 from PyriloStatics import PyriloStatics
-from urllib3 import make_headers, request
+from urllib3 import request
 import logging
 
-from pyrilo.auth.AuthCookie import AuthCookie
+from pyrilo.api.auth.AuthCookie import AuthCookie
 
 
 class IntegrationService:

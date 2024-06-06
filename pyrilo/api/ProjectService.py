@@ -1,6 +1,6 @@
 import logging
 from pyrilo.PyriloStatics import PyriloStatics
-from pyrilo.auth.AuthCookie import AuthCookie
+from pyrilo.api.auth.AuthCookie import AuthCookie
 from urllib3 import request
 
 class ProjectService:
@@ -36,6 +36,10 @@ class ProjectService:
             msg = f"Project with abbreviation {project_abbr} already exists."
             logging.info(msg)
             raise ValueError(msg)
+        elif r.status == 403:
+            msg = f"User is not authorized to create the project '{project_abbr}'."
+            logging.error(msg)
+            raise PermissionError(msg)
         elif r.status >= 400:
             msg = f"Failed to request against {url}. API response: {r.json()}"
             logging.error(msg)
