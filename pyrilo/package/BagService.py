@@ -5,18 +5,21 @@ from PyriloStatics import PyriloStatics
 from urllib3 import encode_multipart_formdata, make_headers, request
 import zipfile
 
+from pyrilo.auth.AuthCookie import AuthCookie
+
+
 class BagService:
     """
     Zips and sends bags to the GAMS5 REST-API with correspondent http requests.
     """
 
-    auth: tuple | None = None
+    auth: AuthCookie | None = None
     host: str
     # do some error control? (should not contain trailing slashes etc.) 
     API_BASE_PATH: str
 
 
-    def __init__(self, host: str, auth: tuple | None = None) -> None:
+    def __init__(self, host: str, auth: AuthCookie | None = None) -> None:
         self.host = host
         self.auth = auth
         self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
@@ -47,8 +50,8 @@ class BagService:
 
             logging.debug(f"Requesting against {url} ...")
 
-            # construct headers
-            headers = make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}')
+            # use cookie header if available
+            headers = self.auth.build_auth_cookie_header() if self.auth else None
             body_form_data, content_type = self.create_multipart_formdata(tempf.read())
             headers["Content-Type"] = content_type
 

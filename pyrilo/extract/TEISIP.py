@@ -38,7 +38,8 @@ class TEISIP(XMLSIP):
 
         object_metadata = SIPMetadata(
             id=id, 
-            title=title, 
+            title=title,
+            project=self.PROJECT_ABBR,
             # TODO add processing of missing statements!
             creator=creator, 
             description=description,
@@ -184,10 +185,10 @@ class TEISIP(XMLSIP):
                 title=title, 
                 mimetype=mimetype,
                 # TODO add processing of missing statements! 
-                creator="TODO", 
-                description="TODO", 
-                rights="TODO", 
-                publisher="TODO", 
+                creator="TODO creator",
+                description="TODO description",
+                rights="TODO rights",
+                publisher="TODO publisher",
                 size=size
             )
 

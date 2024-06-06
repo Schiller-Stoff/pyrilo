@@ -5,17 +5,20 @@ from api.DigitalObject import DigitalObject
 from typing import Dict, List
 from urllib3 import make_headers, request, encode_multipart_formdata
 
+from pyrilo.auth.AuthCookie import AuthCookie
+
+
 class DigitalObjectService:
     """
     Service class for operations on digital objects.
     """
     # tuple for basic auth - 1. user_name 2. user_password
-    auth: tuple | None = None
+    auth: AuthCookie | None
     host: str
     # do some error control? (should not contain trailing slashes etc.) 
     API_BASE_PATH: str
 
-    def __init__(self, host: str, auth: tuple | None = None) -> None:
+    def __init__(self, host: str, auth: AuthCookie | None = None) -> None:
         self.host = host
         self.auth = auth
         self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
@@ -26,7 +29,10 @@ class DigitalObjectService:
 
         """
         url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
-        r = request("PUT", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False)
+
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("PUT", url, headers=headers, redirect=False)
 
         if r.status >= 400:
             msg = f"Failed to request against {url}. API response: {r.json()}"
@@ -44,7 +50,9 @@ class DigitalObjectService:
         """
 
         url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
-        r = request("GET", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None)
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("GET", url, headers=headers)
 
         if r.status >= 400:
             msg = f"Failed to request against {url}. API response: {r.json()}"
@@ -75,7 +83,8 @@ class DigitalObjectService:
         url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{parent_id}/collect"
 
         # construct headers
-        headers = make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}')
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
         child_ids_string = ",".join(children_ids)
         body_form_data, content_type = encode_multipart_formdata({"childObjects": child_ids_string}, boundary=None)
         headers["Content-Type"] = content_type
@@ -98,7 +107,9 @@ class DigitalObjectService:
 
         """
         url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
-        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False)
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("DELETE", url, headers=headers, redirect=False)
 
         if r.status >= 400:
             msg = f"Failed to delete object {id} for project {project_abbr}. DELETE request against {url}. API response: {r.json()}"
@@ -113,7 +124,9 @@ class DigitalObjectService:
 
         """
         url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
-        r = request("DELETE", url, headers= make_headers(basic_auth=f'{self.auth[0]}:{self.auth[1]}') if self.auth else None, redirect=False, timeout=10)
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("DELETE", url, headers=headers, redirect=False, timeout=10)
 
         if r.status >= 400:
             msg = f"Failed to DELETE all objects for project {project_abbr}. DELETE request against {url}. API response: {r.json()}"
