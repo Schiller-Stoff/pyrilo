@@ -15,11 +15,22 @@ class AuthorizationService:
         self.host = host
 
     def login(self):
-        driver = webdriver.Chrome()
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--incognito")
+        driver = webdriver.Chrome(options=chrome_options)
+
         # open the selenium browser
         driver.get(self.host + PyriloStatics.AUTH_ENDPOINT)
-        # wait until the user logs in and gets redirected to the spring security redirect page
-        input("[ Press Enter] after you have logged in and have been redirected to the spring security redirect page...")
+        # need to append a trailing slash to the host url
+
+        # TODO could I check if cookies are still valid? maybe no login is required.
+
+        redirect_url = self.host + "/"
+        # wait until redirection to login page is finished
+        while not driver.current_url == redirect_url:
+            pass
+
+        # todo there is a driver.get_cookie method!
         cookies = driver.get_cookies()
 
         JSESSION_ID = ""
@@ -43,7 +54,4 @@ class AuthorizationService:
         if not self.auth_cookie:
             return self.login()
         return self.auth_cookie
-
-
-
 
