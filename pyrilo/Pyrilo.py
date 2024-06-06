@@ -1,7 +1,6 @@
 import logging
 from api.DigitalObjectService import DigitalObjectService
-from package.SIPBagitTransformerService import SIPBagitTransformerService
-from package.BagService import BagService
+from pyrilo.api.IngestService import IngestService
 from api.IntegrationService import IntegrationService
 from typing import List
 from pyrilo.api.ProjectService import ProjectService
@@ -16,8 +15,7 @@ class Pyrilo:
     """
 
     digital_object_service: DigitalObjectService
-    sip_bagit_transformer_service: SIPBagitTransformerService
-    bag_service: BagService
+    ingest_service: IngestService
     integration_service: IntegrationService
     authorization_service: AuthorizationService
     project_service: ProjectService
@@ -25,8 +23,7 @@ class Pyrilo:
     def __init__(self, host: str, project_abbr: str) -> None:
         self.authorization_service = AuthorizationService(host)
         self.digital_object_service = DigitalObjectService(host)
-        self.bag_service = BagService(host)
-        self.sip_bagit_transformer_service = SIPBagitTransformerService(project_abbr)
+        self.ingest_service = IngestService(host)
         self.integration_service = IntegrationService(host)
         self.project_service = ProjectService(host)
         self.host = host
@@ -39,7 +36,7 @@ class Pyrilo:
         auth_cookie = self.authorization_service.login()
         # set auth info on classes
         self.digital_object_service.auth = auth_cookie
-        self.bag_service.auth = auth_cookie
+        self.ingest_service.auth = auth_cookie
         self.integration_service.auth = auth_cookie
         self.project_service.auth = auth_cookie
 
@@ -78,19 +75,13 @@ class Pyrilo:
         """
         Ingests defined folder from the local SIP structure.
         """
-        self.bag_service.ingest_bag(project_abbr, sip_folder_name)
+        self.ingest_service.ingest_bag(project_abbr, sip_folder_name)
 
     def ingest_bags(self, project_abbr: str):
         """
         Ingests all bags from the local bag structure.
         """
-        self.bag_service.ingest_bags(project_abbr)
-
-    def transform_sips_to_bags(self, project_abbr: str):
-        """
-        Transforms all SIPs to the bagit format.
-        """
-        return self.sip_bagit_transformer_service.transform()
+        self.ingest_service.ingest_bags(project_abbr)
 
     def integrate_project_objects(self, project_abbr: str):
         """
