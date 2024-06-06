@@ -1,7 +1,7 @@
 from selenium import webdriver
 
 from pyrilo.PyriloStatics import PyriloStatics
-from pyrilo.auth.AuthCookie import AuthCookie
+from pyrilo.api.auth.AuthCookie import AuthCookie
 
 
 class AuthorizationService:

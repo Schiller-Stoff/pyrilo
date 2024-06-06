@@ -2,10 +2,10 @@
 import logging
 from PyriloStatics import PyriloStatics
 from api.DigitalObject import DigitalObject
-from typing import Dict, List
-from urllib3 import make_headers, request, encode_multipart_formdata
+from typing import List
+from urllib3 import request, encode_multipart_formdata
 
-from pyrilo.auth.AuthCookie import AuthCookie
+from pyrilo.api.auth.AuthCookie import AuthCookie
 
 
 class DigitalObjectService:

@@ -4,7 +4,7 @@ from pyrilo.api.IngestService import IngestService
 from api.IntegrationService import IntegrationService
 from typing import List
 from pyrilo.api.ProjectService import ProjectService
-from pyrilo.auth.AuthorizationService import AuthorizationService
+from pyrilo.api.auth.AuthorizationService import AuthorizationService
 
 
 class Pyrilo:
