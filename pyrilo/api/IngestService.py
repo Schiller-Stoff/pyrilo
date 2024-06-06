@@ -8,7 +8,7 @@ import zipfile
 from pyrilo.auth.AuthCookie import AuthCookie
 
 
-class BagService:
+class IngestService:
     """
     Zips and sends bags to the GAMS5 REST-API with correspondent http requests.
     """
