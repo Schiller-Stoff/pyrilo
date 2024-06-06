@@ -128,15 +128,13 @@ class Pyrilo:
         self.delete_objects(project_abbr)
 
         # delete all indices from dependend services
-        # TODO reenable
-        # self.disintegrate_project_objects(project_abbr)
+        self.disintegrate_project_objects(project_abbr)
 
         # ingesting all bags from the local bag structure 
         self.ingest_bags(project_abbr)
 
         # demo index all
-        # TODO reenable
-        # self.integrate_project_objects(project_abbr)
+        self.integrate_project_objects(project_abbr)
 
     def create_project(self, project_abbr: str, description: str):
         """
