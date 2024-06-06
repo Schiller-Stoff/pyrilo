@@ -62,15 +62,13 @@ class DigitalObjectService:
             logging.info(f"Successfully retrieved digital objects for project {project_abbr}.")
         
         response_object_list = r.json()
+        # TODO update! this will atm only return 10 objects because of pagination
 
-        digital_objects = []
+        digital_object_ids: List[str] = []
         for response_object in response_object_list:
-            # TODO mapping from api-response to digital object is error prone here
-            digital_objects.append(
-                DigitalObject(response_object["id"], project_abbr, response_object["datastreams"])
-            )
+            digital_object_ids.append(response_object["id"])
 
-        return digital_objects
+        return digital_object_ids
 
 
     def assign_child_objects(self, parent_id: str, children_ids: List[str], project_abbr: str):
