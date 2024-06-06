@@ -24,6 +24,7 @@ class ProjectService:
         Creates a new project with given abbreviation and description.
         :param project_abbr: abbreviation of the project
         :param description: description of the project
+        :raises ValueError: if project with abbreviation already exists
         """
         url = f"{self.API_BASE_PATH}/projects/{project_abbr}"
 
@@ -31,7 +32,11 @@ class ProjectService:
         headers = self.auth.build_auth_cookie_header() if self.auth else None
         r = request("PUT", url, headers=headers, json={"description": description}, redirect=False)
 
-        if r.status >= 400:
+        if r.status == 409:
+            msg = f"Project with abbreviation {project_abbr} already exists."
+            logging.info(msg)
+            raise ValueError(msg)
+        elif r.status >= 400:
             msg = f"Failed to request against {url}. API response: {r.json()}"
             logging.error(msg)
             raise ConnectionError(msg)

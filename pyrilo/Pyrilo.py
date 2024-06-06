@@ -1,10 +1,9 @@
-from extract.SIPService import SIPService
+import logging
 from api.DigitalObjectService import DigitalObjectService
 from package.SIPBagitTransformerService import SIPBagitTransformerService
 from package.BagService import BagService
 from api.IntegrationService import IntegrationService
 from typing import List
-
 from pyrilo.api.ProjectService import ProjectService
 from pyrilo.auth.AuthorizationService import AuthorizationService
 
@@ -140,7 +139,11 @@ class Pyrilo:
         """
         Creates a new project with given abbreviation and description.
         """
-        self.project_service.save_project(project_abbr, description)
+        try:
+            self.project_service.save_project(project_abbr, description)
+        except ValueError as e:
+            msg = f"Skipping project creation: Failed to create project: {e}"
+            logging.error(msg)
 
     def delete_project(self, project_abbr: str):
         """

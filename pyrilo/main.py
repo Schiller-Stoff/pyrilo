@@ -27,12 +27,13 @@ if __name__ == "__main__":
     # login
     pyrilo.login()
 
-    pyrilo.create_project("hupfi", "Hupfi Project")
+    pyrilo.create_project(MY_PROJECT, "Demo project for testing purposes")
     # pyrilo.delete_project("hupfi")
 
 
     # ingest SIPs
-    # pyrilo.ingest(MY_PROJECT)
+    pyrilo.ingest(MY_PROJECT)
+
 
     # pyrilo.transform_sips_to_bags(MY_PROJECT)
 
