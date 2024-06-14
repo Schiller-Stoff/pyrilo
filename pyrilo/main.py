@@ -36,6 +36,11 @@ if __name__ == "__main__":
     pyrilo.ingest(MY_PROJECT)
 
 
+    # pyrilo.integrate_project_objects(MY_PROJECT)
+
+    # print(pyrilo.list_objects(MY_PROJECT))
+    # pyrilo.delete_object("o:derla.vor10", MY_PROJECT)
+
     # pyrilo.ingest_bag(MY_PROJECT, "vor57")
 
     
