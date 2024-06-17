@@ -29,11 +29,15 @@ if __name__ == "__main__":
     pyrilo.login()
 
     pyrilo.create_project(MY_PROJECT, "Demo project for testing purposes")
-    # pyrilo.delete_project("hupfi")
 
+
+    pyrilo.setup_integration_services(MY_PROJECT)
 
     # ingest SIPs
     pyrilo.ingest(MY_PROJECT)
+
+    # pyrilo.integrate_project_objects(MY_PROJECT)
+
 
 
     # pyrilo.integrate_project_objects(MY_PROJECT)

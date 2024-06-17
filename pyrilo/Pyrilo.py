@@ -139,3 +139,9 @@ class Pyrilo:
         Deletes a project.
         """
         self.project_service.delete_project(project_abbr)
+
+    def setup_integration_services(self, project_abbr: str):
+        """
+        Triggers the integration of a project.
+        """
+        self.project_service.trigger_project_integration(project_abbr)
