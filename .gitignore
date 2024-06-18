@@ -14,7 +14,8 @@ out/
 .factorypath
 
 # custom
-venv
+venv/
+.venv/
 bock.egg*
 dist
 .pypirc
@@ -23,3 +24,5 @@ logs
 project/bags
 project/sips
 models
+pyrilo/project/
+.vscode/
