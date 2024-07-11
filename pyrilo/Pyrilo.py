@@ -121,8 +121,6 @@ class Pyrilo:
         # ingesting all bags from the local bag structure admin
         self.ingest_bags(project_abbr)
 
-        # demo index all
-        self.integrate_project_objects(project_abbr)
 
     def create_project(self, project_abbr: str, description: str):
         """
