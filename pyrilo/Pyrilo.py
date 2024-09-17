@@ -113,10 +113,10 @@ class Pyrilo:
         """
 
         # optionally delete all objects first
-        self.delete_objects(project_abbr)
+        # self.delete_objects(project_abbr)
 
         # delete all indices from dependend services
-        self.disintegrate_project_objects(project_abbr)
+        # self.disintegrate_project_objects(project_abbr)
 
         # ingesting all bags from the local bag structure admin
         self.ingest_bags(project_abbr)
