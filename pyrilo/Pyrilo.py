@@ -69,7 +69,9 @@ class Pyrilo:
         """
         Deletes all digital objects of a project
         """
-        return self.digital_object_service.delete_objects(project_abbr)
+        project_objects = self.list_objects(project_abbr)
+        for obj in project_objects:
+            self.delete_object(obj, project_abbr)
 
     def ingest_bag(self, project_abbr: str, sip_folder_name: str):
         """
