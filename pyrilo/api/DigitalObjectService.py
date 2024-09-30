@@ -115,20 +115,3 @@ class DigitalObjectService:
             raise ConnectionError(msg)
         else:
             logging.info(f"Successfully deleted digital object with id {id}.")
-
-    def delete_objects(self, project_abbr: str):
-        """
-        Deletes all digital objects for given project.
-
-        """
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
-        # use cookie header if available
-        headers = self.auth.build_auth_cookie_header() if self.auth else None
-        r = request("DELETE", url, headers=headers, redirect=False, timeout=10)
-
-        if r.status >= 400:
-            msg = f"Failed to DELETE all objects for project {project_abbr}. DELETE request against {url}. API response: {r.json()}"
-            logging.error(msg)
-            raise ConnectionError(msg)
-        else:
-            logging.info(f"Successfully deleted all digital objects for project {project_abbr}.")

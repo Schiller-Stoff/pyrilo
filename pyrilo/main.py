@@ -29,11 +29,17 @@ if __name__ == "__main__":
     pyrilo.login()
 
     pyrilo.create_project(MY_PROJECT, "Demo project for testing purposes")
-    # pyrilo.delete_project("hupfi")
 
+
+    # pyrilo.setup_integration_services(MY_PROJECT)
 
     # ingest SIPs
-    pyrilo.ingest(MY_PROJECT)
+    # pyrilo.ingest(MY_PROJECT)
+
+    pyrilo.integrate_project_objects(MY_PROJECT)
+
+    # pyrilo.disintegrate_project_objects(MY_PROJECT)
+
 
 
     # pyrilo.integrate_project_objects(MY_PROJECT)
@@ -43,4 +49,8 @@ if __name__ == "__main__":
 
     # pyrilo.ingest_bag(MY_PROJECT, "vor57")
 
-    
+   # pyrilo.disintegrate_project_objects(MY_PROJECT)
+
+    # pyrilo.integrate_project_object(MY_PROJECT, "o:derla.vor10")
+
+    # pyrilo.disintegrate_project_object(MY_PROJECT, "o:derla.vor10")

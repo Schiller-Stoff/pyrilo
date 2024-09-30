@@ -69,7 +69,9 @@ class Pyrilo:
         """
         Deletes all digital objects of a project
         """
-        return self.digital_object_service.delete_objects(project_abbr)
+        project_objects = self.list_objects(project_abbr)
+        for obj in project_objects:
+            self.delete_object(obj, project_abbr)
 
     def ingest_bag(self, project_abbr: str, sip_folder_name: str):
         """
@@ -113,16 +115,14 @@ class Pyrilo:
         """
 
         # optionally delete all objects first
-        self.delete_objects(project_abbr)
+        # self.delete_objects(project_abbr)
 
         # delete all indices from dependend services
-        self.disintegrate_project_objects(project_abbr)
+        # self.disintegrate_project_objects(project_abbr)
 
         # ingesting all bags from the local bag structure admin
         self.ingest_bags(project_abbr)
 
-        # demo index all
-        self.integrate_project_objects(project_abbr)
 
     def create_project(self, project_abbr: str, description: str):
         """
@@ -139,3 +139,9 @@ class Pyrilo:
         Deletes a project.
         """
         self.project_service.delete_project(project_abbr)
+
+    def setup_integration_services(self, project_abbr: str):
+        """
+        Triggers the integration of a project.
+        """
+        self.project_service.trigger_project_integration(project_abbr)
