@@ -63,7 +63,10 @@ class Pyrilo:
         """
         Deletes a digital object
         """
-        return self.digital_object_service.delete_object(id, project_abbr)
+        try:
+            return self.digital_object_service.delete_object(id, project_abbr)
+        except Exception as e:
+            logging.error(f"Failed to delete object {id} in project {project_abbr}: {e}")
 
     def delete_objects(self, project_abbr: str):
         """
