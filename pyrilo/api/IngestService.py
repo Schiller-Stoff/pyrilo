@@ -1,12 +1,10 @@
 import logging
 import os
 import tempfile
-from PyriloStatics import PyriloStatics
+from pyrilo.PyriloStatics import PyriloStatics
 from urllib3 import encode_multipart_formdata, request
 import zipfile
-
 from pyrilo.api.auth.AuthCookie import AuthCookie
-
 
 class IngestService:
     """

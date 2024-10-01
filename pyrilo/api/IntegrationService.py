@@ -1,4 +1,4 @@
-from PyriloStatics import PyriloStatics
+from pyrilo.PyriloStatics import PyriloStatics
 from urllib3 import request
 import logging
 

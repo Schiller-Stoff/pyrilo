@@ -1,7 +1,6 @@
 
 import logging
-from PyriloStatics import PyriloStatics
-from api.DigitalObject import DigitalObject
+from pyrilo.PyriloStatics import PyriloStatics
 from typing import List
 from urllib3 import request, encode_multipart_formdata
 
