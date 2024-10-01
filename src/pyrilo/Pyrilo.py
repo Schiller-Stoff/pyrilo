@@ -1,7 +1,7 @@
 import logging
-from api.DigitalObjectService import DigitalObjectService
+from pyrilo.api.DigitalObjectService import DigitalObjectService
 from pyrilo.api.IngestService import IngestService
-from api.IntegrationService import IntegrationService
+from pyrilo.api.IntegrationService import IntegrationService
 from typing import List
 from pyrilo.api.ProjectService import ProjectService
 from pyrilo.api.auth.AuthorizationService import AuthorizationService
