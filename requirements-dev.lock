@@ -17,6 +17,10 @@ certifi==2024.8.30
     # via selenium
 cffi==1.17.1
     # via trio
+click==8.1.7
+    # via pyrilo
+colorama==0.4.6
+    # via click
 h11==0.14.0
     # via wsproto
 idna==3.10
