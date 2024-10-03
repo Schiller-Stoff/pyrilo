@@ -62,7 +62,7 @@ class IngestService:
                 msg = f"Failed to request against {url}. API response: {r.json()}"
                 raise ConnectionError(msg)
             else:
-                logging.info(f"Successfully ingested folder {folder_name} for project {project_abbr}.")
+                logging.info(f"Successfully ingested bag folder {folder_name} for project {project_abbr}.")
             
     def ingest_bags(self, project_abbr: str):
         """
