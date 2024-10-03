@@ -19,14 +19,22 @@ class Pyrilo:
     integration_service: IntegrationService
     authorization_service: AuthorizationService
     project_service: ProjectService
+    host: str
 
-    def __init__(self, host: str, project_abbr: str) -> None:
+    def __init__(self, host: str) -> None:
+        self.configure(host)
+
+    def configure(self, host: str):
+        """
+        Configures the Pyrilo instance, like setting the host of GAMS5.
+        """
         self.authorization_service = AuthorizationService(host)
         self.digital_object_service = DigitalObjectService(host)
         self.ingest_service = IngestService(host)
         self.integration_service = IntegrationService(host)
         self.project_service = ProjectService(host)
         self.host = host
+
 
     def login(self):
         """
