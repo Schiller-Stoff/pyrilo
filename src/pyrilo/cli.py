@@ -45,6 +45,8 @@ def delete_objects(project: str):
 @click.command(name="sync", help="Syncs a project with GAMS: Deletes all objects (and performs disintegration), ingests new objects and integrates them")
 @click.argument("project", required=True)
 def sync(project: str):
+    # TODO remove temporary solution? (creation of project if not existent)
+    pyrilo.create_project(project, "Demo project for testing purposes")
     pyrilo.disintegrate_project_objects(project)
     pyrilo.delete_objects(project)
     pyrilo.ingest(project)
