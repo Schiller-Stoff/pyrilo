@@ -1,4 +1,6 @@
 import logging
+
+from pyrilo.PyriloStatics import PyriloStatics
 from pyrilo.api.DigitalObjectService import DigitalObjectService
 from pyrilo.api.IngestService import IngestService
 from pyrilo.api.IntegrationService import IntegrationService
@@ -24,13 +26,13 @@ class Pyrilo:
     def __init__(self, host: str) -> None:
         self.configure(host)
 
-    def configure(self, host: str):
+    def configure(self, host: str, local_bagit_files_path: str = PyriloStatics.LOCAL_BAGIT_FILES_PATH):
         """
         Configures the Pyrilo instance, like setting the host of GAMS5.
         """
         self.authorization_service = AuthorizationService(host)
         self.digital_object_service = DigitalObjectService(host)
-        self.ingest_service = IngestService(host)
+        self.ingest_service = IngestService(host, local_bagit_files_path=local_bagit_files_path)
         self.integration_service = IntegrationService(host)
         self.project_service = ProjectService(host)
         self.host = host

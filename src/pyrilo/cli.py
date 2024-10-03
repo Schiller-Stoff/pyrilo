@@ -3,15 +3,23 @@ import logging
 from pyrilo.Pyrilo import Pyrilo
 
 #
-pyrilo =  Pyrilo("http://localhost:18085", "hsa")
+pyrilo: Pyrilo = Pyrilo("http://localhost:18085")
 
 @click.group()
-def cli():
+@click.option("--host", "-h", default="http://localhost:18085", help="The host of the GAMS5 instance")
+@click.option("--bag_root", "-r", default="", help="Root folder path (as string) of the bagit files")
+def cli(host: str, bag_root: str):
     """
     Pyrilo is a command line tool for managing your GAMS5 project.
 
     """
     logging.basicConfig( encoding='utf-8', level=logging.INFO)
+
+    if bag_root:
+        pyrilo.configure(host, bag_root)
+    else:
+        pyrilo.configure(host)
+
     pyrilo.login()
 
 
