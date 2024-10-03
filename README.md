@@ -6,7 +6,21 @@ imitates the behavior of Cirilo in Python.
 
 # Quickstart
 
-## Deployment / usage
+### Usage
+
+```sh
+# cd into project root directory
+
+# main command: syncs gams data with local bag files. (only one way folder --> GAMS5)
+pyrilo sync hsa
+
+# check cli.py for additional arguments etc.
+
+
+```
+
+
+## Installation
 
 Via python rye
 
