@@ -14,7 +14,7 @@ class PyriloStatics:
     DEMO_USER = "admin"
 
     # local paths for client to work
-    LOCAL_PROJECT_ROOT_PATH = str(pathlib.Path(__file__).parent.parent.resolve())
+    LOCAL_PROJECT_ROOT_PATH = str(pathlib.Path(__file__).parent.parent.parent.resolve())
     LOCAL_PROJECT_FILES_PATH = LOCAL_PROJECT_ROOT_PATH + os.sep + "project"
     LOCAL_SIP_FOLDERS_PATH = LOCAL_PROJECT_FILES_PATH + os.sep + "sips"
     LOCAL_BAGIT_FILES_PATH = LOCAL_PROJECT_FILES_PATH + os.sep + "bags"

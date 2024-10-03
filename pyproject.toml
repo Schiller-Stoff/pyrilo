@@ -1,0 +1,31 @@
+[project]
+name = "pyrilo"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Sebastian Schiller-Stoff", email = "sebastian.stoff@uni-graz.at" }
+]
+dependencies = [
+    "selenium>=4.25.0",
+    "urllib3==2.0.7",
+    "click>=8.1.7",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyrilo"]
+
+[project.scripts]
+pyrilo = "pyrilo.cli:cli"

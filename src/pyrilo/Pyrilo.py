@@ -1,7 +1,9 @@
 import logging
-from api.DigitalObjectService import DigitalObjectService
+
+from pyrilo.PyriloStatics import PyriloStatics
+from pyrilo.api.DigitalObjectService import DigitalObjectService
 from pyrilo.api.IngestService import IngestService
-from api.IntegrationService import IntegrationService
+from pyrilo.api.IntegrationService import IntegrationService
 from typing import List
 from pyrilo.api.ProjectService import ProjectService
 from pyrilo.api.auth.AuthorizationService import AuthorizationService
@@ -19,14 +21,22 @@ class Pyrilo:
     integration_service: IntegrationService
     authorization_service: AuthorizationService
     project_service: ProjectService
+    host: str
 
-    def __init__(self, host: str, project_abbr: str) -> None:
+    def __init__(self, host: str) -> None:
+        self.configure(host)
+
+    def configure(self, host: str, local_bagit_files_path: str = PyriloStatics.LOCAL_BAGIT_FILES_PATH):
+        """
+        Configures the Pyrilo instance, like setting the host of GAMS5.
+        """
         self.authorization_service = AuthorizationService(host)
         self.digital_object_service = DigitalObjectService(host)
-        self.ingest_service = IngestService(host)
+        self.ingest_service = IngestService(host, local_bagit_files_path=local_bagit_files_path)
         self.integration_service = IntegrationService(host)
         self.project_service = ProjectService(host)
         self.host = host
+
 
     def login(self):
         """
@@ -63,7 +73,10 @@ class Pyrilo:
         """
         Deletes a digital object
         """
-        return self.digital_object_service.delete_object(id, project_abbr)
+        try:
+            return self.digital_object_service.delete_object(id, project_abbr)
+        except Exception as e:
+            logging.error(f"Failed to delete object {id} in project {project_abbr}: {e}")
 
     def delete_objects(self, project_abbr: str):
         """

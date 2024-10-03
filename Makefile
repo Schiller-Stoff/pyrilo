@@ -1,3 +1,4 @@
 init:
-	pip install -r requirements.txt
+	rye sync
+
 

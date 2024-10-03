@@ -1,5 +1,4 @@
 from selenium import webdriver
-
 from pyrilo.PyriloStatics import PyriloStatics
 from pyrilo.api.auth.AuthCookie import AuthCookie
 
