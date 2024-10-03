@@ -15,12 +15,15 @@ class IngestService:
     host: str
     # do some error control? (should not contain trailing slashes etc.) 
     API_BASE_PATH: str
+    # points to folder containing the bag files
+    LOCAL_BAGIT_FILES_PATH: str
 
 
-    def __init__(self, host: str, auth: AuthCookie | None = None) -> None:
+    def __init__(self, host: str, auth: AuthCookie | None = None, local_bagit_files_path: str = PyriloStatics.LOCAL_BAGIT_FILES_PATH) -> None:
         self.host = host
         self.auth = auth
         self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
+        self.LOCAL_BAGIT_FILES_PATH = local_bagit_files_path
 
     
     def ingest_bag(self, project_abbr: str, folder_name: str):
@@ -32,7 +35,7 @@ class IngestService:
 
         # validate folder? 
 
-        folder_path =  os.path.join(PyriloStatics.LOCAL_BAGIT_FILES_PATH, folder_name)
+        folder_path =  os.path.join(self.LOCAL_BAGIT_FILES_PATH, folder_name)
         logging.debug(f"Zipping folder {folder_path} ...")
 
         # zip files / folder
@@ -68,7 +71,7 @@ class IngestService:
         """
         Walks through project directory and ingest the bags as individual objects.
         """
-        bags_dir = PyriloStatics.LOCAL_BAGIT_FILES_PATH
+        bags_dir = self.LOCAL_BAGIT_FILES_PATH
         for folder_name in os.listdir(bags_dir):
             # skip files
             if not os.path.isdir(os.path.join(bags_dir, folder_name)):
