@@ -9,6 +9,10 @@ wheels/
 # venv
 .venv
 
+# exclude rye local dependency files
+.python-version
+requirements.lock
+requirements-dev.lock
 
 
 Thumbs.db
