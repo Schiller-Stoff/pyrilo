@@ -80,7 +80,6 @@ class ProjectService:
 
         if r.status >= 400:
             msg = f"Failed to request against {url}. API response: {r.json()}"
-            logging.error(msg)
             raise ConnectionError(msg)
         else:
             logging.info(f"Successfully created project integration for project with abbreviation {project_abbr}.")

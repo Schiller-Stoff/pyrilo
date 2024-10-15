@@ -157,4 +157,9 @@ class Pyrilo:
         """
         Triggers the integration of a project.
         """
-        self.project_service.trigger_project_integration(project_abbr)
+        try:
+            self.project_service.trigger_project_integration(project_abbr)
+        except ConnectionError:
+            pass
+            msg = f"Skipping setup of integration service for project: Integration service already created: {project_abbr}"
+            logging.warning(msg)

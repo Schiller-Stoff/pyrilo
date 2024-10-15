@@ -47,6 +47,7 @@ def delete_objects(project: str):
 def sync(project: str):
     # TODO remove temporary solution? (creation of project if not existent)
     pyrilo.create_project(project, "Demo project for testing purposes")
+    pyrilo.setup_integration_services(project)
     pyrilo.disintegrate_project_objects(project)
     pyrilo.delete_objects(project)
     pyrilo.ingest(project)
