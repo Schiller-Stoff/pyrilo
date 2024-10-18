@@ -83,6 +83,7 @@ class Pyrilo:
         Deletes all digital objects of a project
         """
         project_objects = self.list_objects(project_abbr)
+        logging.info(f"Deleting now {len(project_objects)} objects for project {project_abbr}")
         for obj in project_objects:
             self.delete_object(obj, project_abbr)
 
