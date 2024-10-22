@@ -78,7 +78,8 @@ class IngestService:
                 continue
 
             try:
-                self.ingest_bag(project_abbr, folder_name)
+                if folder_name.startswith(project_abbr):
+                    self.ingest_bag(project_abbr, folder_name)
             except Exception as e:
                 logging.error(f"Failed to ingest bag {folder_name} for project {project_abbr}: {e}")
                 continue
