@@ -83,6 +83,7 @@ class Pyrilo:
         Deletes all digital objects of a project
         """
         project_objects = self.list_objects(project_abbr)
+        logging.info(f"Deleting now {len(project_objects)} objects for project {project_abbr}")
         for obj in project_objects:
             self.delete_object(obj, project_abbr)
 
@@ -157,4 +158,9 @@ class Pyrilo:
         """
         Triggers the integration of a project.
         """
-        self.project_service.trigger_project_integration(project_abbr)
+        try:
+            self.project_service.trigger_project_integration(project_abbr)
+        except ConnectionError:
+            pass
+            msg = f"Skipping setup of integration service for project: Integration service already created: {project_abbr}"
+            logging.warning(msg)

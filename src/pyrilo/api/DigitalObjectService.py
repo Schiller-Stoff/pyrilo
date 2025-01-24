@@ -61,7 +61,6 @@ class DigitalObjectService:
             logging.info(f"Successfully retrieved digital objects for project {project_abbr}.")
         
         response_object_list = r.json()
-        # TODO update! this will atm only return 10 objects because of pagination
 
         digital_object_ids: List[str] = []
         for response_object in response_object_list:

@@ -38,3 +38,5 @@ project/bags
 models
 pyrilo/project/
 .vscode/
+
+uv.lock
