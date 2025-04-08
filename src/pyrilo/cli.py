@@ -32,8 +32,9 @@ def ingest(project: str):
 
 @cli.command(name="create_project", help="Creates a project on GAMS")
 @click.argument("project", required=True)
-def create_project(project: str):
-    pyrilo.create_project(project, "Demo project for testing purposes")
+@click.argument("desc", required=False)
+def create_project(project: str, desc: str):
+    pyrilo.create_project(project, desc)
 
 
 @cli.command(name="delete_objects", help="Deletes all objects of a project on GAMS")
@@ -41,6 +42,11 @@ def create_project(project: str):
 def delete_objects(project: str):
     pyrilo.delete_objects(project)
 
+@cli.command(name="delete_object", help="Deletes all objects of a project on GAMS")
+@click.argument("project", required=True)
+@click.argument("object_id", required=True)
+def delete_object(project:str, object_id: str):
+    pyrilo.delete_object(object_id, project)
 
 @click.command(name="sync", help="Syncs a project with GAMS: Deletes all objects (and performs disintegration), ingests new objects and integrates them")
 @click.argument("project", required=True)
@@ -67,6 +73,7 @@ def disintegrate(project: str):
 cli.add_command(ingest)
 cli.add_command(create_project)
 cli.add_command(delete_objects)
+cli.add_command(delete_object)
 cli.add_command(sync)
 cli.add_command(integrate)
 cli.add_command(disintegrate)
