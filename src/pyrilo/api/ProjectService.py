@@ -47,6 +47,33 @@ class ProjectService:
         else:
             logging.info(f"Successfully created project with abbreviation {project_abbr}.")
 
+    def update_project(self, project_abbr: str, description: str):
+        """
+        Allows to update an existing project
+        :param project_abbr: abbreviation of the project
+        :param description: description of the project
+        :raises ValueError: if project to be changed with defined abbreviation does not exist
+        """
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}"
+
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("PATCH", url, headers=headers, json={"description": description}, redirect=False)
+
+        if r.status == 403:
+            msg = f"User is not authorized to create the project '{project_abbr}'. Only the gams admin may create / delete projects."
+            logging.error(msg)
+            raise PermissionError(msg)
+        if r.status == 404:
+            msg = f"Requested project to be updated {project_abbr} does not exist! Against url: {url}"
+            logging.error(msg)
+            raise ValueError(msg)
+        elif r.status >= 400:
+            msg = f"Failed to request against {url}. API response: {r.json()}"
+            logging.error(msg)
+            raise ConnectionError(msg)
+        else:
+            logging.info(f"Successfully updated project with abbreviation {project_abbr}.")
 
     def delete_project(self, project_abbr: str):
         """

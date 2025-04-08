@@ -148,6 +148,12 @@ class Pyrilo:
             msg = f"Skipping project creation: Failed to create project: {e}"
             logging.error(msg)
 
+    def update_project(self, project_abbr: str, description: str):
+        """
+        Updates a project.
+        """
+        self.project_service.update_project(project_abbr, description)
+
     def delete_project(self, project_abbr: str):
         """
         Deletes a project.

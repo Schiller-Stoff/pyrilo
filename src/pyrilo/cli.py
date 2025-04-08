@@ -36,6 +36,11 @@ def ingest(project: str):
 def create_project(project: str, desc: str):
     pyrilo.create_project(project, desc)
 
+@cli.command(name="update_project", help="Updates an existing project on GAMS")
+@click.argument("project", required=True)
+@click.argument("desc", required=False)
+def update_project(project: str, desc: str):
+    pyrilo.update_project(project, desc)
 
 @cli.command(name="delete_objects", help="Deletes all objects of a project on GAMS")
 @click.argument("project", required=True)
@@ -72,8 +77,10 @@ def disintegrate(project: str):
 
 cli.add_command(ingest)
 cli.add_command(create_project)
+cli.add_command(update_project)
 cli.add_command(delete_objects)
 cli.add_command(delete_object)
 cli.add_command(sync)
 cli.add_command(integrate)
 cli.add_command(disintegrate)
+
