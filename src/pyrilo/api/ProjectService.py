@@ -65,7 +65,7 @@ class ProjectService:
             logging.error(msg)
             raise PermissionError(msg)
         if r.status == 404:
-            msg = f"Requested project to be updated {project_abbr} does not exist! Against url: {url}"
+            msg = f"Requested project {project_abbr} to be updated does not exist! Against url: {url}"
             logging.error(msg)
             raise ValueError(msg)
         elif r.status >= 400:
