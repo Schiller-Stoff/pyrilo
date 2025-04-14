@@ -65,6 +65,18 @@ def create_collection(project: str, id: str, title: str, desc: str):
     """
     pyrilo.create_collection(project, id, title, desc)
 
+@cli.command(name="delete_collection", help="Deletes a collection of digital objects on the GAMS-API.")
+@click.argument("project", required=True)
+@click.argument("id", required=True)
+def delete_collection(project: str, id: str):
+    """
+    Deletes a GAMS collection
+    """
+    pyrilo.delete_collection(
+        project_abbr=project,
+        collection_id=id
+    )
+
 @click.command(name="sync", help="Syncs a project with GAMS: Deletes all objects (and performs disintegration), ingests new objects and integrates them")
 @click.argument("project", required=True)
 def sync(project: str):

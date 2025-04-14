@@ -19,6 +19,30 @@ class CollectionService:
         self.auth = auth
         self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
 
+    def delete_collection(self, project_abbr: str, collection_id: str):
+        """
+        Deletes specified GAMS collection of digital objects
+        :param project_abbr owning project of the GAMS-collection
+        :param collection_id id of the collection to be saved
+        """
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/collections/{collection_id}"
+
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("DELETE", url, headers=headers, redirect=False)
+
+        if r.status == 404:
+            msg = f"Collection with id {collection_id} for project {project_abbr} does not exist!"
+            logging.info(msg)
+            raise ValueError(msg)
+        elif r.status >= 400:
+            msg = f"Failed to request against {url}. API response: {r.json()}"
+            logging.error(msg)
+            raise ConnectionError(msg)
+        else:
+            logging.info(f"Successfully deleted collection with id {collection_id} for project {project_abbr}.")
+
+
 
     def save_collection(self, project_abbr: str, collection_id: str, title: str, desc: str):
         """
@@ -28,8 +52,7 @@ class CollectionService:
         :param title or label of the collection.
         :param desc description of the collection.
         """
-        url = f"{self.API_BASE_PATH}/collections/{collection_id}"
-        # url = f"{self.API_BASE_PATH}/projects/{project_abbr}/collections"
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/collections/{collection_id}"
 
         request_body = {
             "id": collection_id,

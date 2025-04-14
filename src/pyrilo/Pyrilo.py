@@ -174,6 +174,14 @@ class Pyrilo:
             desc=desc
         )
 
+    def delete_collection(self, project_abbr: str, collection_id: str):
+        """
+        Deletes specified collection entry
+        """
+        self.collection_service.delete_collection(
+            project_abbr=project_abbr,
+            collection_id=collection_id
+        )
 
     def setup_integration_services(self, project_abbr: str):
         """
