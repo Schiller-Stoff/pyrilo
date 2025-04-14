@@ -1,6 +1,7 @@
 import logging
 
 from pyrilo.PyriloStatics import PyriloStatics
+from pyrilo.api.CollectionService import CollectionService
 from pyrilo.api.DigitalObjectService import DigitalObjectService
 from pyrilo.api.IngestService import IngestService
 from pyrilo.api.IntegrationService import IntegrationService
@@ -21,6 +22,7 @@ class Pyrilo:
     integration_service: IntegrationService
     authorization_service: AuthorizationService
     project_service: ProjectService
+    collection_service: CollectionService
     host: str
 
     def __init__(self, host: str) -> None:
@@ -35,6 +37,7 @@ class Pyrilo:
         self.ingest_service = IngestService(host, local_bagit_files_path=local_bagit_files_path)
         self.integration_service = IntegrationService(host)
         self.project_service = ProjectService(host)
+        self.collection_service = CollectionService(host)
         self.host = host
 
 
@@ -159,6 +162,18 @@ class Pyrilo:
         Deletes a project.
         """
         self.project_service.delete_project(project_abbr)
+
+    def create_collection(self,project_abbr: str, collection_id: str, title: str, desc: str):
+        """
+        Creates a GAMS collection
+        """
+        self.collection_service.save_collection(
+            project_abbr=project_abbr,
+            collection_id=collection_id,
+            title=title,
+            desc=desc
+        )
+
 
     def setup_integration_services(self, project_abbr: str):
         """
