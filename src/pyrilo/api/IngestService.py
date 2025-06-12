@@ -47,7 +47,7 @@ class IngestService:
                                 os.path.relpath(os.path.join(root, file), folder_path))
                         
             # ingest zip file
-            url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/"
+            url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
 
             logging.debug(f"Requesting against {url} ...")
 
