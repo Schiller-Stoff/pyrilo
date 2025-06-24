@@ -32,15 +32,50 @@ def ingest(project: str):
 
 @cli.command(name="create_project", help="Creates a project on GAMS")
 @click.argument("project", required=True)
-def create_project(project: str):
-    pyrilo.create_project(project, "Demo project for testing purposes")
+@click.argument("desc", required=False)
+def create_project(project: str, desc: str):
+    pyrilo.create_project(project, desc)
 
+@cli.command(name="update_project", help="Updates an existing project on GAMS")
+@click.argument("project", required=True)
+@click.argument("desc", required=False)
+def update_project(project: str, desc: str):
+    pyrilo.update_project(project, desc)
 
 @cli.command(name="delete_objects", help="Deletes all objects of a project on GAMS")
 @click.argument("project", required=True)
 def delete_objects(project: str):
     pyrilo.delete_objects(project)
 
+@cli.command(name="delete_object", help="Deletes all objects of a project on GAMS")
+@click.argument("project", required=True)
+@click.argument("object_id", required=True)
+def delete_object(project:str, object_id: str):
+    pyrilo.delete_object(object_id, project)
+
+@cli.command(name="create_collection", help="Creates a collection of digital objects on the GAMS-API.")
+@click.argument("project", required=True)
+@click.argument("id", required=True)
+@click.argument("title", required=True)
+@click.argument("desc", required=False)
+def create_collection(project: str, id: str, title: str, desc: str):
+    """
+    Creates a GAMS collection of digital objects.
+    A collection must have an "owning project".
+    """
+    pyrilo.create_collection(project, id, title, desc)
+
+@cli.command(name="delete_collection", help="Deletes a collection of digital objects on the GAMS-API.")
+@click.argument("project", required=True)
+@click.argument("id", required=True)
+def delete_collection(project: str, id: str):
+    """
+    Deletes a GAMS collection
+    """
+    pyrilo.delete_collection(
+        project_abbr=project,
+        collection_id=id
+    )
 
 @click.command(name="sync", help="Syncs a project with GAMS: Deletes all objects (and performs disintegration), ingests new objects and integrates them")
 @click.argument("project", required=True)
@@ -66,7 +101,10 @@ def disintegrate(project: str):
 
 cli.add_command(ingest)
 cli.add_command(create_project)
+cli.add_command(update_project)
 cli.add_command(delete_objects)
+cli.add_command(delete_object)
 cli.add_command(sync)
 cli.add_command(integrate)
 cli.add_command(disintegrate)
+

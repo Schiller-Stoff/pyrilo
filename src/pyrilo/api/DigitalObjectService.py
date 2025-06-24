@@ -48,7 +48,7 @@ class DigitalObjectService:
 
         """
 
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects?style=idlist"
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/ids"
         # use cookie header if available
         headers = self.auth.build_auth_cookie_header() if self.auth else None
         r = request("GET", url, headers=headers)
