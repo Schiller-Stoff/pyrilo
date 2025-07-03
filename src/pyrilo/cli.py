@@ -26,6 +26,10 @@ def cli(host: str, bag_root: str):
 @cli.command(name="ingest", help="Ingest bags as digital objects and datastream for a project")
 @click.argument("project", required=True)
 def ingest(project: str):
+    pyrilo.create_project(project, "Demo project for testing purposes")
+    pyrilo.setup_integration_services(project)
+    pyrilo.disintegrate_project_objects(project)
+    pyrilo.delete_objects(project)
     pyrilo.ingest(project)
     pyrilo.integrate_project_objects(project)
 
