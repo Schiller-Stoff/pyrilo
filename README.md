@@ -2,7 +2,7 @@
 
 prototypical python based gams5 client application - as proxy against the REST-API.
 
-imitates the behavior of Cirilo in Python.
+imitates the behavior of cirilo in Python.
 
 # Quickstart
 
@@ -12,7 +12,7 @@ imitates the behavior of Cirilo in Python.
 # cd into project root directory
 
 # main command: syncs gams data with local bag files. (only one way folder --> GAMS5)
-pyrilo sync hsa
+pyrilo ingest hsa
 
 # check cli.py for additional arguments etc.
 
@@ -24,9 +24,9 @@ pyrilo sync hsa
 
 Via python rye
 
-1. Install rye on your machine (https://rye.astral.sh/guide/installation/) and read through rye basics section
-2. Run `rye sync` in the root directory of this project
-3. Activate rye generated .venv via `source .venv/bin/activate` (for linux) or `.venv\Scripts\activate` (for windows)
+1. Install uv on your machine basics section
+2. Run `uv sync` in the root directory of this project
+3. Activate uv generated .venv via `source .venv/bin/activate` (for linux) or `.venv\Scripts\activate` (for windows)
 4. Run `pyrilo` to start the application
 
 
