@@ -27,11 +27,8 @@ def cli(host: str, bag_root: str):
 @click.argument("project", required=True)
 def ingest(project: str):
     pyrilo.create_project(project, "Demo project for testing purposes")
-    pyrilo.setup_integration_services(project)
-    pyrilo.disintegrate_project_objects(project)
     pyrilo.delete_objects(project)
     pyrilo.ingest(project)
-    pyrilo.integrate_project_objects(project)
 
 
 @cli.command(name="create_project", help="Creates a project on GAMS")
@@ -84,6 +81,7 @@ def delete_collection(project: str, id: str):
 @cli.command(name="integrate", help="Integrates data of digital objects of a project with additional GAMS services like solr")
 @click.argument("project", required=True)
 def integrate(project: str):
+    pyrilo.setup_integration_services(project)
     pyrilo.integrate_project_objects(project)
 
 @click.command(name="disintegrate", help="Disintegrates data of digital objects of a project from additional GAMS services like solr")
