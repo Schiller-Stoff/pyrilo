@@ -89,16 +89,19 @@ def integrate(project: str):
 def disintegrate(project: str):
     pyrilo.disintegrate_project_objects(project)
 
-@click.command(name="integrate_custom_search", help="Disintegrates data of digital objects of a project from additional GAMS services like solr")
-@click.argument("project", required=True)
-def integrate_custom_search(project: str):
-    # TODO could be command group "integrate" with subcommand "custom_search" - or maybe as sync command?
-    pyrilo.integrate_project_objects_custom_search(project)
+@click.group()
+def sync():
+    """ Synchronization / integration commands for GAMS5 projects """
+    pass
 
-@click.command(name="disintegrate_custom_search", help="Disintegrates data of digital objects of a project from additional GAMS services like solr")
+@sync.command('custom_search', help="Test command to say hello")
 @click.argument("project", required=True)
-def disintegrate_custom_search(project: str):
-    pyrilo.disintegrate_project_objects_custom_search(project)
+@click.option("--remove", "-r", default=False, help="If set, removes all data from the custom_search service", is_flag=True)
+def base_search(project: str, remove: bool):
+    if remove:
+        pyrilo.disintegrate_project_objects_custom_search(project)
+    else:
+        pyrilo.integrate_project_objects_custom_search(project)
 
 
 cli.add_command(ingest)
@@ -108,5 +111,4 @@ cli.add_command(delete_objects)
 cli.add_command(delete_object)
 cli.add_command(integrate)
 cli.add_command(disintegrate)
-cli.add_command(integrate_custom_search)
-cli.add_command(disintegrate_custom_search)
+cli.add_command(sync)
