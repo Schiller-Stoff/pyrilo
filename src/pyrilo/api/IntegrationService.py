@@ -60,7 +60,7 @@ class IntegrationService:
         """
 
         """
-        url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects/customSearch"
+        url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects/c-search"
         # use cookie header if available
         headers = self.auth.build_auth_cookie_header() if self.auth else None
         r = request("POST", url, headers=headers, redirect=False, timeout=300)
