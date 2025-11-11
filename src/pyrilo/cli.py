@@ -94,7 +94,7 @@ def sync():
     """ Synchronization / integration commands for GAMS5 projects """
     pass
 
-@sync.command('custom_search', help="Test command to say hello")
+@sync.command('custom_search', help="Handles synchronization with the custom_search service")
 @click.argument("project", required=True)
 @click.option("--remove", "-r", default=False, help="If set, removes all data from the custom_search service", is_flag=True)
 def base_search(project: str, remove: bool):
@@ -102,6 +102,15 @@ def base_search(project: str, remove: bool):
         pyrilo.disintegrate_project_objects_custom_search(project)
     else:
         pyrilo.integrate_project_objects_custom_search(project)
+
+@sync.command('plexus_search', help="Handles synchronization with the plexus_search service")
+@click.argument("project", required=True)
+@click.option("--remove", "-r", default=False, help="If set, removes all data from the custom_search service", is_flag=True)
+def plexus_search(project: str, remove: bool):
+    if remove:
+        pyrilo.disintegrate_project_objects_plexus_search(project)
+    else:
+        pyrilo.integrate_project_objects_plexus_search(project)
 
 
 cli.add_command(ingest)

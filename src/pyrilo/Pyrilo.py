@@ -138,6 +138,18 @@ class Pyrilo:
         """
         return self.integration_service.disintegrate_all_custom_search(project_abbr)
 
+    def integrate_project_objects_plexus_search(self, project_abbr: str):
+        """
+        Integrates all objects of a project to plexus search service.
+        """
+        return self.integration_service.integrate_all_plexus_search(project_abbr)
+
+    def disintegrate_project_objects_plexus_search(self, project_abbr: str):
+        """
+        Disintegrates all objects of a project from plexus search service.
+        """
+        return self.integration_service.disintegrate_all_plexus_search(project_abbr)
+
     def ingest(self, project_abbr: str):
         """
         Performs a complete ingest operation based on the defined SIP folders.
