@@ -60,7 +60,7 @@ class IntegrationService:
         """
 
         """
-        url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects/c-search"
+        url = f"{self.API_BASE_PATH}/integration/c-search/projects/{project_abbr}/objects"
         # use cookie header if available
         headers = self.auth.build_auth_cookie_header() if self.auth else None
         r = request("POST", url, headers=headers, redirect=False, timeout=300)
@@ -76,7 +76,7 @@ class IntegrationService:
         """
         Disintegrate all digital objects of a project from gams-integration customSearch service.
         """
-        url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects/customSearch"
+        url = f"{self.API_BASE_PATH}/integration/c-search/projects/{project_abbr}/objects"
         # use cookie header if available
         headers = self.auth.build_auth_cookie_header() if self.auth else None
         r = request("DELETE", url, headers=headers, redirect=False, timeout=30)
