@@ -1,7 +1,7 @@
 
 import logging
 from pyrilo.PyriloStatics import PyriloStatics
-from typing import List
+from typing import List, Dict, Any
 from urllib3 import request, encode_multipart_formdata
 
 from pyrilo.api.auth.AuthCookie import AuthCookie
@@ -42,13 +42,20 @@ class DigitalObjectService:
 
 
 
-    def list_objects(self, project_abbr: str):
+    def list_objects(self, project_abbr: str, object_ids: None | List[str] = None, page_index: int = 0):
         """
         Retrieves an overview over all digital objects for given project.
 
         """
+        # needed for recursion
+        if object_ids is None:
+            object_ids: List[str] = []
+        else:
+            # if a list of objects was already retrieved -> increment pageIndex
+            page_index += 1
 
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/ids"
+
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/ids?pageIndex={str(page_index)}"
         # use cookie header if available
         headers = self.auth.build_auth_cookie_header() if self.auth else None
         r = request("GET", url, headers=headers)
@@ -58,15 +65,23 @@ class DigitalObjectService:
             logging.error(msg)
             raise ConnectionError(msg)
         else:
+            logging.debug(f"Successfully GET requested digital objects for project {project_abbr}.")
+
+        # paginated object ids
+        paginated_response_object: Dict[str, Any] = r.json()
+        paginated_id_list = paginated_response_object.get("results")
+
+        # digital_object_ids: List[str] = []
+        for object_id in paginated_id_list:
+            object_ids.append(object_id)
+
+        # if pagination.hasNext = true
+        if paginated_response_object.get("pagination").get("hasNext") is True:
+            logging.debug("hasNext property in returned pagination is true -> calling now the method recursively to aggregate all digital objects")
+            return self.list_objects(project_abbr, object_ids, page_index)
+        else:
             logging.info(f"Successfully retrieved digital objects for project {project_abbr}.")
-        
-        response_object_list = r.json()
-
-        digital_object_ids: List[str] = []
-        for response_object in response_object_list:
-            digital_object_ids.append(response_object)
-
-        return digital_object_ids
+            return object_ids
 
 
     def assign_child_objects(self, parent_id: str, children_ids: List[str], project_abbr: str):

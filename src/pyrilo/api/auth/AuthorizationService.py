@@ -1,6 +1,10 @@
+import logging
+
 from selenium import webdriver
 from pyrilo.PyriloStatics import PyriloStatics
 from pyrilo.api.auth.AuthCookie import AuthCookie
+from urllib3 import request
+from urllib3.exceptions import NameResolutionError
 
 
 class AuthorizationService:
@@ -13,7 +17,40 @@ class AuthorizationService:
         # self.password = password
         self.host = host
 
+
+    def verify_oauth_workflow_works(self):
+        """
+        Checks if the authentication endpoint is reachable AND if the redirection workflow (oatuh2) works
+        as expected.
+        1. Try to reach the auth endpoint
+        2. Retry logic following redirects
+        3. If not reachable, raise ConnectionError
+        """
+        auth_url = self.host + PyriloStatics.AUTH_ENDPOINT
+        # use cookie header if available
+        try:
+            r = request("GET", auth_url, retries=3, redirect=True)
+        except Exception as e:
+            # if cause is of type NameResolutionError, append cause info
+            # check if cause is a NameResolutionError
+            if(isinstance(e.__cause__, NameResolutionError)):
+                msg = f"Failed to reach auth service endpoint at {auth_url} due to NameResolutionError. You must set 'keycloak' to resolve against localhost on your local machine - otherwise the ouath2 redirection workflow is not going to work! Original Exception: {e}"
+                raise ConnectionError(msg)
+
+            logging.error(msg)
+            msg = f"Failed to reach auth service endpoint at {auth_url}. Exception: {e}"
+            raise ConnectionError(msg)
+
+        if r.status >= 400:
+            msg = f"Failed to reach auth service endpoint at {auth_url}. Status: {r.status}. Response: {r.json()}"
+            logging.error(msg)
+            raise ConnectionError(msg)
+        else:
+            logging.info(f"Auth service endpoint reachable at: {auth_url}")
+
     def login(self):
+        self.verify_oauth_workflow_works()
+
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--incognito")
         driver = webdriver.Chrome(options=chrome_options)

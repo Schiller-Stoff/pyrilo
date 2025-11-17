@@ -23,11 +23,12 @@ def cli(host: str, bag_root: str):
     pyrilo.login()
 
 
-@cli.command(name="ingest", help="Ingest bags as digital objects and datastream for a project")
+@cli.command(name="ingest", help="Ingest bags as digital objects and datastream for a project. Removes all digital objects and datastreams beforehand")
 @click.argument("project", required=True)
 def ingest(project: str):
+    pyrilo.create_project(project, "Demo project for testing purposes")
+    pyrilo.delete_objects(project)
     pyrilo.ingest(project)
-    pyrilo.integrate_project_objects(project)
 
 
 @cli.command(name="create_project", help="Creates a project on GAMS")
@@ -77,20 +78,10 @@ def delete_collection(project: str, id: str):
         collection_id=id
     )
 
-@click.command(name="sync", help="Syncs a project with GAMS: Deletes all objects (and performs disintegration), ingests new objects and integrates them")
-@click.argument("project", required=True)
-def sync(project: str):
-    # TODO remove temporary solution? (creation of project if not existent)
-    pyrilo.create_project(project, "Demo project for testing purposes")
-    pyrilo.setup_integration_services(project)
-    pyrilo.disintegrate_project_objects(project)
-    pyrilo.delete_objects(project)
-    pyrilo.ingest(project)
-    pyrilo.integrate_project_objects(project)
-
 @cli.command(name="integrate", help="Integrates data of digital objects of a project with additional GAMS services like solr")
 @click.argument("project", required=True)
 def integrate(project: str):
+    pyrilo.setup_integration_services(project)
     pyrilo.integrate_project_objects(project)
 
 @click.command(name="disintegrate", help="Disintegrates data of digital objects of a project from additional GAMS services like solr")
@@ -98,13 +89,35 @@ def integrate(project: str):
 def disintegrate(project: str):
     pyrilo.disintegrate_project_objects(project)
 
+@click.group()
+def sync():
+    """ Synchronization / integration commands for GAMS5 projects """
+    pass
+
+@sync.command('custom_search', help="Handles synchronization with the custom_search service")
+@click.argument("project", required=True)
+@click.option("--remove", "-r", default=False, help="If set, removes all data from the custom_search service", is_flag=True)
+def base_search(project: str, remove: bool):
+    if remove:
+        pyrilo.disintegrate_project_objects_custom_search(project)
+    else:
+        pyrilo.integrate_project_objects_custom_search(project)
+
+@sync.command('plexus_search', help="Handles synchronization with the plexus_search service")
+@click.argument("project", required=True)
+@click.option("--remove", "-r", default=False, help="If set, removes all data from the custom_search service", is_flag=True)
+def plexus_search(project: str, remove: bool):
+    if remove:
+        pyrilo.disintegrate_project_objects_plexus_search(project)
+    else:
+        pyrilo.integrate_project_objects_plexus_search(project)
+
 
 cli.add_command(ingest)
 cli.add_command(create_project)
 cli.add_command(update_project)
 cli.add_command(delete_objects)
 cli.add_command(delete_object)
-cli.add_command(sync)
 cli.add_command(integrate)
 cli.add_command(disintegrate)
-
+cli.add_command(sync)
