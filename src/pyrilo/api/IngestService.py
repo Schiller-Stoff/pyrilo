@@ -83,15 +83,20 @@ class IngestService:
             except Exception as e:
                 logging.error(f"Failed to ingest bag {folder_name} for project {project_abbr}: {e}")
                 continue
-        
 
-    def create_multipart_formdata(self, data):
+    def create_multipart_formdata(self, data, filename="bag.zip"):
         """
-            Creates multipart formdata request body for the given data.
+        Creates multipart formdata request body for the given data.
 
+        Args:
+            data: The zip file content as bytes
+            filename: The filename to use in the multipart request
+
+        Returns:
+            Tuple of (body, content_type)
         """
         form_multipart = {
-            "subInfoPackZIP": data,
+            "subInfoPackZIP": (filename, data, "application/zip"),  # ✅ CORRECT - file tuple
             # TODO remove (is required atm)
             "ingestProfile": "simple"
         }
