@@ -22,6 +22,21 @@ class DigitalObjectService:
         self.auth = auth
         self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
 
+    def object_exists(self, id: str, project_abbr: str):
+        """
+        Checks if a digital object exists on the gams-api.
+        """
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("HEAD", url, headers=headers, redirect=False)
+
+        if r.status >= 400:
+            return False
+        else:
+            logging.debug(f"Successfully requested digital objects for project {project_abbr}.")
+            return True
+
     def save_object(self, id: str, project_abbr: str):
         """
         Creates digital object for project with given id.
