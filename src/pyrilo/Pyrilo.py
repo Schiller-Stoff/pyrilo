@@ -98,8 +98,9 @@ class Pyrilo:
         Ingests defined folder from the local SIP structure.
         """
         if self.digital_object_service.object_exists(sip_folder_name, project_abbr):
-            logging.info(f"Deleting already existing object on the gams-api: {sip_folder_name} for ingest")
             self.delete_object(sip_folder_name, project_abbr)
+            logging.info(f"Successfully deleted object: {sip_folder_name} for ingest")
+
 
         try:
             self.ingest_service.ingest_bag(project_abbr, sip_folder_name)

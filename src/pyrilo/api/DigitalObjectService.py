@@ -141,5 +141,3 @@ class DigitalObjectService:
             msg = f"Failed to delete object {id} for project {project_abbr}. DELETE request against {url}. API response: {r.json()}"
             logging.error(msg)
             raise ConnectionError(msg)
-        else:
-            logging.info(f"Successfully deleted digital object with id {id}.")
