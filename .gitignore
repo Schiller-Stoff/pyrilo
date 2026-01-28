@@ -1,3 +1,20 @@
+# python generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# venv
+.venv
+
+# exclude rye local dependency files
+.python-version
+requirements.lock
+requirements-dev.lock
+
+
 Thumbs.db
 .DS_Store
 .gradle
@@ -14,7 +31,8 @@ out/
 .factorypath
 
 # custom
-venv
+venv/
+.venv/
 bock.egg*
 dist
 .pypirc
@@ -22,3 +40,7 @@ __pycache__
 logs
 project/bags
 models
+pyrilo/project/
+.vscode/
+
+uv.lock
