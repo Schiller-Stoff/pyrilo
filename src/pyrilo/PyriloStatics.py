@@ -1,7 +1,3 @@
-
-import os
-import pathlib
-
 class PyriloStatics:
     """
     This class contains all statics for the GAMS5 API, like the API root path, the demo project abbreviation, the demo user name, etc.
