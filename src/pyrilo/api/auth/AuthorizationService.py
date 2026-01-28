@@ -1,84 +1,99 @@
 import logging
-
-from selenium import webdriver
-from pyrilo.PyriloStatics import PyriloStatics
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+from getpass import getpass
 from pyrilo.api.auth.AuthCookie import AuthCookie
-from urllib3 import request
-from urllib3.exceptions import NameResolutionError
+from pyrilo.PyriloStatics import PyriloStatics
 
 
 class AuthorizationService:
-
-    host: str
-    auth_cookie: AuthCookie | None = None
-
     def __init__(self, host):
-        # self.user = user
-        # self.password = password
         self.host = host
+        self.session = requests.Session()
 
+    def login(self, username: str = None, password: str = None) -> AuthCookie:
+        """
+        Performs headless authentication using requests.
+        """
+        login_url = f"{self.host}{PyriloStatics.AUTH_ENDPOINT}"
 
-    def verify_oauth_workflow_works(self):
-        """
-        Checks if the authentication endpoint is reachable AND if the redirection workflow (oatuh2) works
-        as expected.
-        1. Try to reach the auth endpoint
-        2. Retry logic following redirects
-        3. If not reachable, raise ConnectionError
-        """
-        auth_url = self.host + PyriloStatics.AUTH_ENDPOINT
-        # use cookie header if available
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
+        }
+
         try:
-            r = request("GET", auth_url, retries=3, redirect=True)
-        except Exception as e:
-            # if cause is of type NameResolutionError, append cause info
-            # check if cause is a NameResolutionError
-            if(isinstance(e.__cause__, NameResolutionError)):
-                msg = f"Failed to reach auth service endpoint at {auth_url} due to NameResolutionError. You must set 'keycloak' to resolve against localhost on your local machine - otherwise the ouath2 redirection workflow is not going to work! Original Exception: {e}"
-                raise ConnectionError(msg)
+            # 1. Request the Auth Endpoint, but STOP before following the redirect
+            response = self.session.get(login_url, headers=headers, allow_redirects=False)
 
-            logging.error(msg)
-            msg = f"Failed to reach auth service endpoint at {auth_url}. Exception: {e}"
-            raise ConnectionError(msg)
+            # 2. Check if we got the expected redirect
+            if response.status_code in (301, 302, 303, 307, 308):
+                redirect_url = response.headers.get('Location')
 
-        if r.status >= 400:
-            msg = f"Failed to reach auth service endpoint at {auth_url}. Status: {r.status}. Response: {r.json()}"
-            logging.error(msg)
-            raise ConnectionError(msg)
-        else:
-            logging.info(f"Auth service endpoint reachable at: {auth_url}")
+                # CRITICAL FIX: If server downgrades to HTTP but we started with HTTPS, force HTTPS.
+                if redirect_url and redirect_url.startswith("http://") and self.host.startswith("https://"):
+                    logging.warning(f"Detected insecure redirect to {redirect_url}. Upgrading to HTTPS.")
+                    redirect_url = redirect_url.replace("http://", "https://", 1)
 
-    def login(self):
-        self.verify_oauth_workflow_works()
+                # 3. Now follow the corrected URL (and allow subsequent redirects normally)
+                response = self.session.get(redirect_url, headers=headers)
 
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--incognito")
-        driver = webdriver.Chrome(options=chrome_options)
+            # Raise error if the final landing page (or the initial one if no redirect) failed
+            response.raise_for_status()
 
-        # open the selenium browser
-        driver.get(self.host + PyriloStatics.AUTH_ENDPOINT)
-        # need to append a trailing slash to the host url
+        except requests.RequestException as e:
+            if hasattr(e, 'response') and e.response is not None:
+                logging.error(f"Failed URL: {e.response.url}")
+                logging.error(f"Status Code: {e.response.status_code}")
+                logging.error(f"Response Body Snippet: {e.response.text[:200]}")
+            raise ConnectionError(f"Failed to reach auth endpoint: {e}")
 
-        # TODO could I check if cookies are still valid? maybe no login is required.
+        # 2. Parse the login form to get the dynamic 'action' URL
+        soup = BeautifulSoup(response.text, 'html.parser')
+        form = soup.find('form')
+        if not form:
+            raise ValueError(
+                "Could not find login form on the page. The service might not be using a standard HTML form.")
 
-        redirect_url = self.host + "/"
-        # wait until redirection to login page is finished
-        while not driver.current_url == redirect_url:
-            pass
+        action_url = form.get('action')
+        # Handle relative URLs
+        if not action_url.startswith('http'):
+            action_url = urljoin(response.url, action_url)
 
-        # TODO there is a driver.get_cookie method!
-        cookies = driver.get_cookies()
+        # 3. Prompt for credentials if not provided
+        if not username:
+            print(f"Logging in to {self.host}")
+            username = input("Username: ")
+            password = getpass("Password: ")
 
-        # TODO elaborate error handling
-        JSESSION_ID = driver.get_cookie("JSESSIONID").get("value")
+        # 4. Submit the form
+        # Note: You might need to scrape hidden input fields (like CSRF tokens) from the 'form'
+        # and include them in this payload.
+        payload = {'username': username, 'password': password, 'credentialId': ''}
 
-        self.auth_cookie = AuthCookie(JSESSION_ID)
-        # close browser again
-        driver.close()
-        return self.auth_cookie
+        # Add any hidden fields required by Keycloak
+        for input_tag in form.find_all('input'):
+            if input_tag.get('type') == 'hidden':
+                payload[input_tag.get('name')] = input_tag.get('value')
 
-    def retrieve_auth_cookie(self):
-        if not self.auth_cookie:
-            return self.login()
-        return self.auth_cookie
+        logging.info("Submitting credentials...")
+        post_response = self.session.post(action_url, data=payload)
 
+        if post_response.status_code >= 400:
+            raise PermissionError("Login failed. Check credentials or server logs.")
+
+        # 5. Extract the cookie from the session
+        return self._extract_cookie()
+
+    def _extract_cookie(self):
+        # Look for JSESSIONID in the session cookies
+        cookie_val = self.session.cookies.get("JSESSIONID")
+        if not cookie_val:
+            raise ValueError("Authentication successful, but JSESSIONID cookie was not found.")
+
+        logging.info("Successfully retrieved JSESSIONID.")
+        return AuthCookie(cookie_val)
