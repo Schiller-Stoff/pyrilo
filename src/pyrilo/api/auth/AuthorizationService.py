@@ -1,10 +1,10 @@
 import logging
 import requests
-from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from getpass import getpass
 from pyrilo.api.auth.AuthCookie import AuthCookie
 from pyrilo.PyriloStatics import PyriloStatics
+from pyrilo.api.auth.LoginFormParser import LoginFormParser
 
 
 class AuthorizationService:
@@ -52,14 +52,15 @@ class AuthorizationService:
                 logging.error(f"Response Body Snippet: {e.response.text[:200]}")
             raise ConnectionError(f"Failed to reach auth endpoint: {e}")
 
-        # 2. Parse the login form to get the dynamic 'action' URL
-        soup = BeautifulSoup(response.text, 'html.parser')
-        form = soup.find('form')
-        if not form:
-            raise ValueError(
-                "Could not find login form on the page. The service might not be using a standard HTML form.")
+        # 2. Parse the login form using the standard library
+        parser = LoginFormParser()
+        parser.feed(response.text)
 
-        action_url = form.get('action')
+        if not parser.action:
+            raise ValueError(
+                "Could not find a form with an action URL. The service might not be using a standard HTML form.")
+
+        action_url = parser.action
         # Handle relative URLs
         if not action_url.startswith('http'):
             action_url = urljoin(response.url, action_url)
@@ -75,10 +76,8 @@ class AuthorizationService:
         # and include them in this payload.
         payload = {'username': username, 'password': password, 'credentialId': ''}
 
-        # Add any hidden fields required by Keycloak
-        for input_tag in form.find_all('input'):
-            if input_tag.get('type') == 'hidden':
-                payload[input_tag.get('name')] = input_tag.get('value')
+        # Merge extracted hidden fields (CSRF tokens, execution tokens, etc.)
+        payload.update(parser.hidden_inputs)
 
         logging.info("Submitting credentials...")
         post_response = self.session.post(action_url, data=payload)
