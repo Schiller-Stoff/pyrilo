@@ -1,4 +1,5 @@
 import logging
+import os
 
 from pyrilo.PyriloStatics import PyriloStatics
 from pyrilo.api.CollectionService import CollectionService
@@ -24,6 +25,7 @@ class Pyrilo:
     project_service: ProjectService
     collection_service: CollectionService
     host: str
+    local_bagit_files_path: str
 
     def __init__(self, host: str) -> None:
         self.configure(host)
@@ -39,6 +41,7 @@ class Pyrilo:
         self.project_service = ProjectService(host)
         self.collection_service = CollectionService(host)
         self.host = host
+        self.local_bagit_files_path = local_bagit_files_path
 
 
     def login(self):
@@ -94,13 +97,25 @@ class Pyrilo:
         """
         Ingests defined folder from the local SIP structure.
         """
-        self.ingest_service.ingest_bag(project_abbr, sip_folder_name)
+        if self.digital_object_service.object_exists(sip_folder_name, project_abbr):
+            self.delete_object(sip_folder_name, project_abbr)
+            logging.info(f"Successfully deleted object: {sip_folder_name} for ingest")
+
+
+        try:
+            self.ingest_service.ingest_bag(project_abbr, sip_folder_name)
+        except Exception as e:
+            logging.error(f"Failed to ingest bag {sip_folder_name}")
 
     def ingest_bags(self, project_abbr: str):
         """
         Ingests all bags from the local bag structure.
         """
-        self.ingest_service.ingest_bags(project_abbr)
+        # loop through folders and delete
+        for folder_name in os.listdir(self.local_bagit_files_path):
+            object_id = folder_name
+            self.ingest_bag(project_abbr, folder_name)
+            logging.info(f"Successfully ingested object {object_id}")
 
     def integrate_project_objects(self, project_abbr: str):
         """
