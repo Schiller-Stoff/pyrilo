@@ -27,8 +27,7 @@ def cli(host: str, bag_root: str):
 @click.argument("project", required=True)
 def ingest(project: str):
     pyrilo.create_project(project, "Demo project for testing purposes")
-    pyrilo.delete_objects(project)
-    pyrilo.ingest(project)
+    pyrilo.ingest_bags(project)
 
 
 @cli.command(name="create_project", help="Creates a project on GAMS")
