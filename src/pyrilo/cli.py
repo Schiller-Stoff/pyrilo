@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import click
 import logging
 from pyrilo.Pyrilo import Pyrilo
@@ -7,19 +9,22 @@ pyrilo: Pyrilo = Pyrilo("http://localhost:18085")
 
 @click.group()
 @click.option("--host", "-h", default="http://localhost:18085", help="The host of the GAMS5 instance")
-@click.option("--bag_root", "-r", default="", help="Root folder path (as string) of the bagit files")
+@click.option("--bag_root", "-r", default=None, help="Root folder path of the bagit files. Defaults to ./bags")
 def cli(host: str, bag_root: str):
     """
     Pyrilo is a command line tool for managing your GAMS5 project.
 
     """
-    logging.basicConfig( encoding='utf-8', level=logging.INFO)
+    logging.basicConfig( encoding='utf-8', level=logging.INFO, force=True)
 
     if bag_root:
-        pyrilo.configure(host, bag_root)
+        # Resolve to absolute path immediately to avoid relative path confusion later
+        resolved_path = str(Path(bag_root).resolve())
     else:
-        pyrilo.configure(host)
+        # Default: The user is running this IN their project folder
+        resolved_path = str(Path.cwd() / "bags")
 
+    pyrilo.configure(host, resolved_path)
     pyrilo.login()
 
 

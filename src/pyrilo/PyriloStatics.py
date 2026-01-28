@@ -13,11 +13,6 @@ class PyriloStatics:
     DEMO_PROJECT_ABBR = "demo"
     DEMO_USER = "admin"
 
-    # local paths for client to work
-    LOCAL_PROJECT_ROOT_PATH = str(pathlib.Path(__file__).parent.parent.parent.resolve())
-    LOCAL_PROJECT_FILES_PATH = LOCAL_PROJECT_ROOT_PATH + os.sep + "project"
-    LOCAL_SIP_FOLDERS_PATH = LOCAL_PROJECT_FILES_PATH + os.sep + "sips"
-    LOCAL_BAGIT_FILES_PATH = LOCAL_PROJECT_FILES_PATH + os.sep + "bags"
     # source file name of sips
     SIP_SOURCE_DATASTREAM_ID = "SOURCE"
     SIP_SOURCE_FILE_NAME = SIP_SOURCE_DATASTREAM_ID + ".xml"

@@ -1,6 +1,7 @@
 import logging
 import os
 import tempfile
+from pathlib import Path
 from pyrilo.PyriloStatics import PyriloStatics
 from urllib3 import encode_multipart_formdata, request
 import zipfile
@@ -19,11 +20,22 @@ class IngestService:
     LOCAL_BAGIT_FILES_PATH: str
 
 
-    def __init__(self, host: str, auth: AuthCookie | None = None, local_bagit_files_path: str = PyriloStatics.LOCAL_BAGIT_FILES_PATH) -> None:
+    def __init__(self, host: str, auth: AuthCookie | None = None, local_bagit_files_path: str = None) -> None:
         self.host = host
         self.auth = auth
         self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
         self.LOCAL_BAGIT_FILES_PATH = local_bagit_files_path
+
+        # If no path is provided, default to 'bags' in the Current Working Directory
+        if local_bagit_files_path:
+            self.LOCAL_BAGIT_FILES_PATH = local_bagit_files_path
+        else:
+            self.LOCAL_BAGIT_FILES_PATH = str(Path.cwd() / "bags")
+
+        # Senior Tip: Add a check immediately to fail fast
+        if not os.path.exists(self.LOCAL_BAGIT_FILES_PATH):
+            # You might want to log a warning instead of raising, depending on your flow
+            logging.warning(f"Bag directory not found at: {self.LOCAL_BAGIT_FILES_PATH}")
 
     
     def ingest_bag(self, project_abbr: str, folder_name: str):

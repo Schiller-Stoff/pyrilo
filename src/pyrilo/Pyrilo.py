@@ -30,7 +30,7 @@ class Pyrilo:
     def __init__(self, host: str) -> None:
         self.configure(host)
 
-    def configure(self, host: str, local_bagit_files_path: str = PyriloStatics.LOCAL_BAGIT_FILES_PATH):
+    def configure(self, host: str, local_bagit_files_path: str = None):
         """
         Configures the Pyrilo instance, like setting the host of GAMS5.
         """
