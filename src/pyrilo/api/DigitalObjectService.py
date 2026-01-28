@@ -1,8 +1,7 @@
 
 import logging
-from PyriloStatics import PyriloStatics
-from api.DigitalObject import DigitalObject
-from typing import List
+from pyrilo.PyriloStatics import PyriloStatics
+from typing import List, Dict, Any
 from urllib3 import request, encode_multipart_formdata
 
 from pyrilo.api.auth.AuthCookie import AuthCookie
@@ -22,6 +21,21 @@ class DigitalObjectService:
         self.host = host
         self.auth = auth
         self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
+
+    def object_exists(self, id: str, project_abbr: str):
+        """
+        Checks if a digital object exists on the gams-api.
+        """
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
+        # use cookie header if available
+        headers = self.auth.build_auth_cookie_header() if self.auth else None
+        r = request("HEAD", url, headers=headers, redirect=False)
+
+        if r.status >= 400:
+            return False
+        else:
+            logging.debug(f"Successfully requested digital objects for project {project_abbr}.")
+            return True
 
     def save_object(self, id: str, project_abbr: str):
         """
@@ -43,13 +57,20 @@ class DigitalObjectService:
 
 
 
-    def list_objects(self, project_abbr: str):
+    def list_objects(self, project_abbr: str, object_ids: None | List[str] = None, page_index: int = 0):
         """
         Retrieves an overview over all digital objects for given project.
 
         """
+        # needed for recursion
+        if object_ids is None:
+            object_ids: List[str] = []
+        else:
+            # if a list of objects was already retrieved -> increment pageIndex
+            page_index += 1
 
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects?style=idlist"
+
+        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/ids?pageIndex={str(page_index)}"
         # use cookie header if available
         headers = self.auth.build_auth_cookie_header() if self.auth else None
         r = request("GET", url, headers=headers)
@@ -59,16 +80,23 @@ class DigitalObjectService:
             logging.error(msg)
             raise ConnectionError(msg)
         else:
+            logging.debug(f"Successfully GET requested digital objects for project {project_abbr}.")
+
+        # paginated object ids
+        paginated_response_object: Dict[str, Any] = r.json()
+        paginated_id_list = paginated_response_object.get("results")
+
+        # digital_object_ids: List[str] = []
+        for object_id in paginated_id_list:
+            object_ids.append(object_id)
+
+        # if pagination.hasNext = true
+        if paginated_response_object.get("pagination").get("hasNext") is True:
+            logging.debug("hasNext property in returned pagination is true -> calling now the method recursively to aggregate all digital objects")
+            return self.list_objects(project_abbr, object_ids, page_index)
+        else:
             logging.info(f"Successfully retrieved digital objects for project {project_abbr}.")
-        
-        response_object_list = r.json()
-        # TODO update! this will atm only return 10 objects because of pagination
-
-        digital_object_ids: List[str] = []
-        for response_object in response_object_list:
-            digital_object_ids.append(response_object)
-
-        return digital_object_ids
+            return object_ids
 
 
     def assign_child_objects(self, parent_id: str, children_ids: List[str], project_abbr: str):
@@ -113,22 +141,3 @@ class DigitalObjectService:
             msg = f"Failed to delete object {id} for project {project_abbr}. DELETE request against {url}. API response: {r.json()}"
             logging.error(msg)
             raise ConnectionError(msg)
-        else:
-            logging.info(f"Successfully deleted digital object with id {id}.")
-
-    def delete_objects(self, project_abbr: str):
-        """
-        Deletes all digital objects for given project.
-
-        """
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
-        # use cookie header if available
-        headers = self.auth.build_auth_cookie_header() if self.auth else None
-        r = request("DELETE", url, headers=headers, redirect=False, timeout=10)
-
-        if r.status >= 400:
-            msg = f"Failed to DELETE all objects for project {project_abbr}. DELETE request against {url}. API response: {r.json()}"
-            logging.error(msg)
-            raise ConnectionError(msg)
-        else:
-            logging.info(f"Successfully deleted all digital objects for project {project_abbr}.")

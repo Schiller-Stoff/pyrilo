@@ -2,24 +2,34 @@
 
 prototypical python based gams5 client application - as proxy against the REST-API.
 
-imitates the behavior of Cirilo in Python.
+imitates the behavior of cirilo in Python.
 
 # Quickstart
 
-## Deployment / usage
+### Usage
 
-1. Standard python venv workflow (initialize local venv, install from requirements.txt)
-2. Run pyrilo/main.py
+```sh
+# cd into project root directory
 
+# main command: syncs gams data with local bag files. (only one way folder --> GAMS5)
+pyrilo ingest hsa
 
-## Additional
-
-- Start venv via linux / wsl "source ./venv/bin/activate"
-- Install dependencies from requirements.txt (you might also have to install python-wheel on your machine to use fasttext)
-- Run main.py
+# check cli.py for additional arguments etc.
 
 
-# Dependencies
+```
+
+
+## Installation
+
+Via python rye
+
+1. Install uv on your machine basics section
+2. Run `uv sync` in the root directory of this project
+3. Activate uv generated .venv via `source .venv/bin/activate` (for linux) or `.venv\Scripts\activate` (for windows)
+4. Run `pyrilo` to start the application
+
+
+# External Dependencies
 
 - available GAMS5 instance (e.g. via docker-compose.yml)
-- python 3.12
