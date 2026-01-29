@@ -89,4 +89,3 @@ class DigitalObjectService:
         Deletes a digital object with given id.
         """
         self.client.delete(f"projects/{project_abbr}/objects/{id}")
-        logging.info(f"Successfully deleted object {id} for project {project_abbr}.")

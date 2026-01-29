@@ -1,15 +1,27 @@
 import logging
 import requests
+from typing import Optional
 from pyrilo.PyriloStatics import PyriloStatics
+
 
 class GamsApiClient:
     """
-    Central client for handling HTTP interactions with the GAMS5 API.
-    Wraps requests to handle URL construction, logging, and common error checking.
+    Owns the HTTP session and handles all low-level API interactions.
     """
+    session: requests.Session
+    host: str
+    api_base_url: str
 
-    def __init__(self, session: requests.Session, host: str):
-        self.session = session
+    def __init__(self, host: str):
+        # 1. Initialize Session internally
+        self.session = requests.Session()
+
+        # 2. Configure Headers (Moved from Pyrilo.py)
+        self.session.headers.update({
+            "User-Agent": "Pyrilo (Research Software)",
+            "Accept": "application/json"
+        })
+
         self.host = host.rstrip("/")
         self.api_base_url = f"{self.host}{PyriloStatics.API_ROOT}"
 
@@ -32,15 +44,6 @@ class GamsApiClient:
         return self._request("HEAD", endpoint, **kwargs)
 
     def _request(self, method: str, endpoint: str, raise_errors: bool = True, **kwargs) -> requests.Response:
-        """
-        Internal wrapper for requests.
-        :param endpoint: relative path from api root OR absolute url starting with httpö
-        """
-
-        if endpoint.startswith("http://"):
-            logging.warning(f"Found insecure http:// call in GamsApiClient. http:// should not be used in production:  {endpoint}")
-
-        # Refactoring: Support absolute URLs for Auth redirects/actions
         if endpoint.startswith("http://") or endpoint.startswith("https://"):
             url = endpoint
         else:
