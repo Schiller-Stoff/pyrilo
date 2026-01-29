@@ -1,12 +1,14 @@
 import logging
 import os
 
+import requests
+
 from pyrilo.PyriloStatics import PyriloStatics
 from pyrilo.api.CollectionService import CollectionService
 from pyrilo.api.DigitalObjectService import DigitalObjectService
 from pyrilo.api.IngestService import IngestService
 from pyrilo.api.IntegrationService import IntegrationService
-from typing import List
+from typing import List, Optional
 from pyrilo.api.ProjectService import ProjectService
 from pyrilo.api.auth.AuthorizationService import AuthorizationService
 
@@ -18,6 +20,13 @@ class Pyrilo:
     - check method names for more
     """
 
+    # Core components
+    session: requests.Session
+    host: str
+    api_base_url: str
+    local_bagit_files_path: Optional[str]
+
+    # Services
     digital_object_service: DigitalObjectService
     ingest_service: IngestService
     integration_service: IntegrationService
@@ -28,13 +37,32 @@ class Pyrilo:
     local_bagit_files_path: str
 
     def __init__(self, host: str) -> None:
+
+        # 1. Create the unified session
+        self.session = requests.Session()
+
+        # 2. Configure default headers (User-Agent, etc.)
+        self.session.headers.update({
+            "User-Agent": "Pyrilo/0.1.0 (Research Software)",
+            "Accept": "application/json"
+        })
+
+        # 3. Configure paths
         self.configure(host)
 
     def configure(self, host: str, local_bagit_files_path: str = None):
         """
         Configures the Pyrilo instance, like setting the host of GAMS5.
         """
-        self.authorization_service = AuthorizationService(host)
+        self.host = host.rstrip("/")  # Normalize host
+        self.api_base_url = f"{self.host}{PyriloStatics.API_ROOT}"
+        self.local_bagit_files_path = local_bagit_files_path
+
+        # 4. Inject the session and base URL into all services
+        # Note: We pass the session by reference. Changes to cookies in auth_service
+        # are instantly available to digital_object_service.
+        self.authorization_service = AuthorizationService(self.session, self.host)
+
         self.digital_object_service = DigitalObjectService(host)
         self.ingest_service = IngestService(host, local_bagit_files_path=local_bagit_files_path)
         self.integration_service = IntegrationService(host)
