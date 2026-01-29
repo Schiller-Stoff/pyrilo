@@ -180,30 +180,6 @@ def delete_object(ctx, project:str, object_id: str):
         logging.error(f"Failed to delete object: {e}")
         sys.exit(1)
 
-@cli.command(name="integrate", help="Integrates data of digital objects of a project with additional GAMS services like solr")
-@click.argument("project", required=True)
-@click.pass_context
-def integrate(ctx, project: str):
-    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
-    try:
-        pyrilo_app.setup_integration_services(project)
-        pyrilo_app.integrate_project_objects(project)
-    except Exception as e:
-        logging.error(f"Failed to integrate objects: {e}")
-        sys.exit(1)
-
-
-@click.command(name="disintegrate", help="Disintegrates data of digital objects of a project from additional GAMS services like solr")
-@click.argument("project", required=True)
-@click.pass_context
-def disintegrate(ctx, project: str):
-    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
-    try:
-        pyrilo_app.disintegrate_project_objects(project)
-    except Exception as e:
-        logging.error(f"Failed to disintegrate objects: {e}")
-        sys.exit(1)
-
 @click.group()
 def sync():
     """ Synchronization / integration commands for GAMS5 projects """
@@ -244,6 +220,4 @@ cli.add_command(create_project)
 cli.add_command(update_project)
 cli.add_command(delete_objects)
 cli.add_command(delete_object)
-cli.add_command(integrate)
-cli.add_command(disintegrate)
 cli.add_command(sync)
