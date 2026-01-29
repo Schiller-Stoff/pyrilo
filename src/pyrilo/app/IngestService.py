@@ -2,6 +2,7 @@ import logging
 import os
 from pathlib import Path
 from pyrilo.api.GamsApiClient import GamsApiClient
+# Import the new service
 from pyrilo.infrastructure.FileSystemService import FileSystemService
 
 class IngestService:
@@ -10,12 +11,16 @@ class IngestService:
     """
 
     client: GamsApiClient
+    file_system: FileSystemService  # New dependency
     LOCAL_BAGIT_FILES_PATH: str
 
+    # Updated constructor to accept file_system dependency
     def __init__(self,
                  client: GamsApiClient,
+                 file_system: FileSystemService,
                  local_bagit_files_path: str = None) -> None:
         self.client = client
+        self.file_system = file_system
 
         if local_bagit_files_path:
             self.LOCAL_BAGIT_FILES_PATH = local_bagit_files_path
@@ -34,9 +39,8 @@ class IngestService:
         folder_path = os.path.join(self.LOCAL_BAGIT_FILES_PATH, folder_name)
         logging.debug(f"Zipping folder {folder_path} ...")
 
-        # Delegate IO complexity to the infrastructure service
         # This fixes the Windows bug and allows us to mock 'create_zip_from_folder' in tests.
-        zip_content = FileSystemService.create_zip_from_folder(folder_path)
+        zip_content = self.file_system.create_zip_from_folder(folder_path)
 
         # Prepare for requests
         files_payload = {
@@ -59,10 +63,9 @@ class IngestService:
         """
         Walks through project directory and ingest the bags as individual objects.
         """
-        # REFACTORED: Use the service to get folders.
         # This makes it easy to mock an empty list or a specific list of folders in tests.
         try:
-            subfolders = FileSystemService.list_subdirectories(self.LOCAL_BAGIT_FILES_PATH)
+            subfolders = self.file_system.list_subdirectories(self.LOCAL_BAGIT_FILES_PATH)
         except Exception as e:
             logging.error(f"Could not list bags directory: {e}")
             return

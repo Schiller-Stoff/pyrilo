@@ -14,6 +14,7 @@ from pyrilo.app.IntegrationService import IntegrationService
 from pyrilo.api.Project.exceptions import ProjectAlreadyExistsError
 from pyrilo.api.Project.ProjectService import ProjectService
 from pyrilo.api.auth.AuthorizationService import AuthorizationService
+from pyrilo.infrastructure.FileSystemService import FileSystemService
 
 
 # 1. Configure Logging Helper
@@ -32,7 +33,7 @@ def bootstrap_application(host: str, bag_root: str) -> Pyrilo:
     The Composition Root.
     Constructs the object graph and returns the fully assembled application.
     """
-    # 1. Infrastructure / Core Clients
+
     # Resolve the path here, not deep inside the service
     if bag_root:
         resolved_bag_path = str(Path(bag_root).resolve())
@@ -41,12 +42,18 @@ def bootstrap_application(host: str, bag_root: str) -> Pyrilo:
 
     client = GamsApiClient(host)
 
-    # 2. Services (Injecting the client)
+
+    # Services (Injecting the client)
     auth_service = AuthorizationService(client)
     digital_object_service = DigitalObjectService(client)
 
+    file_system_service = FileSystemService()
     # IngestService needs both client and the file path
-    ingest_service = IngestService(client, local_bagit_files_path=resolved_bag_path)
+    ingest_service = IngestService(
+        client,
+        file_system_service,
+        local_bagit_files_path=resolved_bag_path
+    )
 
     integration_service = IntegrationService(client)
     project_service = ProjectService(client)

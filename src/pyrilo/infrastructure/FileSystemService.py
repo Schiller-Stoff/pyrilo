@@ -10,8 +10,7 @@ class FileSystemService:
     Encapsulates file system operations to isolate side effects (IO) from business logic.
     """
 
-    @staticmethod
-    def list_subdirectories(path: str) -> List[str]:
+    def list_subdirectories(self, path: str) -> List[str]:
         """
         Returns a list of subdirectory names in the given path.
         """
@@ -24,10 +23,11 @@ class FileSystemService:
             if os.path.isdir(os.path.join(path, name))
         ]
 
-    @staticmethod
-    def create_zip_from_folder(folder_path: str) -> bytes:
+    def create_zip_from_folder(self, folder_path: str) -> bytes:
         """
         Zips the contents of a folder into an in-memory bytes object.
+
+        Refactoring Benefit:
         - Uses io.BytesIO instead of tempfile, avoiding disk IO entirely.
         - Fixes the Windows 'PermissionError' caused by reading a file while it is still open.
         """
