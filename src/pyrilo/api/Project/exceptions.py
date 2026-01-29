@@ -8,5 +8,10 @@ class ProjectError(PyriloError):
 
 class ProjectAlreadyExistsError(ProjectError):
     """
+    Gams project already exist
+    """
 
+class ProjectNotFoundError(ProjectError):
+    """
+    Gams project not found
     """
