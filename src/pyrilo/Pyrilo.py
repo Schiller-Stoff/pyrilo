@@ -16,8 +16,8 @@ from pyrilo.api.auth.AuthorizationService import AuthorizationService
 class Pyrilo:
     """
     Provides abstractions for the usage of GAMS5 REST-API, like:
-    - ingesting SIPs as digital objects and datastreams
-    - check method names for more
+    - ingesting bags as digital objects and datastreams
+    - creation of projects etc.
     """
 
     # Core components
@@ -33,8 +33,6 @@ class Pyrilo:
     authorization_service: AuthorizationService
     project_service: ProjectService
     collection_service: CollectionService
-    host: str
-    local_bagit_files_path: str
 
     def __init__(self, host: str) -> None:
 
@@ -43,7 +41,7 @@ class Pyrilo:
 
         # 2. Configure default headers (User-Agent, etc.)
         self.session.headers.update({
-            "User-Agent": "Pyrilo/0.1.0 (Research Software)",
+            "User-Agent": "Pyrilo (Research Software)",
             "Accept": "application/json"
         })
 
@@ -77,12 +75,7 @@ class Pyrilo:
         Logs in to the GAMS5 instance.
         """
         # first login
-        auth_cookie = self.authorization_service.login()
-        # set auth info on classes
-        self.digital_object_service.auth = auth_cookie
-        self.ingest_service.auth = auth_cookie
-        self.integration_service.auth = auth_cookie
-        self.project_service.auth = auth_cookie
+        self.authorization_service.login()
 
     def list_objects(self, project_abbr: str) -> List[str]:
         """
@@ -93,7 +86,7 @@ class Pyrilo:
 
     def save_object(self, id: str, project_abbr: str):
         """
-        Creates a digital object 
+        Creates a digital object
         """
         return self.digital_object_service.save_object(id, project_abbr)
 
@@ -107,10 +100,8 @@ class Pyrilo:
         """
         Deletes a digital object
         """
-        try:
-            return self.digital_object_service.delete_object(id, project_abbr)
-        except Exception as e:
-            logging.error(f"Failed to delete object {id} in project {project_abbr}: {e}")
+
+        return self.digital_object_service.delete_object(id, project_abbr)
 
     def delete_objects(self, project_abbr: str):
         """
@@ -127,23 +118,37 @@ class Pyrilo:
         """
         if self.digital_object_service.object_exists(sip_folder_name, project_abbr):
             self.delete_object(sip_folder_name, project_abbr)
-            logging.info(f"Successfully deleted object: {sip_folder_name} for ingest")
+            logging.info(f"Successfully deleted existing object: {sip_folder_name} for ingest")
 
 
-        try:
-            self.ingest_service.ingest_bag(project_abbr, sip_folder_name)
-        except Exception as e:
-            logging.error(f"Failed to ingest bag {sip_folder_name}")
+        self.ingest_service.ingest_bag(project_abbr, sip_folder_name)
 
     def ingest_bags(self, project_abbr: str):
         """
         Ingests all bags from the local bag structure.
         """
-        # loop through folders and delete
+
+        if not self.local_bagit_files_path:
+            raise ValueError("Local bag path is not configured.")
+
+        failures = []
+
         for folder_name in os.listdir(self.local_bagit_files_path):
-            object_id = folder_name
-            self.ingest_bag(project_abbr, folder_name)
-            logging.info(f"Successfully ingested object {object_id}")
+            # Basic filter (you might want to improve this)
+            if not folder_name.startswith(project_abbr):
+                continue
+
+            try:
+                logging.info(f"Starting ingest for: {folder_name}")
+                self.ingest_bag(project_abbr, folder_name)
+                logging.info(f"Successfully ingested: {folder_name}")
+            except Exception as e:
+                logging.error(f"FAILED to ingest {folder_name}: {e}")
+                failures.append(folder_name)
+
+        # Critical: If there were failures, we should probably let the caller know
+        if failures:
+            raise RuntimeError(f"Batch ingest completed with {len(failures)} errors: {failures}")
 
     def integrate_project_objects(self, project_abbr: str):
         """
@@ -201,7 +206,7 @@ class Pyrilo:
         # optionally delete all objects first
         # self.delete_objects(project_abbr)
 
-        # delete all indices from dependend services
+        # delete all indices from dependent services
         # self.disintegrate_project_objects(project_abbr)
 
         # ingesting all bags from the local bag structure admin
@@ -212,11 +217,7 @@ class Pyrilo:
         """
         Creates a new project with given abbreviation and description.
         """
-        try:
-            self.project_service.save_project(project_abbr, description)
-        except ValueError as e:
-            msg = f"Skipping project creation: Failed to create project: {e}"
-            logging.error(msg)
+        self.project_service.save_project(project_abbr, description)
 
     def update_project(self, project_abbr: str, description: str):
         """
