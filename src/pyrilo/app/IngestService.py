@@ -1,10 +1,8 @@
 import logging
 import os
-import tempfile
 from pathlib import Path
-import zipfile
 from pyrilo.api.GamsApiClient import GamsApiClient
-
+from pyrilo.infrastructure.FileSystemService import FileSystemService
 
 class IngestService:
     """
@@ -14,7 +12,9 @@ class IngestService:
     client: GamsApiClient
     LOCAL_BAGIT_FILES_PATH: str
 
-    def __init__(self, client: GamsApiClient, local_bagit_files_path: str = None) -> None:
+    def __init__(self,
+                 client: GamsApiClient,
+                 local_bagit_files_path: str = None) -> None:
         self.client = client
 
         if local_bagit_files_path:
@@ -22,6 +22,8 @@ class IngestService:
         else:
             self.LOCAL_BAGIT_FILES_PATH = str(Path.cwd() / "bags")
 
+        # We can leave this check here as a sanity check, or move it.
+        # Since it's configuration validation, it's acceptable here.
         if not os.path.exists(self.LOCAL_BAGIT_FILES_PATH):
             logging.warning(f"Bag directory not found at: {self.LOCAL_BAGIT_FILES_PATH}")
 
@@ -32,44 +34,40 @@ class IngestService:
         folder_path = os.path.join(self.LOCAL_BAGIT_FILES_PATH, folder_name)
         logging.debug(f"Zipping folder {folder_path} ...")
 
-        with tempfile.NamedTemporaryFile(suffix='.zip', delete=False) as tempf:
-            with zipfile.ZipFile(tempf.name, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                for root, dirs, files in os.walk(folder_path):
-                    for file in files:
-                        zipf.write(os.path.join(root, file),
-                                   os.path.relpath(os.path.join(root, file), folder_path))
+        # Delegate IO complexity to the infrastructure service
+        # This fixes the Windows bug and allows us to mock 'create_zip_from_folder' in tests.
+        zip_content = FileSystemService.create_zip_from_folder(folder_path)
 
-            # Read the file back into memory
-            tempf.seek(0)
-            zip_content = tempf.read()
+        # Prepare for requests
+        files_payload = {
+            "subInfoPackZIP": ("bag.zip", zip_content, "application/zip")
+        }
+        data_payload = {
+            "ingestProfile": "simple"
+        }
 
-            # Prepare for requests
-            files_payload = {
-                "subInfoPackZIP": ("bag.zip", zip_content, "application/zip")
-            }
-            data_payload = {
-                "ingestProfile": "simple"
-            }
+        logging.debug(f"Requesting ingest for project {project_abbr} ...")
 
-            logging.debug(f"Requesting ingest for project {project_abbr} ...")
-
-            # We use the client to post. raise_errors=True is default.
-            self.client.post(
-                f"projects/{project_abbr}/objects",
-                files=files_payload,
-                data=data_payload,
-                timeout=100
-            )
+        self.client.post(
+            f"projects/{project_abbr}/objects",
+            files=files_payload,
+            data=data_payload,
+            timeout=100
+        )
 
     def ingest_bags(self, project_abbr: str):
         """
         Walks through project directory and ingest the bags as individual objects.
         """
-        bags_dir = self.LOCAL_BAGIT_FILES_PATH
-        for folder_name in os.listdir(bags_dir):
-            if not os.path.isdir(os.path.join(bags_dir, folder_name)):
-                continue
+        # REFACTORED: Use the service to get folders.
+        # This makes it easy to mock an empty list or a specific list of folders in tests.
+        try:
+            subfolders = FileSystemService.list_subdirectories(self.LOCAL_BAGIT_FILES_PATH)
+        except Exception as e:
+            logging.error(f"Could not list bags directory: {e}")
+            return
 
+        for folder_name in subfolders:
             try:
                 if folder_name.startswith(project_abbr):
                     self.ingest_bag(project_abbr, folder_name)
