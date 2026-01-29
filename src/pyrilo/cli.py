@@ -8,11 +8,12 @@ import requests
 
 from pyrilo.Pyrilo import Pyrilo
 from pyrilo.api.CollectionService import CollectionService
-from pyrilo.api.DigitalObjectService import DigitalObjectService
+from pyrilo.api.DigitalObject.DigitalObjectService import DigitalObjectService
 from pyrilo.api.GamsApiClient import GamsApiClient
 from pyrilo.api.IngestService import IngestService
 from pyrilo.api.IntegrationService import IntegrationService
-from pyrilo.api.ProjectService import ProjectService
+from pyrilo.api.Project.exceptions import ProjectAlreadyExistsError
+from pyrilo.api.Project.ProjectService import ProjectService
 from pyrilo.api.auth.AuthorizationService import AuthorizationService
 
 
@@ -122,7 +123,7 @@ def ingest(ctx, project: str):
         # We can try to create, but if it fails (e.g. exists), we might want to continue
         try:
             pyrilo_app.create_project(project, "Auto-created by ingest")
-        except ValueError:
+        except ProjectAlreadyExistsError:
             logging.info(f"Project {project} already exists (or creation failed non-fatally). Continuing...")
 
         pyrilo_app.ingest_bags(project)
@@ -140,6 +141,7 @@ def create_project(ctx, project: str, desc: str):
     pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
         pyrilo_app.create_project(project, desc)
+        logging.info(f"Successfully created project: {project}")
     except Exception as e:
         logging.error(f"Failed to create project: {e}")
         sys.exit(1)

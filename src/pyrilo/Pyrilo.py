@@ -3,12 +3,13 @@ import os
 from typing import List, Optional
 
 from pyrilo.api.CollectionService import CollectionService
-from pyrilo.api.DigitalObjectService import DigitalObjectService
+from pyrilo.api.DigitalObject.DigitalObjectService import DigitalObjectService
 from pyrilo.api.GamsApiClient import GamsApiClient
 from pyrilo.api.IngestService import IngestService
 from pyrilo.api.IntegrationService import IntegrationService
-from pyrilo.api.ProjectService import ProjectService
+from pyrilo.api.Project.ProjectService import ProjectService
 from pyrilo.api.auth.AuthorizationService import AuthorizationService
+from pyrilo.exceptions import PyriloConflictError, PyriloNetworkError
 
 
 class Pyrilo:
@@ -237,7 +238,11 @@ class Pyrilo:
         """
         try:
             self.project_service.trigger_project_integration(project_abbr)
-        except ConnectionError:
-            pass
-            msg = f"Skipping setup of integration service for project: Integration service already created: {project_abbr}"
-            logging.warning(msg)
+        except PyriloConflictError:
+            # THIS is the specific case we want to ignore (it already exists)
+            msg = f"Integration service already setup for project: {project_abbr}"
+            logging.info(msg)  # Info, not warning, since this is expected behavior
+        except PyriloNetworkError:
+            # Do NOT catch this silently. If the network is down, the user must know.
+            # We let it bubble up, or re-raise with context.
+            raise

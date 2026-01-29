@@ -2,6 +2,8 @@ import logging
 import requests
 from typing import Optional
 from pyrilo.PyriloStatics import PyriloStatics
+from pyrilo.exceptions import PyriloAuthenticationError, PyriloPermissionError, PyriloNotFoundError, \
+    PyriloConflictError, PyriloApiError, PyriloNetworkError
 
 
 class GamsApiClient:
@@ -54,13 +56,34 @@ class GamsApiClient:
         try:
             response = self.session.request(method, url, **kwargs)
         except requests.RequestException as e:
+            # Context: This is a low-level network failure (DNS, Timeout)
             msg = f"Network failure connecting to {url}: {e}"
             logging.error(msg)
-            raise ConnectionError(msg)
+            raise PyriloNetworkError(msg) from e
 
-        if raise_errors and response.status_code >= 400:
-            msg = f"Failed to request {method} {url}. Status: {response.status_code}. Response: {response.text}"
-            logging.error(msg)
-            raise ConnectionError(msg)
+        if raise_errors:
+            self._handle_error_status(response)
 
         return response
+
+    def _handle_error_status(self, response: requests.Response):
+        """Maps HTTP status codes to Pyrilo exceptions."""
+        if response.status_code < 400:
+            return
+
+        code = response.status_code
+        msg = f"API Error {code} for {response.url}: {response.text}"
+
+        logging.error(msg)
+
+        if code == 401:
+            raise PyriloAuthenticationError(msg, code, response.text)
+        elif code == 403:
+            raise PyriloPermissionError(msg, code, response.text)
+        elif code == 404:
+            raise PyriloNotFoundError(msg, code, response.text)
+        elif code == 409:
+            raise PyriloConflictError(msg, code, response.text)
+        else:
+            # Fallback for 500s or other 4xx
+            raise PyriloApiError(msg, code, response.text)
