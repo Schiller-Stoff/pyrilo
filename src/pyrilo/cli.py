@@ -77,7 +77,7 @@ def cli(ctx, host: str, bag_root: str, verbose: bool):
     setup_logging(verbose)
     ctx.ensure_object(dict)
 
-    # Initialize Client
+    # Initialize pyrilo-app
     try:
         pyrilo_app = bootstrap_application(host, bag_root)
 
@@ -97,7 +97,7 @@ def cli(ctx, host: str, bag_root: str, verbose: bool):
         # 3. Pass credentials to the service
         pyrilo_app.login(username, password)
 
-        ctx.obj['CLIENT'] = pyrilo_app
+        ctx.obj['PYRILO_APP'] = pyrilo_app
 
     except requests.exceptions.ConnectionError:
         logging.critical(f"Could not connect to GAMS host: {host}")
@@ -117,15 +117,15 @@ def cli(ctx, host: str, bag_root: str, verbose: bool):
 @click.pass_context
 def ingest(ctx, project: str):
     """Ingest bags for a project."""
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
         # We can try to create, but if it fails (e.g. exists), we might want to continue
         try:
-            client.create_project(project, "Auto-created by ingest")
+            pyrilo_app.create_project(project, "Auto-created by ingest")
         except ValueError:
             logging.info(f"Project {project} already exists (or creation failed non-fatally). Continuing...")
 
-        client.ingest_bags(project)
+        pyrilo_app.ingest_bags(project)
         logging.info("Ingest complete.")
     except Exception as e:
         logging.critical(f"Ingest failed: {e}")
@@ -137,9 +137,9 @@ def ingest(ctx, project: str):
 @click.argument("desc", required=False, default="")
 @click.pass_context
 def create_project(ctx, project: str, desc: str):
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
-        client.create_project(project, desc)
+        pyrilo_app.create_project(project, desc)
     except Exception as e:
         logging.error(f"Failed to create project: {e}")
         sys.exit(1)
@@ -149,9 +149,9 @@ def create_project(ctx, project: str, desc: str):
 @click.argument("desc", required=False)
 @click.pass_context
 def update_project(ctx, project: str, desc: str):
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
-        client.update_project(project, desc)
+        pyrilo_app.update_project(project, desc)
     except Exception as e:
         logging.error(f"Failed to update project: {e}")
         sys.exit(1)
@@ -161,9 +161,9 @@ def update_project(ctx, project: str, desc: str):
 @click.argument("project", required=True)
 @click.pass_context
 def delete_objects(ctx, project: str):
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
-        client.delete_objects(project)
+        pyrilo_app.delete_objects(project)
     except Exception as e:
         logging.error(f"Failed to delete objects: {e}")
         sys.exit(1)
@@ -174,9 +174,9 @@ def delete_objects(ctx, project: str):
 @click.argument("object_id", required=True)
 @click.pass_context
 def delete_object(ctx, project:str, object_id: str):
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
-        client.delete_object(object_id, project)
+        pyrilo_app.delete_object(object_id, project)
     except Exception as e:
         logging.error(f"Failed to delete object: {e}")
         sys.exit(1)
@@ -192,9 +192,9 @@ def create_collection(ctx, project: str, id: str, title: str, desc: str):
     Creates a GAMS collection of digital objects.
     A collection must have an "owning project".
     """
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
-        client.create_collection(project, id, title, desc)
+        pyrilo_app.create_collection(project, id, title, desc)
     except Exception as e:
         logging.error(f"Failed to create collection: {e}")
         sys.exit(1)
@@ -208,9 +208,9 @@ def delete_collection(ctx, project: str, id: str):
     """
     Deletes a GAMS collection
     """
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
-        client.delete_collection(project, id)
+        pyrilo_app.delete_collection(project, id)
     except Exception as e:
         logging.error(f"Failed to delete collection: {e}")
         sys.exit(1)
@@ -219,10 +219,10 @@ def delete_collection(ctx, project: str, id: str):
 @click.argument("project", required=True)
 @click.pass_context
 def integrate(ctx, project: str):
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
-        client.setup_integration_services(project)
-        client.integrate_project_objects(project)
+        pyrilo_app.setup_integration_services(project)
+        pyrilo_app.integrate_project_objects(project)
     except Exception as e:
         logging.error(f"Failed to integrate objects: {e}")
         sys.exit(1)
@@ -232,9 +232,9 @@ def integrate(ctx, project: str):
 @click.argument("project", required=True)
 @click.pass_context
 def disintegrate(ctx, project: str):
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
-        client.disintegrate_project_objects(project)
+        pyrilo_app.disintegrate_project_objects(project)
     except Exception as e:
         logging.error(f"Failed to disintegrate objects: {e}")
         sys.exit(1)
@@ -249,12 +249,12 @@ def sync():
 @click.option("--remove", "-r", default=False, help="If set, removes all data from the custom_search service", is_flag=True)
 @click.pass_context
 def base_search(ctx, project: str, remove: bool):
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
         if remove:
-            client.disintegrate_project_objects_custom_search(project)
+            pyrilo_app.disintegrate_project_objects_custom_search(project)
         else:
-            client.integrate_project_objects_custom_search(project)
+            pyrilo_app.integrate_project_objects_custom_search(project)
     except Exception as e:
         logging.error(f"Failed to integrate objects: {e}")
         sys.exit(1)
@@ -264,12 +264,12 @@ def base_search(ctx, project: str, remove: bool):
 @click.option("--remove", "-r", default=False, help="If set, removes all data from the custom_search service", is_flag=True)
 @click.pass_context
 def plexus_search(ctx, project: str, remove: bool):
-    client: Pyrilo = ctx.obj['CLIENT']
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
     try:
         if remove:
-            client.disintegrate_project_objects_plexus_search(project)
+            pyrilo_app.disintegrate_project_objects_plexus_search(project)
         else:
-            client.integrate_project_objects_plexus_search(project)
+            pyrilo_app.integrate_project_objects_plexus_search(project)
     except Exception as e:
         logging.error(f"Failed to integrate objects: {e}")
         sys.exit(1)
