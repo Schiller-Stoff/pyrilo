@@ -1,9 +1,9 @@
 import sys
+import os
 from pathlib import Path
 
 import click
 import logging
-
 import requests
 
 from pyrilo.Pyrilo import Pyrilo
@@ -17,7 +17,6 @@ def setup_logging(verbose: bool = False):
         datefmt='%H:%M:%S',
         force=True
     )
-
 
 @click.group()
 @click.option("--host", "-h", default="http://localhost:18085", help="The host of the GAMS5 instance")
@@ -43,13 +42,29 @@ def cli(ctx, host: str, bag_root: str, verbose: bool):
 
         client.configure(host, resolved_path)
 
-        # Login is the first point of failure
-        client.login()
+        # Handle Credentials at the CLI/Entrypoint layer
+        # 1. Try Environment Variables first (Best for CI/CD/Docker)
+        username = os.environ.get("PYRILO_USER")
+        password = os.environ.get("PYRILO_PASSWORD")
+
+        # 2. If not found, prompt the user interactively
+        if not username or not password:
+            click.echo(f"Authentication required for {host}")
+            if not username:
+                username = click.prompt("Username")
+            if not password:
+                password = click.prompt("Password", hide_input=True)
+
+        # 3. Pass credentials to the service
+        client.login(username, password)
 
         ctx.obj['CLIENT'] = client
 
     except requests.exceptions.ConnectionError:
         logging.critical(f"Could not connect to GAMS host: {host}")
+        sys.exit(1)
+    except ValueError as e:
+        logging.critical(f"Configuration/Auth Error: {e}")
         sys.exit(1)
     except Exception as e:
         logging.critical(f"Initialization failed: {e}")

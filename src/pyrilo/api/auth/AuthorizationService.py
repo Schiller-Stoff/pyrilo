@@ -1,7 +1,6 @@
 import logging
 import requests
 from urllib.parse import urljoin
-from getpass import getpass
 from pyrilo.PyriloStatics import PyriloStatics
 from pyrilo.api.auth.LoginFormParser import LoginFormParser
 
@@ -15,6 +14,7 @@ class AuthorizationService:
         """
         Performs authentication.
         Raises PermissionError if credentials are rejected.
+        Raises ValueError if credentials are required but not provided.
         """
         login_url = f"{self.host}{PyriloStatics.AUTH_ENDPOINT}"
 
@@ -35,7 +35,6 @@ class AuthorizationService:
 
             if not parser.action:
                 # If we can't find a form, we might already be logged in.
-                # But if we intended to login and can't find a form, it's safer to warn.
                 logging.warning("No login form found. Assuming already authenticated or non-standard page.")
                 return
 
@@ -43,11 +42,11 @@ class AuthorizationService:
             if not action_url.startswith('http'):
                 action_url = urljoin(response.url, action_url)
 
-            # 3. Get Credentials
-            if not username:
-                print(f"Logging in to {self.host}")
-                username = input("Username: ")
-                password = getpass("Password: ")
+            # 3. Validate Credentials
+            # Refactoring: Removed interactive input() logic.
+            # Credentials must be passed in or we fail.
+            if not username or not password:
+                raise ValueError("Authentication required: Credentials were not provided to the AuthorizationService.")
 
             # 4. Submit Form
             payload = {'username': username, 'password': password, 'credentialId': ''}
@@ -69,7 +68,6 @@ class AuthorizationService:
                 raise PermissionError("Login failed: Invalid credentials (server returned error param).")
 
             # Check 3: Did we land back on the login page?
-            # If the response still contains a password input field, the server likely re-rendered the form.
             if 'type="password"' in post_response.text.lower():
                 raise PermissionError("Login failed: Login form detected in response content.")
 

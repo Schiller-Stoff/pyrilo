@@ -70,12 +70,12 @@ class Pyrilo:
         self.local_bagit_files_path = local_bagit_files_path
 
 
-    def login(self):
+    def login(self, username: str = None, password: str = None):
         """
         Logs in to the GAMS5 instance.
         """
         # first login
-        self.authorization_service.login()
+        self.authorization_service.login(username, password)
 
     def list_objects(self, project_abbr: str) -> List[str]:
         """
