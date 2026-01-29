@@ -6,6 +6,7 @@ import requests
 from pyrilo.PyriloStatics import PyriloStatics
 from pyrilo.api.CollectionService import CollectionService
 from pyrilo.api.DigitalObjectService import DigitalObjectService
+from pyrilo.api.GamsApiClient import GamsApiClient
 from pyrilo.api.IngestService import IngestService
 from pyrilo.api.IntegrationService import IntegrationService
 from typing import List, Optional
@@ -21,6 +22,7 @@ class Pyrilo:
     """
 
     # Core components
+    client: GamsApiClient
     session: requests.Session
     host: str
     api_base_url: str
@@ -56,10 +58,13 @@ class Pyrilo:
         self.api_base_url = f"{self.host}{PyriloStatics.API_ROOT}"
         self.local_bagit_files_path = local_bagit_files_path
 
+        # Initialize the Centralized Client
+        self.client = GamsApiClient(self.session, self.host)
+
         # 4. Inject the session and base URL into all services
         # Note: We pass the session by reference. Changes to cookies in auth_service
         # are instantly available to digital_object_service.
-        self.authorization_service = AuthorizationService(self.session, self.host)
+        self.authorization_service = AuthorizationService(self.client)
 
         self.digital_object_service = DigitalObjectService(self.session, host)
         self.ingest_service = IngestService(self.session, host, local_bagit_files_path=local_bagit_files_path)

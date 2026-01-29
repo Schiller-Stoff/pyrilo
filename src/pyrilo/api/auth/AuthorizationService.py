@@ -1,22 +1,20 @@
 import logging
-import requests
 from urllib.parse import urljoin
-from pyrilo.PyriloStatics import PyriloStatics
+from pyrilo.api.GamsApiClient import GamsApiClient  # <--- Changed from requests
 from pyrilo.api.auth.LoginFormParser import LoginFormParser
 
 
 class AuthorizationService:
-    def __init__(self, session: requests.Session, host: str):
-        self.session = session
-        self.host = host
+    # 1. Inject the Client, not the Session
+    def __init__(self, client: GamsApiClient):
+        self.client = client
 
     def login(self, username: str = None, password: str = None) -> None:
         """
-        Performs authentication.
-        Raises PermissionError if credentials are rejected.
-        Raises ValueError if credentials are required but not provided.
+        Performs authentication using the shared GamsApiClient.
         """
-        login_url = f"{self.host}{PyriloStatics.AUTH_ENDPOINT}"
+        # 2. Use 'auth' endpoint. The client automatically prepends {host}/api/v1/
+        # This replaces: login_url = f"{self.host}{PyriloStatics.AUTH_ENDPOINT}"
 
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -24,56 +22,48 @@ class AuthorizationService:
             'Upgrade-Insecure-Requests': '1'
         }
 
-        try:
-            # 1. Get the login page
-            response = self.session.get(login_url, headers=headers)
-            response.raise_for_status()
+        # 3. Use client.get()
+        # We assume the API returns HTML here, but client.get returns the response object, so that's fine.
+        response = self.client.get("auth", headers=headers)
+        response.raise_for_status()
 
-            # 2. Parse the login form
-            parser = LoginFormParser()
-            parser.feed(response.text)
+        # Parsing the keycloak form
+        parser = LoginFormParser()
+        parser.feed(response.text)
 
-            if not parser.action:
-                # If we can't find a form, we might already be logged in.
-                logging.warning("No login form found. Assuming already authenticated or non-standard page.")
-                return
+        if not parser.action:
+            # If we can't find a form, we might already be logged in.
+            logging.warning("No login form found. Assuming already authenticated or non-standard page.")
+            return
 
-            action_url = parser.action
-            if not action_url.startswith('http'):
-                action_url = urljoin(response.url, action_url)
+        action_url = parser.action
+        logging.debug("Redirecting to keycloak url: ", action_url)
+        if not action_url.startswith('http'):
+            # This creates an absolute URL
+            action_url = urljoin(response.url, action_url)
 
-            # 3. Validate Credentials
-            # Refactoring: Removed interactive input() logic.
-            # Credentials must be passed in or we fail.
-            if not username or not password:
-                raise ValueError("Authentication required: Credentials were not provided to the AuthorizationService.")
+        if not username or not password:
+            raise ValueError("Authentication required...")
 
-            # 4. Submit Form
-            payload = {'username': username, 'password': password, 'credentialId': ''}
-            payload.update(parser.hidden_inputs)
+        payload = {'username': username, 'password': password, 'credentialId': ''}
+        payload.update(parser.hidden_inputs)
 
-            logging.info("Submitting credentials...")
+        # 4. Use client.post() with the absolute URL (handled by our client upgrade)
+        post_response = self.client.post(action_url, data=payload, headers=headers)
 
-            # Post request
-            post_response = self.session.post(action_url, data=payload, headers=headers)
+        # --- VALIDATION LOGIC START ---
 
-            # --- VALIDATION LOGIC START ---
+        # Check 1: HTTP Error Codes (401/403)
+        if post_response.status_code >= 400:
+            raise PermissionError(f"Login failed with status {post_response.status_code}.")
 
-            # Check 1: HTTP Error Codes (401/403)
-            if post_response.status_code >= 400:
-                raise PermissionError(f"Login failed with status {post_response.status_code}.")
+        # Check 2: "error" in URL (Common Spring/Java pattern: /login?error)
+        if "error" in post_response.url.lower():
+            raise PermissionError("Login failed: Invalid credentials (server returned error param).")
 
-            # Check 2: "error" in URL (Common Spring/Java pattern: /login?error)
-            if "error" in post_response.url.lower():
-                raise PermissionError("Login failed: Invalid credentials (server returned error param).")
+        # Check 3: Did we land back on the login page?
+        if 'type="password"' in post_response.text.lower():
+            raise PermissionError("Login failed: Login form detected in response content.")
 
-            # Check 3: Did we land back on the login page?
-            if 'type="password"' in post_response.text.lower():
-                raise PermissionError("Login failed: Login form detected in response content.")
-
-            # --- VALIDATION LOGIC END ---
-
-            logging.info("Login successful (session cookie established).")
-
-        except requests.RequestException as e:
-            raise ConnectionError(f"Login network failure: {e}")
+        # --- VALIDATION LOGIC END ---
+        logging.info("Login successful (session cookie established).")
