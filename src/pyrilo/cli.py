@@ -7,6 +7,14 @@ import logging
 import requests
 
 from pyrilo.Pyrilo import Pyrilo
+from pyrilo.api.CollectionService import CollectionService
+from pyrilo.api.DigitalObjectService import DigitalObjectService
+from pyrilo.api.GamsApiClient import GamsApiClient
+from pyrilo.api.IngestService import IngestService
+from pyrilo.api.IntegrationService import IntegrationService
+from pyrilo.api.ProjectService import ProjectService
+from pyrilo.api.auth.AuthorizationService import AuthorizationService
+
 
 # 1. Configure Logging Helper
 def setup_logging(verbose: bool = False):
@@ -18,6 +26,45 @@ def setup_logging(verbose: bool = False):
         force=True
     )
 
+
+def bootstrap_application(host: str, bag_root: str) -> Pyrilo:
+    """
+    The Composition Root.
+    Constructs the object graph and returns the fully assembled application.
+    """
+    # 1. Infrastructure / Core Clients
+    # Resolve the path here, not deep inside the service
+    if bag_root:
+        resolved_bag_path = str(Path(bag_root).resolve())
+    else:
+        resolved_bag_path = str(Path.cwd() / "bags")
+
+    client = GamsApiClient(host)
+
+    # 2. Services (Injecting the client)
+    auth_service = AuthorizationService(client)
+    digital_object_service = DigitalObjectService(client)
+
+    # IngestService needs both client and the file path
+    ingest_service = IngestService(client, local_bagit_files_path=resolved_bag_path)
+
+    integration_service = IntegrationService(client)
+    project_service = ProjectService(client)
+    collection_service = CollectionService(client)
+
+    # 3. Facade (Injecting the services)
+    app = Pyrilo(
+        bag_root,
+        authorization_service=auth_service,
+        digital_object_service=digital_object_service,
+        ingest_service=ingest_service,
+        integration_service=integration_service,
+        project_service=project_service,
+        collection_service=collection_service
+    )
+
+    return app
+
 @click.group()
 @click.option("--host", "-h", default="http://localhost:18085", help="The host of the GAMS5 instance")
 @click.option("--bag_root", "-r", default=None, help="Root folder path of the bagit files. Defaults to ./bags")
@@ -28,19 +75,11 @@ def cli(ctx, host: str, bag_root: str, verbose: bool):
     Pyrilo is a command line tool for managing your GAMS5 project.
     """
     setup_logging(verbose)
-
     ctx.ensure_object(dict)
 
     # Initialize Client
     try:
-        client = Pyrilo(host)
-
-        if bag_root:
-            resolved_path = str(Path(bag_root).resolve())
-        else:
-            resolved_path = str(Path.cwd() / "bags")
-
-        client.configure(host, resolved_path)
+        pyrilo_app = bootstrap_application(host, bag_root)
 
         # Handle Credentials at the CLI/Entrypoint layer
         # 1. Try Environment Variables first (Best for CI/CD/Docker)
@@ -56,9 +95,9 @@ def cli(ctx, host: str, bag_root: str, verbose: bool):
                 password = click.prompt("Password", hide_input=True)
 
         # 3. Pass credentials to the service
-        client.login(username, password)
+        pyrilo_app.login(username, password)
 
-        ctx.obj['CLIENT'] = client
+        ctx.obj['CLIENT'] = pyrilo_app
 
     except requests.exceptions.ConnectionError:
         logging.critical(f"Could not connect to GAMS host: {host}")

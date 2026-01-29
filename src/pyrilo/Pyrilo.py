@@ -31,32 +31,24 @@ class Pyrilo:
     project_service: ProjectService
     collection_service: CollectionService
 
-    def __init__(self, host: str) -> None:
-        self.configure(host)
+    def __init__(self,
+                 local_bagit_files_path: str,
+                 authorization_service: AuthorizationService,
+                 digital_object_service: DigitalObjectService,
+                 ingest_service: IngestService,
+                 integration_service: IntegrationService,
+                 project_service: ProjectService,
+                 collection_service: CollectionService,
+                 ) -> None:
 
-    def configure(self, host: str, local_bagit_files_path: str = None):
-        """
-        Configures the Pyrilo instance, like setting the host of GAMS5.
-        """
-        self.host = host.rstrip("/")  # Normalize host
         self.local_bagit_files_path = local_bagit_files_path
 
-        # Initialize the Centralized Client
-        self.client = GamsApiClient(self.host)
-
-        # 4. Inject the session and base URL into all services
-        # Note: We pass the session by reference. Changes to cookies in auth_service
-        # are instantly available to digital_object_service.
-        self.authorization_service = AuthorizationService(self.client)
-
-        self.digital_object_service = DigitalObjectService(self.client)
-        self.ingest_service = IngestService(self.client, local_bagit_files_path=local_bagit_files_path)
-        self.integration_service = IntegrationService(self.client)
-        self.project_service = ProjectService(self.client)
-        self.collection_service = CollectionService(self.client)
-        self.host = host
-        self.local_bagit_files_path = local_bagit_files_path
-
+        self.authorization_service = authorization_service
+        self.digital_object_service = digital_object_service
+        self.ingest_service = ingest_service
+        self.integration_service = integration_service
+        self.project_service = project_service
+        self.collection_service = collection_service
 
     def login(self, username: str = None, password: str = None):
         """
