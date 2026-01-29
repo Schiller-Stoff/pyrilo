@@ -7,7 +7,6 @@ import logging
 import requests
 
 from pyrilo.Pyrilo import Pyrilo
-from pyrilo.api.CollectionService import CollectionService
 from pyrilo.api.DigitalObject.DigitalObjectService import DigitalObjectService
 from pyrilo.api.GamsApiClient import GamsApiClient
 from pyrilo.api.IngestService import IngestService
@@ -51,7 +50,6 @@ def bootstrap_application(host: str, bag_root: str) -> Pyrilo:
 
     integration_service = IntegrationService(client)
     project_service = ProjectService(client)
-    collection_service = CollectionService(client)
 
     # 3. Facade (Injecting the services)
     app = Pyrilo(
@@ -60,8 +58,7 @@ def bootstrap_application(host: str, bag_root: str) -> Pyrilo:
         digital_object_service=digital_object_service,
         ingest_service=ingest_service,
         integration_service=integration_service,
-        project_service=project_service,
-        collection_service=collection_service
+        project_service=project_service
     )
 
     return app
@@ -181,40 +178,6 @@ def delete_object(ctx, project:str, object_id: str):
         pyrilo_app.delete_object(object_id, project)
     except Exception as e:
         logging.error(f"Failed to delete object: {e}")
-        sys.exit(1)
-
-@cli.command(name="create_collection", help="Creates a collection of digital objects on the GAMS-API.")
-@click.argument("project", required=True)
-@click.argument("id", required=True)
-@click.argument("title", required=True)
-@click.argument("desc", required=False)
-@click.pass_context
-def create_collection(ctx, project: str, id: str, title: str, desc: str):
-    """
-    Creates a GAMS collection of digital objects.
-    A collection must have an "owning project".
-    """
-    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
-    try:
-        pyrilo_app.create_collection(project, id, title, desc)
-    except Exception as e:
-        logging.error(f"Failed to create collection: {e}")
-        sys.exit(1)
-
-
-@cli.command(name="delete_collection", help="Deletes a collection of digital objects on the GAMS-API.")
-@click.argument("project", required=True)
-@click.argument("id", required=True)
-@click.pass_context
-def delete_collection(ctx, project: str, id: str):
-    """
-    Deletes a GAMS collection
-    """
-    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
-    try:
-        pyrilo_app.delete_collection(project, id)
-    except Exception as e:
-        logging.error(f"Failed to delete collection: {e}")
         sys.exit(1)
 
 @cli.command(name="integrate", help="Integrates data of digital objects of a project with additional GAMS services like solr")

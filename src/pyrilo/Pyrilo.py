@@ -1,8 +1,6 @@
 import logging
 import os
 from typing import List, Optional
-
-from pyrilo.api.CollectionService import CollectionService
 from pyrilo.api.DigitalObject.DigitalObjectService import DigitalObjectService
 from pyrilo.api.GamsApiClient import GamsApiClient
 from pyrilo.api.IngestService import IngestService
@@ -30,7 +28,6 @@ class Pyrilo:
     integration_service: IntegrationService
     authorization_service: AuthorizationService
     project_service: ProjectService
-    collection_service: CollectionService
 
     def __init__(self,
                  local_bagit_files_path: str,
@@ -38,8 +35,7 @@ class Pyrilo:
                  digital_object_service: DigitalObjectService,
                  ingest_service: IngestService,
                  integration_service: IntegrationService,
-                 project_service: ProjectService,
-                 collection_service: CollectionService,
+                 project_service: ProjectService
                  ) -> None:
 
         self.local_bagit_files_path = local_bagit_files_path
@@ -49,7 +45,6 @@ class Pyrilo:
         self.ingest_service = ingest_service
         self.integration_service = integration_service
         self.project_service = project_service
-        self.collection_service = collection_service
 
     def login(self, username: str = None, password: str = None):
         """
@@ -211,26 +206,6 @@ class Pyrilo:
         Deletes a project.
         """
         self.project_service.delete_project(project_abbr)
-
-    def create_collection(self,project_abbr: str, collection_id: str, title: str, desc: str):
-        """
-        Creates a GAMS collection
-        """
-        self.collection_service.save_collection(
-            project_abbr=project_abbr,
-            collection_id=collection_id,
-            title=title,
-            desc=desc
-        )
-
-    def delete_collection(self, project_abbr: str, collection_id: str):
-        """
-        Deletes specified collection entry
-        """
-        self.collection_service.delete_collection(
-            project_abbr=project_abbr,
-            collection_id=collection_id
-        )
 
     def setup_integration_services(self, project_abbr: str):
         """
