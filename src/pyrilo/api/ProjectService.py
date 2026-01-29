@@ -1,25 +1,19 @@
 import logging
-from pyrilo.PyriloStatics import PyriloStatics
-import requests
+from pyrilo.api.GamsApiClient import GamsApiClient
 
 
 class ProjectService:
-    """
-    Handles requests against the GAMS5 API for projects using requests.Session.
-    """
-    session: requests.Session
-    host: str
-    API_BASE_PATH: str
+    client: GamsApiClient
 
-    def __init__(self, session: requests.Session, host: str) -> None:
-        self.host = host
-        self.session = session
-        self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
+    def __init__(self, client: GamsApiClient) -> None:
+        self.client = client
 
     def save_project(self, project_abbr: str, description: str):
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}"
-
-        r = self.session.put(url, json={"description": description})
+        r = self.client.put(
+            f"projects/{project_abbr}",
+            json={"description": description},
+            raise_errors=False
+        )
 
         if r.status_code == 409:
             msg = f"Project with abbreviation {project_abbr} already exists."
@@ -30,16 +24,18 @@ class ProjectService:
             logging.error(msg)
             raise PermissionError(msg)
         elif r.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {r.text}"
+            msg = f"Failed to save project. Status: {r.status_code}. Response: {r.text}"
             logging.error(msg)
             raise ConnectionError(msg)
         else:
             logging.info(f"Successfully created project with abbreviation {project_abbr}.")
 
     def update_project(self, project_abbr: str, description: str):
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}"
-
-        r = self.session.patch(url, json={"description": description})
+        r = self.client.patch(
+            f"projects/{project_abbr}",
+            json={"description": description},
+            raise_errors=False
+        )
 
         if r.status_code == 403:
             msg = f"User is not authorized to update the project '{project_abbr}'."
@@ -50,31 +46,17 @@ class ProjectService:
             logging.error(msg)
             raise ValueError(msg)
         elif r.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {r.text}"
+            msg = f"Failed to update project. Status: {r.status_code}. Response: {r.text}"
             logging.error(msg)
             raise ConnectionError(msg)
         else:
             logging.info(f"Successfully updated project with abbreviation {project_abbr}.")
 
     def delete_project(self, project_abbr: str):
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}"
-
-        r = self.session.delete(url)
-
-        if r.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {r.text}"
-            logging.error(msg)
-            raise ConnectionError(msg)
-        else:
-            logging.info(f"Successfully deleted project with abbreviation {project_abbr}.")
+        # Default error handling is sufficient here (>= 400 raises ConnectionError)
+        self.client.delete(f"projects/{project_abbr}")
+        logging.info(f"Successfully deleted project with abbreviation {project_abbr}.")
 
     def trigger_project_integration(self, project_abbr: str):
-        url = f"{self.API_BASE_PATH}/integration/projects/{project_abbr}/objects/search/setup"
-
-        r = self.session.post(url)
-
-        if r.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {r.text}"
-            raise ConnectionError(msg)
-        else:
-            logging.info(f"Successfully created project integration for {project_abbr}.")
+        self.client.post(f"integration/projects/{project_abbr}/objects/search/setup")
+        logging.info(f"Successfully created project integration for {project_abbr}.")

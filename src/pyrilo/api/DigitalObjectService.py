@@ -1,30 +1,27 @@
 import logging
-from pyrilo.PyriloStatics import PyriloStatics
-from typing import List, Dict, Any
-import requests
+from typing import List, Dict, Any, Optional
+from pyrilo.api.GamsApiClient import GamsApiClient
 
 
 class DigitalObjectService:
     """
-    Service class for operations on digital objects using requests.Session.
+    Service class for operations on digital objects using GamsApiClient.
     """
-    session: requests.Session
-    host: str
-    API_BASE_PATH: str
+    client: GamsApiClient
 
-    def __init__(self, session: requests.Session, host: str) -> None:
-        self.host = host
-        self.session = session
-        self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
+    def __init__(self, client: GamsApiClient) -> None:
+        self.client = client
 
-    def object_exists(self, id: str, project_abbr: str):
+    def object_exists(self, id: str, project_abbr: str) -> bool:
         """
         Checks if a digital object exists on the gams-api.
         """
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
-
-        # Requests handles cookies automatically via the session
-        r = self.session.head(url)
+        # We disable auto-error raising because a 404 simply means "False" here,
+        # not a system failure.
+        r = self.client.head(
+            f"projects/{project_abbr}/objects/{id}",
+            raise_errors=False
+        )
 
         if r.status_code >= 400:
             return False
@@ -36,45 +33,36 @@ class DigitalObjectService:
         """
         Creates digital object for project with given id.
         """
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
+        self.client.put(f"projects/{project_abbr}/objects/{id}")
+        logging.info(f"Successfully created digital object with id {id} for project {project_abbr}.")
 
-        r = self.session.put(url)
-
-        if r.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {r.text}"
-            logging.error(msg)
-            raise ConnectionError(msg)
-        else:
-            logging.info(f"Successfully created digital object with id {id} for project {project_abbr}.")
-
-    def list_objects(self, project_abbr: str, object_ids: None | List[str] = None, page_index: int = 0):
+    def list_objects(self, project_abbr: str, object_ids: Optional[List[str]] = None, page_index: int = 0):
         """
         Retrieves an overview over all digital objects for given project.
         """
         if object_ids is None:
-            object_ids: List[str] = []
+            object_ids = []
         else:
             page_index += 1
 
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/ids"
         params = {"pageIndex": str(page_index)}
 
-        r = self.session.get(url, params=params)
+        # The client handles the URL and error checking (>= 400) automatically
+        r = self.client.get(
+            f"projects/{project_abbr}/objects/ids",
+            params=params
+        )
 
-        if r.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {r.text}"
-            logging.error(msg)
-            raise ConnectionError(msg)
-        else:
-            logging.debug(f"Successfully GET requested digital objects for project {project_abbr}.")
+        logging.debug(f"Successfully GET requested digital objects for project {project_abbr}.")
 
         paginated_response_object: Dict[str, Any] = r.json()
-        paginated_id_list = paginated_response_object.get("results")
+        paginated_id_list = paginated_response_object.get("results", [])
 
-        for object_id in paginated_id_list:
-            object_ids.append(object_id)
+        # Append current page results
+        object_ids.extend(paginated_id_list)
 
-        if paginated_response_object.get("pagination").get("hasNext") is True:
+        # Check for recursion
+        if paginated_response_object.get("pagination", {}).get("hasNext") is True:
             logging.debug("hasNext property in returned pagination is true -> recursing")
             return self.list_objects(project_abbr, object_ids, page_index)
         else:
@@ -85,30 +73,20 @@ class DigitalObjectService:
         """
         Assigns child objects to a parent object.
         """
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{parent_id}/collect"
-
         child_ids_string = ",".join(children_ids)
-        # Requests automatically sets boundary for files/multipart, but here we are sending fields
+        # We pass data (form fields) just like in standard requests
         data = {"childObjects": child_ids_string}
 
-        r = self.session.patch(url, data=data)
+        self.client.patch(
+            f"projects/{project_abbr}/objects/{parent_id}/collect",
+            data=data
+        )
 
-        if r.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {r.text}"
-            logging.error(msg)
-            raise ConnectionError(msg)
-        else:
-            logging.info(f"Successfully assigned child-objects to object {parent_id} for project {project_abbr}.")
+        logging.info(f"Successfully assigned child-objects to object {parent_id} for project {project_abbr}.")
 
     def delete_object(self, id: str, project_abbr: str):
         """
         Deletes a digital object with given id.
         """
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects/{id}"
-
-        r = self.session.delete(url)
-
-        if r.status_code >= 400:
-            msg = f"Failed to delete object {id} for project {project_abbr}. API response: {r.text}"
-            logging.error(msg)
-            raise ConnectionError(msg)
+        self.client.delete(f"projects/{project_abbr}/objects/{id}")
+        logging.info(f"Successfully deleted object {id} for project {project_abbr}.")

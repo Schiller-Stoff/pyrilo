@@ -1,37 +1,32 @@
 import logging
-from pyrilo.PyriloStatics import PyriloStatics
-import requests
+from pyrilo.api.GamsApiClient import GamsApiClient
 
 
 class CollectionService:
-    session: requests.Session
-    host: str
-    API_BASE_PATH: str
+    client: GamsApiClient
 
-    def __init__(self, session: requests.Session, host: str) -> None:
-        self.host = host
-        self.session = session
-        self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
+    def __init__(self, client: GamsApiClient) -> None:
+        self.client = client
 
     def delete_collection(self, project_abbr: str, collection_id: str):
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/collections/{collection_id}"
-
-        r = self.session.delete(url)
+        # We disable auto-raising errors because we want to handle 404 specifically
+        r = self.client.delete(
+            f"projects/{project_abbr}/collections/{collection_id}",
+            raise_errors=False
+        )
 
         if r.status_code == 404:
             msg = f"Collection with id {collection_id} for project {project_abbr} does not exist!"
             logging.info(msg)
             raise ValueError(msg)
         elif r.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {r.text}"
+            msg = f"Failed to delete collection {collection_id}. Status: {r.status_code}. Response: {r.text}"
             logging.error(msg)
             raise ConnectionError(msg)
         else:
             logging.info(f"Successfully deleted collection {collection_id} for project {project_abbr}.")
 
     def save_collection(self, project_abbr: str, collection_id: str, title: str, desc: str):
-        url = f"{self.API_BASE_PATH}/projects/{project_abbr}/collections/{collection_id}"
-
         request_body = {
             "id": collection_id,
             "project": {
@@ -41,7 +36,11 @@ class CollectionService:
             "description": desc
         }
 
-        r = self.session.put(url, json=request_body)
+        r = self.client.put(
+            f"projects/{project_abbr}/collections/{collection_id}",
+            json=request_body,
+            raise_errors=False
+        )
 
         if r.status_code == 409:
             msg = f"Collection with id {collection_id} already exists."
@@ -52,7 +51,7 @@ class CollectionService:
             logging.error(msg)
             raise PermissionError(msg)
         elif r.status_code >= 400:
-            msg = f"Failed to request against {url}. API response: {r.text}"
+            msg = f"Failed to create collection. Status: {r.status_code}. Response: {r.text}"
             logging.error(msg)
             raise ConnectionError(msg)
         else:

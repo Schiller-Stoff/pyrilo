@@ -66,11 +66,11 @@ class Pyrilo:
         # are instantly available to digital_object_service.
         self.authorization_service = AuthorizationService(self.client)
 
-        self.digital_object_service = DigitalObjectService(self.session, host)
-        self.ingest_service = IngestService(self.session, host, local_bagit_files_path=local_bagit_files_path)
-        self.integration_service = IntegrationService(self.session, host)
-        self.project_service = ProjectService(self.session, host)
-        self.collection_service = CollectionService(self.session, host)
+        self.digital_object_service = DigitalObjectService(self.client)
+        self.ingest_service = IngestService(self.client, local_bagit_files_path=local_bagit_files_path)
+        self.integration_service = IntegrationService(self.client)
+        self.project_service = ProjectService(self.client)
+        self.collection_service = CollectionService(self.client)
         self.host = host
         self.local_bagit_files_path = local_bagit_files_path
 

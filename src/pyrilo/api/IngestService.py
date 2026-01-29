@@ -2,26 +2,20 @@ import logging
 import os
 import tempfile
 from pathlib import Path
-from pyrilo.PyriloStatics import PyriloStatics
-import requests
 import zipfile
+from pyrilo.api.GamsApiClient import GamsApiClient
 
 
 class IngestService:
     """
-    Zips and sends bags to the GAMS5 REST-API using requests.Session.
+    Zips and sends bags to the GAMS5 REST-API using GamsApiClient.
     """
 
-    session: requests.Session
-    host: str
-    API_BASE_PATH: str
+    client: GamsApiClient
     LOCAL_BAGIT_FILES_PATH: str
 
-    def __init__(self, session: requests.Session, host: str, local_bagit_files_path: str = None) -> None:
-        self.session = session
-        self.host = host
-        self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
-        self.LOCAL_BAGIT_FILES_PATH = local_bagit_files_path
+    def __init__(self, client: GamsApiClient, local_bagit_files_path: str = None) -> None:
+        self.client = client
 
         if local_bagit_files_path:
             self.LOCAL_BAGIT_FILES_PATH = local_bagit_files_path
@@ -45,28 +39,27 @@ class IngestService:
                         zipf.write(os.path.join(root, file),
                                    os.path.relpath(os.path.join(root, file), folder_path))
 
-            # Read the file back into memory (as per original implementation)
+            # Read the file back into memory
             tempf.seek(0)
             zip_content = tempf.read()
 
-            # Ingest zip file
-            url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
-            logging.debug(f"Requesting against {url} ...")
-
-            # Prepare for requests: files dict and data dict
-            files = {
+            # Prepare for requests
+            files_payload = {
                 "subInfoPackZIP": ("bag.zip", zip_content, "application/zip")
             }
-            data = {
+            data_payload = {
                 "ingestProfile": "simple"
             }
 
-            # Requests automatically handles Content-Type and Boundary for multipart/form-data
-            r = self.session.post(url, files=files, data=data, timeout=100)
+            logging.debug(f"Requesting ingest for project {project_abbr} ...")
 
-            if r.status_code >= 400:
-                msg = f"Failed to request against {url}. API response: {r.text}"
-                raise ConnectionError(msg)
+            # We use the client to post. raise_errors=True is default.
+            self.client.post(
+                f"projects/{project_abbr}/objects",
+                files=files_payload,
+                data=data_payload,
+                timeout=100
+            )
 
     def ingest_bags(self, project_abbr: str):
         """
