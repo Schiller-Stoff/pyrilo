@@ -3,87 +3,77 @@ import os
 import tempfile
 from pathlib import Path
 from pyrilo.PyriloStatics import PyriloStatics
-from urllib3 import encode_multipart_formdata, request
+import requests
 import zipfile
-from pyrilo.api.auth.AuthCookie import AuthCookie
+
 
 class IngestService:
     """
-    Zips and sends bags to the GAMS5 REST-API with correspondent http requests.
+    Zips and sends bags to the GAMS5 REST-API using requests.Session.
     """
 
-    auth: AuthCookie | None = None
+    session: requests.Session
     host: str
-    # do some error control? (should not contain trailing slashes etc.) 
     API_BASE_PATH: str
-    # points to folder containing the bag files
     LOCAL_BAGIT_FILES_PATH: str
 
-
-    def __init__(self, host: str, auth: AuthCookie | None = None, local_bagit_files_path: str = None) -> None:
+    def __init__(self, session: requests.Session, host: str, local_bagit_files_path: str = None) -> None:
+        self.session = session
         self.host = host
-        self.auth = auth
         self.API_BASE_PATH = f"{host}{PyriloStatics.API_ROOT}"
         self.LOCAL_BAGIT_FILES_PATH = local_bagit_files_path
 
-        # If no path is provided, default to 'bags' in the Current Working Directory
         if local_bagit_files_path:
             self.LOCAL_BAGIT_FILES_PATH = local_bagit_files_path
         else:
             self.LOCAL_BAGIT_FILES_PATH = str(Path.cwd() / "bags")
 
-        # Senior Tip: Add a check immediately to fail fast
         if not os.path.exists(self.LOCAL_BAGIT_FILES_PATH):
-            # You might want to log a warning instead of raising, depending on your flow
             logging.warning(f"Bag directory not found at: {self.LOCAL_BAGIT_FILES_PATH}")
 
-    
     def ingest_bag(self, project_abbr: str, folder_name: str):
         """
-        Ingests given given folder from the local bag structure.
+        Ingests defined folder from the local bag structure.
         """
-        
-        # find folder? 
-
-        # validate folder? 
-
-        folder_path =  os.path.join(self.LOCAL_BAGIT_FILES_PATH, folder_name)
+        folder_path = os.path.join(self.LOCAL_BAGIT_FILES_PATH, folder_name)
         logging.debug(f"Zipping folder {folder_path} ...")
 
-        # zip files / folder
         with tempfile.NamedTemporaryFile(suffix='.zip', delete=False) as tempf:
             with zipfile.ZipFile(tempf.name, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 for root, dirs, files in os.walk(folder_path):
                     for file in files:
-                        zipf.write(os.path.join(root, file), 
-                                os.path.relpath(os.path.join(root, file), folder_path))
-                        
-            # ingest zip file
-            url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
+                        zipf.write(os.path.join(root, file),
+                                   os.path.relpath(os.path.join(root, file), folder_path))
 
+            # Read the file back into memory (as per original implementation)
+            tempf.seek(0)
+            zip_content = tempf.read()
+
+            # Ingest zip file
+            url = f"{self.API_BASE_PATH}/projects/{project_abbr}/objects"
             logging.debug(f"Requesting against {url} ...")
 
-            # use cookie header if available
-            headers = self.auth.build_auth_cookie_header() if self.auth else None
-            body_form_data, content_type = self.create_multipart_formdata(tempf.read())
-            headers["Content-Type"] = content_type
+            # Prepare for requests: files dict and data dict
+            files = {
+                "subInfoPackZIP": ("bag.zip", zip_content, "application/zip")
+            }
+            data = {
+                "ingestProfile": "simple"
+            }
 
-            # construct a multipart request via formdata
-            r = request("POST", url, headers=headers, redirect=False, body=body_form_data, timeout=100)
+            # Requests automatically handles Content-Type and Boundary for multipart/form-data
+            r = self.session.post(url, files=files, data=data, timeout=100)
 
-            # include CSRF token? (NOT NECESSARY FROM PYTHON CLIENT?)
-
-            if r.status >= 400:
-                msg = f"Failed to request against {url}. API response: {r.json()}"
+            if r.status_code >= 400:
+                msg = f"Failed to request against {url}. API response: {r.text}"
                 raise ConnectionError(msg)
-            
+
     def ingest_bags(self, project_abbr: str):
         """
         Walks through project directory and ingest the bags as individual objects.
         """
         bags_dir = self.LOCAL_BAGIT_FILES_PATH
         for folder_name in os.listdir(bags_dir):
-            # skip files
             if not os.path.isdir(os.path.join(bags_dir, folder_name)):
                 continue
 
@@ -93,23 +83,3 @@ class IngestService:
             except Exception as e:
                 logging.error(f"Failed to ingest bag {folder_name} for project {project_abbr}: {e}")
                 continue
-
-    def create_multipart_formdata(self, data, filename="bag.zip"):
-        """
-        Creates multipart formdata request body for the given data.
-
-        Args:
-            data: The zip file content as bytes
-            filename: The filename to use in the multipart request
-
-        Returns:
-            Tuple of (body, content_type)
-        """
-        form_multipart = {
-            "subInfoPackZIP": (filename, data, "application/zip"),  # ✅ CORRECT - file tuple
-            # TODO remove (is required atm)
-            "ingestProfile": "simple"
-        }
-
-        body, content_type = encode_multipart_formdata(form_multipart, boundary=None)
-        return body, content_type
