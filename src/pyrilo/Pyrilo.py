@@ -3,8 +3,8 @@ import os
 from typing import List, Optional
 from pyrilo.api.DigitalObject.DigitalObjectService import DigitalObjectService
 from pyrilo.api.GamsApiClient import GamsApiClient
-from pyrilo.api.IngestService import IngestService
-from pyrilo.api.IntegrationService import IntegrationService
+from pyrilo.app.IngestService import IngestService
+from pyrilo.app.IntegrationService import IntegrationService
 from pyrilo.api.Project.ProjectService import ProjectService
 from pyrilo.api.auth.AuthorizationService import AuthorizationService
 from pyrilo.exceptions import PyriloConflictError, PyriloNetworkError
