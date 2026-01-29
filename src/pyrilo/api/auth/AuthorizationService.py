@@ -35,6 +35,7 @@ class AuthorizationService:
             if not parser.action:
                 raise ValueError("Could not find a login form action URL.")
 
+            # TODO unclear - what is with http redirects? - should throw
             action_url = parser.action
             if not action_url.startswith('http'):
                 action_url = urljoin(response.url, action_url)
