@@ -1,0 +1,19 @@
+# make test, coverage, documentation, etc
+SHELL := /bin/bash
+
+.PHONY: all test clean build
+
+all: init test lint build
+
+init:
+    @uv sync
+
+test:
+	@uv run pytest tests
+
+lint:
+	@uv run ruff check src
+
+build:
+	@uv build
+
