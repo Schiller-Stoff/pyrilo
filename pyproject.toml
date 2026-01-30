@@ -1,9 +1,9 @@
 [project]
 name = "pyrilo"
 version = "0.1.0"
-description = "Add your description here"
+description = "CLI tool for data ingest against the gams5-api"
 authors = [
-    { name = "Sebastian Schiller-Stoff", email = "sebastian.stoff@uni-graz.at" }
+    { name = "Sebastian David Schiller-Stoff", email = "sebastian.stoff@uni-graz.at" }
 ]
 dependencies = [
     "click>=8.3.1",
