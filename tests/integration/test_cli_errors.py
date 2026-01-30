@@ -8,7 +8,7 @@ def test_cli_fails_gracefully_on_auth_error(mock_pyrilo_ingest_env):
     gams_api_mock, test_pyrilo_project = mock_pyrilo_ingest_env
 
     # Override the login action to fail
-    gams_api_mock.post("http://test-gams.local/login-action", status_code=401)
+    gams_api_mock.post(f"{test_pyrilo_project.TEST_HOST}/login-action", status_code=401)
 
     runner = CliRunner()
     result = runner.invoke(cli, [
@@ -30,7 +30,7 @@ def test_cli_fails_on_network_error(mock_pyrilo_ingest_env):
 
     # Mock a connection exception for the auth endpoint
     import requests
-    gams_api_mock.get("http://test-gams.local/api/v1/auth", exc=requests.exceptions.ConnectionError)
+    gams_api_mock.get(f"{test_pyrilo_project.TEST_HOST}/api/v1/auth", exc=requests.exceptions.ConnectionError)
 
     runner = CliRunner()
     result = runner.invoke(cli, [

@@ -32,7 +32,7 @@ def test_create_project_fails_if_exists(mock_pyrilo_ingest_env):
     gams_api_mock, test_pyrilo_project = mock_pyrilo_ingest_env
 
     # Override the default 201 response with a 409 Conflict
-    gams_api_mock.put("http://test-gams.local/api/v1/projects/demo", status_code=409)
+    gams_api_mock.put(f"{test_pyrilo_project.TEST_HOST}/api/v1/projects/demo", status_code=409)
 
     runner = CliRunner()
     result = runner.invoke(cli, [
