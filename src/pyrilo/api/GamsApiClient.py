@@ -1,6 +1,7 @@
 import logging
+
 import requests
-from typing import Optional
+
 from pyrilo.PyriloStatics import PyriloStatics
 from pyrilo.exceptions import PyriloAuthenticationError, PyriloPermissionError, PyriloNotFoundError, \
     PyriloConflictError, PyriloApiError, PyriloNetworkError
