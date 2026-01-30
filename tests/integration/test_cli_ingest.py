@@ -1,61 +1,9 @@
-from unittest.mock import MagicMock, patch
 
-import pytest
 from click.testing import CliRunner
 
 # Import your actual entry point
 from pyrilo.cli import cli
-
-# --- Test Data & Configuration ---
-TEST_PROJECT = "demo_project"
-TEST_BAG_NAME = f"{TEST_PROJECT}_bag_001"
-MOCK_HOST = "http://test-gams.local"
-
-
-@pytest.fixture
-def mock_gams_api():
-    """
-    Patches the low-level requests.Session.request method.
-    This intercepts ALL HTTP calls made by pyrilo (Login, Head, Post, etc.)
-    and simulates a successful GAMS server.
-    """
-    with patch("requests.Session.request") as mock_request:
-        # Define a side_effect function to handle different endpoints dynamically
-        def api_side_effect(method, url, **kwargs):
-            # Create a generic successful response mock
-            response = MagicMock()
-            response.status_code = 200
-            response.text = "<html>Login Form</html>"
-            response.url = url
-
-            # 1. Handle Login (GET auth)
-            if "auth" in url and method == "GET":
-                # Returns a fake login form that your parser will accept
-                response.text = '<form action="/login-action"><input type="hidden" name="execution" value="123"/></form>'
-                return response
-
-            # 2. Handle Login Submission (POST login-action)
-            if "login-action" in url and method == "POST":
-                # Simulate successful login redirect
-                response.url = "http://test-gams.local/home"
-                return response
-
-            # 3. Handle Object Existence Check (HEAD objects/{id})
-            if f"objects/{TEST_BAG_NAME}" in url and method == "HEAD":
-                # Simulate that the object does NOT exist yet (so we don't try to delete it)
-                response.status_code = 404
-                return response
-
-            # 4. Handle Ingest (POST objects)
-            if "objects" in url and method == "POST":
-                response.status_code = 201  # Created
-                return response
-
-            # Default for anything else
-            return response
-
-        mock_request.side_effect = api_side_effect
-        yield mock_request
+from utils.TestPyriloProject import TestPyriloProject
 
 
 def test_cli_ingest_flow_success(tmp_path, mock_gams_api):
@@ -75,7 +23,7 @@ def test_cli_ingest_flow_success(tmp_path, mock_gams_api):
     # 1. Setup: Create a fake bag structure in a temporary directory
     # Structure: /tmp/bags/demo_project_bag_001/data.txt
     bags_root = tmp_path / "bags"
-    bag_folder = bags_root / TEST_BAG_NAME
+    bag_folder = bags_root / TestPyriloProject.TEST_BAG_NAME
     bag_folder.mkdir(parents=True)
     (bag_folder / "data.txt").write_text("Hello GAMS")
 
@@ -91,10 +39,10 @@ def test_cli_ingest_flow_success(tmp_path, mock_gams_api):
     result = runner.invoke(
         cli,
         [
-            "--host", MOCK_HOST,
+            "--host", TestPyriloProject.MOCK_HOST,
             "--bag_root", str(bags_root),  # Point to our temp dir
             "--verbose",
-            "ingest", TEST_PROJECT
+            "ingest", TestPyriloProject.TEST_PROJECT
         ],
         env=env_vars
     )
@@ -112,7 +60,7 @@ def test_cli_ingest_flow_success(tmp_path, mock_gams_api):
     # Find the POST request to the objects endpoint
     upload_calls = [
         call for call in mock_gams_api.mock_calls
-        if "POST" in str(call) and f"projects/{TEST_PROJECT}/objects" in str(call)
+        if "POST" in str(call) and f"projects/{TestPyriloProject.TEST_PROJECT}/objects" in str(call)
     ]
 
     assert len(upload_calls) == 1, "Expected exactly one upload POST request"
