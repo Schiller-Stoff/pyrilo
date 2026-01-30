@@ -11,7 +11,7 @@ def mock_gams_api():
     Patches the requests library using requests-mock with regex patterns.
     """
     with requests_mock.Mocker() as m:
-        host = TestPyriloProject.MOCK_HOST
+        host = TestPyriloProject.TEST_HOST
         api_base = f"{host}/api/v1"
 
         # ------------------------------------------------------------------

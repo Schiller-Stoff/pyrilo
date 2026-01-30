@@ -33,7 +33,7 @@ def test_cli_ingest_flow_success(tmp_path, mock_pyrilo_ingest_env):
     result = runner.invoke(
         cli,
         [
-            "--host", test_pyrilo_project.MOCK_HOST,
+            "--host", test_pyrilo_project.TEST_HOST,
             "--bag_root", str(bags_root),  # points to the test data
             "--verbose",
             "ingest", test_pyrilo_project.TEST_PROJECT

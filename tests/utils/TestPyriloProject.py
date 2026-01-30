@@ -7,5 +7,5 @@ class TestPyriloProject:
     """
     TEST_PROJECT = "demo"
     TEST_BAG_NAME = "memo.person.1"
-    MOCK_HOST = "http://test-gams.local"
+    TEST_HOST = "http://test-gams.local"
     INGEST_BAGS_PATH =  Path(__file__).parent.parent / "resources" / "bags"

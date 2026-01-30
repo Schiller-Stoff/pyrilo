@@ -12,7 +12,7 @@ def test_cli_fails_gracefully_on_auth_error(mock_pyrilo_ingest_env):
 
     runner = CliRunner()
     result = runner.invoke(cli, [
-        "--host", test_pyrilo_project.MOCK_HOST,
+        "--host", test_pyrilo_project.TEST_HOST,
         "create_project", test_pyrilo_project.TEST_PROJECT
     ], env={"PYRILO_USER": "wrong", "PYRILO_PASSWORD": "wrong"})
 

@@ -10,7 +10,7 @@ def test_create_project_success(mock_pyrilo_ingest_env):
 
     runner = CliRunner()
     result = runner.invoke(cli, [
-        "--host", test_pyrilo_project.MOCK_HOST,
+        "--host", test_pyrilo_project.TEST_HOST,
         "create_project", test_pyrilo_project.TEST_PROJECT, "My Test Description"
     ], env={"PYRILO_USER": "u", "PYRILO_PASSWORD": "p"})
 
@@ -36,7 +36,7 @@ def test_create_project_fails_if_exists(mock_pyrilo_ingest_env):
 
     runner = CliRunner()
     result = runner.invoke(cli, [
-        "--host", test_pyrilo_project.MOCK_HOST,
+        "--host", test_pyrilo_project.TEST_HOST,
         "create_project", test_pyrilo_project.TEST_PROJECT
     ], env={"PYRILO_USER": "u", "PYRILO_PASSWORD": "p"})
 
