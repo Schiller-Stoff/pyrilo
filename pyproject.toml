@@ -1,17 +1,16 @@
 [project]
 name = "pyrilo"
 version = "0.1.0"
-description = "Add your description here"
+description = "CLI tool for data ingest against the gams5-api"
 authors = [
-    { name = "Sebastian Schiller-Stoff", email = "sebastian.stoff@uni-graz.at" }
+    { name = "Sebastian David Schiller-Stoff", email = "sebastian.stoff@uni-graz.at" }
 ]
 dependencies = [
-    "urllib3==2.0.7",
-    "click>=8.1.7",
-    "requests>=2.32.4",
+    "click>=8.3.1",
+    "requests>=2.32.4"
 ]
 readme = "README.md"
-requires-python = ">= 3.8"
+requires-python = ">= 3.12"
 
 [build-system]
 requires = ["hatchling"]
