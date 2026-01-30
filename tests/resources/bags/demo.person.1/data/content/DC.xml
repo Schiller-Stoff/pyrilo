@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+    <dc:identifier>demo.person.1</dc:identifier>
+    <dc:creator>Born digital - demo project GAMS</dc:creator>
+    <dc:title xml:lang="en">Erwin Adler</dc:title>
+    <dc:subject>Jüdische Opfer</dc:subject>
+    <dc:rights>Creative Commons BY-NC 4.0</dc:rights>
+    <dc:description xml:lang="de">Sohn von Adler Ignatz und Rosa, geb. Kronberger; als Geburtsdaten findet sich neben
+        dem 14.01.1884 auch der 14.02.1884; als Geburtsort neben Mürzzuschlag, Steiermark findet sich auch Lackenbach,
+        Burgenland; Deportation von Zagreb in unbekanntes Lager
+    </dc:description>
+    <dc:date>14.01.1884</dc:date>
+    <dc:language>de</dc:language>
+    <dc:publisher>Heimo Halbrainer (Hardcoded)</dc:publisher>
+    <dc:rights>Creative Commons BY-NC 4.0 (Hardcoded)</dc:rights>
+    <dc:rights>https://creativecommons.org/licenses/by-nc/4.0</dc:rights>
+    <dc:type>Dataset</dc:type>
+    <dc:format>Born digital: Eintrag in google Tabelle</dc:format>
+</oai_dc:dc>

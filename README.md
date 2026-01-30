@@ -1,8 +1,6 @@
 # Pyrilo
 
-prototypical python based gams5 client application - as proxy against the REST-API.
-
-imitates the behavior of cirilo in Python.
+CLI tool that ingests local bag files against gams5 
 
 # Quickstart
 
@@ -10,6 +8,7 @@ imitates the behavior of cirilo in Python.
 
 ```sh
 # cd into project root directory
+pyrilo # check commands provided by pyrilo
 
 # main command: syncs gams data with local bag files. (only one way folder --> GAMS5)
 pyrilo ingest hsa
@@ -19,10 +18,9 @@ pyrilo ingest hsa
 
 ```
 
-
 ## Installation
 
-Via python rye
+Via python uv
 
 1. Install uv on your machine basics section
 2. Run `uv sync` in the root directory of this project
