@@ -1,47 +1,49 @@
 from click.testing import CliRunner
 from pyrilo.cli import cli
-from utils.TestPyriloProject import TestPyriloProject
 
-
-def test_sync_custom_search_integrate(mock_gams_api):
+def test_sync_custom_search_integrate(mock_pyrilo_ingest_env):
     """
     Test 'pyrilo sync custom_search <project>' triggers the specific POST endpoint.
     """
+    gams_api_mock, test_pyrilo_project = mock_pyrilo_ingest_env
+
     # Register the specific custom search endpoint (since it's not in conftest generic regex)
     # Note: We use the exact URL we expect the code to hit
-    target_url = f"{TestPyriloProject.MOCK_HOST}/api/v1/integration/c-search/projects/demo/objects"
-    mock_gams_api.post(target_url, status_code=200)
+    target_url = f"{test_pyrilo_project.MOCK_HOST}/api/v1/integration/c-search/projects/demo/objects"
+    gams_api_mock.post(target_url, status_code=200)
 
     runner = CliRunner()
     result = runner.invoke(cli, [
-        "--host", TestPyriloProject.MOCK_HOST,
-        "sync", "custom_search", "demo"
+        "--host", test_pyrilo_project.MOCK_HOST,
+        "sync", "custom_search", test_pyrilo_project.TEST_PROJECT
     ], env={"PYRILO_USER": "u", "PYRILO_PASSWORD": "p"})
 
     assert result.exit_code == 0
 
     # Verify we hit the specific integration endpoint
-    history = mock_gams_api.request_history
+    history = gams_api_mock.request_history
     calls = [c for c in history if target_url in c.url and c.method == "POST"]
     assert len(calls) == 1
 
 
-def test_sync_plexus_search_remove(mock_gams_api):
+def test_sync_plexus_search_remove(mock_pyrilo_ingest_env):
     """
     Test 'pyrilo sync plexus_search <project> --remove' triggers the DELETE endpoint.
     """
-    target_url = f"{TestPyriloProject.MOCK_HOST}/api/v1/integration/plexus-search/projects/demo/objects"
-    mock_gams_api.delete(target_url, status_code=200)
+    gams_api_mock, test_pyrilo_project = mock_pyrilo_ingest_env
+
+    target_url = f"{test_pyrilo_project.MOCK_HOST}/api/v1/integration/plexus-search/projects/demo/objects"
+    gams_api_mock.delete(target_url, status_code=200)
 
     runner = CliRunner()
     result = runner.invoke(cli, [
-        "--host", TestPyriloProject.MOCK_HOST,
-        "sync", "plexus_search", "demo", "--remove"
+        "--host", test_pyrilo_project.MOCK_HOST,
+        "sync", "plexus_search", test_pyrilo_project.TEST_PROJECT, "--remove"
     ], env={"PYRILO_USER": "u", "PYRILO_PASSWORD": "p"})
 
     assert result.exit_code == 0
 
     # Verify DELETE method
-    history = mock_gams_api.request_history
+    history = gams_api_mock.request_history
     calls = [c for c in history if target_url in c.url and c.method == "DELETE"]
     assert len(calls) == 1
