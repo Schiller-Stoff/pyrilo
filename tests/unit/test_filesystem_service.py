@@ -1,6 +1,6 @@
-import os
-import zipfile
 import io
+import zipfile
+
 from pyrilo.infrastructure.FileSystemService import FileSystemService
 
 
