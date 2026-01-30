@@ -6,9 +6,9 @@ authors = [
     { name = "Sebastian Schiller-Stoff", email = "sebastian.stoff@uni-graz.at" }
 ]
 dependencies = [
-    "selenium>=4.25.0",
     "urllib3==2.0.7",
     "click>=8.1.7",
+    "requests>=2.32.4",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -22,6 +22,13 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pyrilo"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "requests-mock>=1.12.1",
+    "ruff>=0.14.14",
+]
 
 [project.scripts]
 pyrilo = "pyrilo.cli:cli"

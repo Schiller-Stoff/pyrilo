@@ -1,0 +1,61 @@
+{
+  "title": "Erwin Adler",
+  "project": "demo",
+  "description": "Sohn von Adler Ignatz und Rosa, geb. Kronberger; als Geburtsdaten findet sich neben dem 14.01.1884 auch der 14.02.1884; als Geburtsort neben Mürzzuschlag, Steiermark findet sich auch Lackenbach, Burgenland; Deportation von Zagreb in unbekanntes Lager",
+  "creator": "Born digital - demo project GAMS",
+  "rights": "Creative Commons BY-NC 4.0",
+  "publisher": "demo project GAMS5",
+  "source": "Demo datasheet transformed by Demo preprocessing tool",
+  "recid": "demo.person.1",
+  "objectType": "RDF",
+  "created_by": "gamspackaging 0.5.1",
+  "sip_creation_timestamp": 1764925745,
+  "mainResource": "RDF.xml",
+  "contentFiles": [
+    {
+      "dsid": "DC.xml",
+      "mimetype": "text/xml",
+      "title": "DC.xml",
+      "description": "Datastream for DC.xml",
+      "creator": "Born digital - demo project GAMS",
+      "rights": "Creative Commons BY-NC 4.0",
+      "size": 1199,
+      "bagpath": "data/content/DC.xml",
+      "lang": [],
+      "tags": []
+    },
+    {
+      "dsid": "EVENTS.json",
+      "mimetype": "application/json",
+      "title": "EVENTS.json",
+      "description": "Datastream for EVENTS.json",
+      "creator": "Born digital - demo project GAMS",
+      "rights": "Creative Commons BY-NC 4.0",
+      "size": 3339,
+      "bagpath": "data/content/EVENTS.json",
+      "lang": [],
+      "tags": []
+    },
+    {
+      "dsid": "RDF.xml",
+      "mimetype": "text/xml",
+      "title": "RDF.xml",
+      "description": "Datastream for RDF.xml",
+      "creator": "Born digital - demo project GAMS",
+      "rights": "Creative Commons BY-NC 4.0",
+      "size": 4828,
+      "bagpath": "data/content/RDF.xml",
+      "lang": [],
+      "tags": []
+    }
+  ],
+  "lang": [],
+  "tags": [
+    "jüdischeopfer",
+    "jüdisch",
+    "person",
+    "male"
+  ],
+  "funder": "",
+  "$schema": "https://raw.githubusercontent.com/cerndigitalmemory/sip-spec/refs/heads/develop/sip-schema-d1.json"
+}

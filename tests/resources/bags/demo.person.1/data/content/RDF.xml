@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:schema="http://schema.org/" xmlns:bio="http://purl.org/vocab/bio/0.1/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:memo="http://digitales-memobuch.at/ontology#">
+  <rdf:Description rdf:about="http://digitales-memobuch.at/persons/memo.person.1">
+    <rdfs:label>Erwin Adler</rdfs:label>
+    <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person" />
+    <rdf:type rdf:resource="http://schema.org/Person" />
+    <rdf:type rdf:resource="http://digitales-memobuch.at/ontology#HolocaustVictim" />
+    <foaf:givenName>Erwin</foaf:givenName>
+    <schema:givenName>Erwin</schema:givenName>
+    <foaf:familyName>Adler</foaf:familyName>
+    <schema:familyName>Adler</schema:familyName>
+    <foaf:name>Erwin Adler</foaf:name>
+    <schema:name>Erwin Adler</schema:name>
+    <schema:gender>Male</schema:gender>
+    <foaf:gender>male</foaf:gender>
+    <memo:gender>Male</memo:gender>
+    <dcterms:description xml:lang="de">Sohn von Adler Ignatz und Rosa, geb. Kronberger; als Geburtsdaten findet sich neben dem 14.01.1884 auch der 14.02.1884; als Geburtsort neben Mürzzuschlag, Steiermark findet sich auch Lackenbach, Burgenland; Deportation von Zagreb in unbekanntes Lager</dcterms:description>
+    <schema:description xml:lang="de">Sohn von Adler Ignatz und Rosa, geb. Kronberger; als Geburtsdaten findet sich neben dem 14.01.1884 auch der 14.02.1884; als Geburtsort neben Mürzzuschlag, Steiermark findet sich auch Lackenbach, Burgenland; Deportation von Zagreb in unbekanntes Lager</schema:description>
+    <bio:biography xml:lang="de">Sohn von Adler Ignatz und Rosa, geb. Kronberger; als Geburtsdaten findet sich neben dem 14.01.1884 auch der 14.02.1884; als Geburtsort neben Mürzzuschlag, Steiermark findet sich auch Lackenbach, Burgenland; Deportation von Zagreb in unbekanntes Lager</bio:biography>
+    <foaf:birthday>14.01.1884</foaf:birthday>
+    <schema:birthPlace>Mürzzuschlag, Steiermark</schema:birthPlace>
+    <foaf:based_near>Mürzzuschlag, Steiermark</foaf:based_near>
+    <dcterms:subject rdf:resource="http://digitales-memobuch.at/ontology#victim-category/j-discheopfer-j-disch" />
+    <memo:victimCategory rdf:resource="http://digitales-memobuch.at/ontology#victim-category/j-discheopfer-j-disch" />
+    <dcterms:references>DÖW; Geni; MyHeritage</dcterms:references>
+    <memo:literatureReference>DÖW; Geni; MyHeritage</memo:literatureReference>
+    <memo:lastVoluntaryResidence rdf:resource="http://digitales-memobuch.at/persons/memo.person.1/places/voluntary" />
+    <dcterms:creator>Born digital - memo project GAMS</dcterms:creator>
+    <dcterms:rights>Creative Commons BY-NC 4.0</dcterms:rights>
+    <dcterms:rightsHolder>MEMO Project</dcterms:rightsHolder>
+    <dcterms:license rdf:resource="https://creativecommons.org/licenses/by-nc/4.0/" />
+    <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-12-05T10:01:11.093213</dcterms:created>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://digitales-memobuch.at/persons/memo.person.1/birth">
+    <rdf:type rdf:resource="http://purl.org/vocab/bio/0.1/Birth" />
+    <rdfs:label>Birth of memo.person.1</rdfs:label>
+    <bio:principal rdf:resource="http://digitales-memobuch.at/persons/memo.person.1" />
+    <bio:place>Mürzzuschlag, Steiermark</bio:place>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://digitales-memobuch.at/ontology#victim-category/j-discheopfer-j-disch">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept" />
+    <skos:prefLabel xml:lang="de">jüdischeopfer;jüdisch</skos:prefLabel>
+    <rdfs:label xml:lang="de">jüdischeopfer;jüdisch</rdfs:label>
+    <skos:inScheme rdf:resource="http://digitales-memobuch.at/ontology#victim-categories" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://digitales-memobuch.at/persons/memo.person.1/places/voluntary">
+    <rdf:type rdf:resource="http://schema.org/Place" />
+    <rdf:type rdf:resource="http://www.w3.org/2003/01/geo/wgs84_pos#Point" />
+    <rdfs:label>Last Voluntary Residence</rdfs:label>
+    <schema:address>Mariahilferstraße 13, 8020 Graz</schema:address>
+    <memo:placeType>voluntary-residence</memo:placeType>
+    <wgs84_pos:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#float">47.07220566</wgs84_pos:lat>
+    <wgs84_pos:long rdf:datatype="http://www.w3.org/2001/XMLSchema#float">15.43338116</wgs84_pos:long>
+  </rdf:Description>
+</rdf:RDF>
