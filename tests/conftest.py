@@ -2,7 +2,7 @@ import pytest
 import requests_mock
 import re
 
-from utils.TestPyriloProject import TestPyriloProject
+from tests.utils.TestPyriloProject import TestPyriloProject
 
 
 @pytest.fixture
