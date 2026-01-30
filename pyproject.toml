@@ -26,6 +26,7 @@ packages = ["src/pyrilo"]
 [dependency-groups]
 dev = [
     "pytest>=8.3.5",
+    "requests-mock>=1.12.1",
     "ruff>=0.14.14",
 ]
 
