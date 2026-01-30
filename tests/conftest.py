@@ -33,7 +33,7 @@ def mock_gams_api():
                 return response
 
             # 3. Handle Object Existence Check (HEAD objects/{id})
-            if f"objects/{TestPyriloProject.TEST_BAG_NAME}" in url and method == "HEAD":
+            if f"objects" in url and method == "HEAD":
                 # Simulate that the object does NOT exist yet (so we don't try to delete it)
                 response.status_code = 404
                 return response
