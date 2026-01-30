@@ -1,15 +1,11 @@
 
 from click.testing import CliRunner
-
-# Import your actual entry point
 from pyrilo.cli import cli
-from utils.TestPyriloProject import TestPyriloProject
 
-
-def test_cli_ingest_flow_success(tmp_path, mock_gams_api):
+def test_cli_ingest_flow_success(tmp_path, mock_pyrilo_ingest_env):
     """
     INTEGRATION TEST:
-    1. Sets up a real temporary file structure.
+    1. Uses the pyrilo test data
     2. Runs the real 'pyrilo ingest' CLI command.
     3. Mocks only the network responses.
 
@@ -20,12 +16,10 @@ def test_cli_ingest_flow_success(tmp_path, mock_gams_api):
     - IngestService correctly constructs the API request.
     """
 
-    # 1. Setup: Create a fake bag structure in a temporary directory
-    # Structure: /tmp/bags/demo_project_bag_001/data.txt
-    bags_root = tmp_path / "bags"
-    bag_folder = bags_root / TestPyriloProject.TEST_BAG_NAME
-    bag_folder.mkdir(parents=True)
-    (bag_folder / "data.txt").write_text("Hello GAMS")
+    gams_api_mock, test_pyrilo_project = mock_pyrilo_ingest_env
+
+    # 1. Setup: Use already setup test bags
+    bags_root = test_pyrilo_project.INGEST_BAGS_PATH
 
     # 2. Act: Run the CLI command
     runner = CliRunner()
@@ -39,10 +33,10 @@ def test_cli_ingest_flow_success(tmp_path, mock_gams_api):
     result = runner.invoke(
         cli,
         [
-            "--host", TestPyriloProject.MOCK_HOST,
-            "--bag_root", str(bags_root),  # Point to our temp dir
+            "--host", test_pyrilo_project.MOCK_HOST,
+            "--bag_root", str(bags_root),  # points to the test data
             "--verbose",
-            "ingest", TestPyriloProject.TEST_PROJECT
+            "ingest", test_pyrilo_project.TEST_PROJECT
         ],
         env=env_vars
     )
@@ -59,8 +53,8 @@ def test_cli_ingest_flow_success(tmp_path, mock_gams_api):
 
     # Find the POST request to the objects endpoint
     upload_calls = [
-        call for call in mock_gams_api.mock_calls
-        if "POST" in str(call) and f"projects/{TestPyriloProject.TEST_PROJECT}/objects" in str(call)
+        call for call in gams_api_mock.mock_calls
+        if "POST" in str(call) and f"projects/{test_pyrilo_project.TEST_PROJECT}/objects" in str(call)
     ]
 
     assert len(upload_calls) == 1, "Expected exactly one upload POST request"
@@ -74,5 +68,5 @@ def test_cli_ingest_flow_success(tmp_path, mock_gams_api):
     filename, file_content, mimetype = files['subInfoPackZIP']
     assert filename == "bag.zip"
     assert mimetype == "application/zip"
-    # Even cooler: assert the zip is not empty (FileSystemService worked!)
+    # assert the zip is not empty (FileSystemService worked!)
     assert len(file_content) > 0

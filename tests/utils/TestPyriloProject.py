@@ -3,13 +3,9 @@ from pathlib import Path
 
 class TestPyriloProject:
     """
-    TODO description
+    Wrapper for information about the test ingest files.
     """
-
-    # --- Test Data & Configuration ---
     TEST_PROJECT = "demo"
-    TEST_BAG_NAME = f"{TEST_PROJECT}_bag_001" # TODO remove / update?
+    TEST_BAG_NAME = "memo.person.1"
     MOCK_HOST = "http://test-gams.local"
-
-
     INGEST_BAGS_PATH =  Path(__file__).parent.parent / "resources" / "bags"

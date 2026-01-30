@@ -60,6 +60,6 @@ def test_pyrilo_ingest_files(tmp_path):
 @pytest.fixture
 def mock_pyrilo_ingest_env(mock_gams_api, test_pyrilo_ingest_files):
     """
-    Setsup a complete pyrilo ingest environment with mocked gams-api and available test data
+    Sets up a complete pyrilo ingest environment with mocked gams-api and available test data
     """
-    return test_pyrilo_ingest_files
+    return mock_gams_api, test_pyrilo_ingest_files
