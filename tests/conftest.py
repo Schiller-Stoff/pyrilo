@@ -52,13 +52,14 @@ def mock_gams_api():
 @pytest.fixture
 def test_pyrilo_ingest_files(tmp_path):
     """
-    TODO implement!
+    Setup procedure for pyrilo ingest files
+    Could create random files etc.
     """
-
-    # check how I'm doing it in the pollin tool
+    return TestPyriloProject()
 
 @pytest.fixture
-def mock_pyrilo_ingest_env(mock_gams_api):
+def mock_pyrilo_ingest_env(mock_gams_api, test_pyrilo_ingest_files):
     """
-    TODO implement!
+    Setsup a complete pyrilo ingest environment with mocked gams-api and available test data
     """
+    return test_pyrilo_ingest_files
