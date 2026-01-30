@@ -141,7 +141,6 @@ source = { editable = "." }
 dependencies = [
     { name = "click" },
     { name = "requests" },
-    { name = "urllib3" },
 ]
 
 [package.dev-dependencies]
@@ -155,7 +154,6 @@ dev = [
 requires-dist = [
     { name = "click", specifier = ">=8.1.7" },
     { name = "requests", specifier = ">=2.32.4" },
-    { name = "urllib3", specifier = "==2.0.7" },
 ]
 
 [package.metadata.requires-dev]
