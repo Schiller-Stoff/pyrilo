@@ -1,84 +1,69 @@
 import logging
-
-from selenium import webdriver
-from pyrilo.PyriloStatics import PyriloStatics
-from pyrilo.api.auth.AuthCookie import AuthCookie
-from urllib3 import request
-from urllib3.exceptions import NameResolutionError
+from urllib.parse import urljoin
+from pyrilo.api.GamsApiClient import GamsApiClient  # <--- Changed from requests
+from pyrilo.api.auth.LoginFormParser import LoginFormParser
 
 
 class AuthorizationService:
+    # 1. Inject the Client, not the Session
+    def __init__(self, client: GamsApiClient):
+        self.client = client
 
-    host: str
-    auth_cookie: AuthCookie | None = None
-
-    def __init__(self, host):
-        # self.user = user
-        # self.password = password
-        self.host = host
-
-
-    def verify_oauth_workflow_works(self):
+    def login(self, username: str = None, password: str = None) -> None:
         """
-        Checks if the authentication endpoint is reachable AND if the redirection workflow (oatuh2) works
-        as expected.
-        1. Try to reach the auth endpoint
-        2. Retry logic following redirects
-        3. If not reachable, raise ConnectionError
+        Performs authentication using the shared GamsApiClient.
         """
-        auth_url = self.host + PyriloStatics.AUTH_ENDPOINT
-        # use cookie header if available
-        try:
-            r = request("GET", auth_url, retries=3, redirect=True)
-        except Exception as e:
-            # if cause is of type NameResolutionError, append cause info
-            # check if cause is a NameResolutionError
-            if(isinstance(e.__cause__, NameResolutionError)):
-                msg = f"Failed to reach auth service endpoint at {auth_url} due to NameResolutionError. You must set 'keycloak' to resolve against localhost on your local machine - otherwise the ouath2 redirection workflow is not going to work! Original Exception: {e}"
-                raise ConnectionError(msg)
+        # 2. Use 'auth' endpoint. The client automatically prepends {host}/api/v1/
+        # This replaces: login_url = f"{self.host}{PyriloStatics.AUTH_ENDPOINT}"
 
-            logging.error(msg)
-            msg = f"Failed to reach auth service endpoint at {auth_url}. Exception: {e}"
-            raise ConnectionError(msg)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Upgrade-Insecure-Requests': '1'
+        }
 
-        if r.status >= 400:
-            msg = f"Failed to reach auth service endpoint at {auth_url}. Status: {r.status}. Response: {r.json()}"
-            logging.error(msg)
-            raise ConnectionError(msg)
-        else:
-            logging.info(f"Auth service endpoint reachable at: {auth_url}")
+        # 3. Use client.get()
+        # We assume the API returns HTML here, but client.get returns the response object, so that's fine.
+        response = self.client.get("auth", headers=headers)
+        response.raise_for_status()
 
-    def login(self):
-        self.verify_oauth_workflow_works()
+        # Parsing the keycloak form
+        parser = LoginFormParser()
+        parser.feed(response.text)
 
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--incognito")
-        driver = webdriver.Chrome(options=chrome_options)
+        if not parser.action:
+            # If we can't find a form, we might already be logged in.
+            logging.warning("No login form found. Assuming already authenticated or non-standard page.")
+            return
 
-        # open the selenium browser
-        driver.get(self.host + PyriloStatics.AUTH_ENDPOINT)
-        # need to append a trailing slash to the host url
+        action_url = parser.action
+        logging.debug("Redirecting to keycloak url: ", action_url)
+        if not action_url.startswith('http'):
+            # This creates an absolute URL
+            action_url = urljoin(response.url, action_url)
 
-        # TODO could I check if cookies are still valid? maybe no login is required.
+        if not username or not password:
+            raise ValueError("Authentication required...")
 
-        redirect_url = self.host + "/"
-        # wait until redirection to login page is finished
-        while not driver.current_url == redirect_url:
-            pass
+        payload = {'username': username, 'password': password, 'credentialId': ''}
+        payload.update(parser.hidden_inputs)
 
-        # TODO there is a driver.get_cookie method!
-        cookies = driver.get_cookies()
+        # 4. Use client.post() with the absolute URL (handled by our client upgrade)
+        post_response = self.client.post(action_url, data=payload, headers=headers)
 
-        # TODO elaborate error handling
-        JSESSION_ID = driver.get_cookie("JSESSIONID").get("value")
+        # --- VALIDATION LOGIC START ---
 
-        self.auth_cookie = AuthCookie(JSESSION_ID)
-        # close browser again
-        driver.close()
-        return self.auth_cookie
+        # Check 1: HTTP Error Codes (401/403)
+        if post_response.status_code >= 400:
+            raise PermissionError(f"Login failed with status {post_response.status_code}.")
 
-    def retrieve_auth_cookie(self):
-        if not self.auth_cookie:
-            return self.login()
-        return self.auth_cookie
+        # Check 2: "error" in URL (Common Spring/Java pattern: /login?error)
+        if "error" in post_response.url.lower():
+            raise PermissionError("Login failed: Invalid credentials (server returned error param).")
 
+        # Check 3: Did we land back on the login page?
+        if 'type="password"' in post_response.text.lower():
+            raise PermissionError("Login failed: Login form detected in response content.")
+
+        # --- VALIDATION LOGIC END ---
+        logging.info("Login successful (session cookie established).")

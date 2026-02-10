@@ -1,0 +1,4 @@
+Bagging-Date: 2025-12-05
+Payload-Oxum: 421964.5
+Contact-Email: dh@uni-graz.at
+External-Description: Erwin Adler
