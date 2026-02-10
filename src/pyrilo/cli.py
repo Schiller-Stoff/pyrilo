@@ -137,7 +137,7 @@ def ingest(ctx, project: str):
         sys.exit(1)
 
 
-@cli.command(name="create_project")
+@cli.command(name="create_project", help="Creates a new project on GAMS")
 @click.argument("project", required=True)
 @click.argument("desc", required=False, default="")
 @click.pass_context
