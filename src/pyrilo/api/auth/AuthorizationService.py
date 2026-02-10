@@ -67,3 +67,12 @@ class AuthorizationService:
 
         # --- VALIDATION LOGIC END ---
         logging.info("Login successful (session cookie established).")
+
+        # csrf token
+        self.client.session.headers.update(
+            {
+                "X-XSRF-TOKEN": post_response.cookies.get('XSRF-TOKEN'),
+                "JSESSIONID": post_response.cookies.get('JSESSIONID') # setting jsession id is not necessary
+            }
+        )
+
