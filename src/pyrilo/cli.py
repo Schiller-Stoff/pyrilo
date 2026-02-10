@@ -137,7 +137,7 @@ def ingest(ctx, project: str):
         sys.exit(1)
 
 
-@cli.command(name="create_project")
+@cli.command(name="create_project", help="Creates a new project on GAMS")
 @click.argument("project", required=True)
 @click.argument("desc", required=False, default="")
 @click.pass_context
@@ -148,6 +148,18 @@ def create_project(ctx, project: str, desc: str):
         logging.info(f"Successfully created project: {project}")
     except Exception as e:
         logging.error(f"Failed to create project: {e}")
+        sys.exit(1)
+
+@cli.command(name="delete_project", help="Deletes an existing project on GAMS")
+@click.argument("project", required=True)
+@click.pass_context
+def delete_project(ctx, project: str):
+    pyrilo_app: Pyrilo = ctx.obj['PYRILO_APP']
+    try:
+        pyrilo_app.delete_project(project)
+        logging.info(f"Successfully deleted project: {project}")
+    except Exception as e:
+        logging.error(f"Failed to delete project: {e}")
         sys.exit(1)
 
 @cli.command(name="update_project", help="Updates an existing project on GAMS")
