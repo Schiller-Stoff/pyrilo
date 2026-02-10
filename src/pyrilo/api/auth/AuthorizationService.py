@@ -68,10 +68,10 @@ class AuthorizationService:
         # --- VALIDATION LOGIC END ---
         logging.info("Login successful (session cookie established).")
 
-        # csrf token
+        # csrf token needs to be read out from cookie and then used via request header (that's the core idea of the protection against CSRF attacks)
         self.client.session.headers.update(
             {
-                "X-XSRF-TOKEN": post_response.cookies.get('XSRF-TOKEN'),
-                "JSESSIONID": post_response.cookies.get('JSESSIONID')  # setting jsession id is not necessary
+                "X-XSRF-TOKEN": post_response.cookies.get('XSRF-TOKEN')
+                # the jsession-id as being handled by the corresponding cookie
             }
         )
