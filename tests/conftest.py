@@ -1,4 +1,5 @@
 import pytest
+import requests
 import requests_mock
 import re
 
@@ -21,7 +22,11 @@ def mock_gams_api():
             f"{api_base}/auth",
             text='<form action="/login-action"><input type="hidden" name="execution" value="123"/></form>'
         )
-        m.post(f"{host}/login-action", status_code=200, text="Login Successful")
+        mock_cookies = {
+            # cookie with xsrf token must be present for the authorization to work
+            "XSRF-TOKEN": "test demo value"
+        }
+        m.post(f"{host}/login-action", status_code=200, text="Login Successful", cookies=mock_cookies)
 
         # ------------------------------------------------------------------
         # 2. Project Operations (The Missing Piece!)
