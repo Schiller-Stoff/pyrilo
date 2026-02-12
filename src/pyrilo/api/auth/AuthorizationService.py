@@ -67,3 +67,16 @@ class AuthorizationService:
 
         # --- VALIDATION LOGIC END ---
         logging.info("Login successful (session cookie established).")
+
+        # csrf token needs to be read out from cookie and then used via request header (that's the core idea of the protection against CSRF attacks)
+        csrf_token = post_response.cookies.get('XSRF-TOKEN')
+
+        if not csrf_token:
+            raise PermissionError("Login failed: csrf token not found in gams-api response.")
+
+        self.client.session.headers.update(
+            {
+                "X-XSRF-TOKEN": csrf_token
+                # the jsession-id as being handled by the corresponding cookie
+            }
+        )
